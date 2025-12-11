@@ -1,87 +1,19 @@
-# Welcome to React Router!
+# Jared Stoddard Portfolio
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Client-side React Router app built with Vite and TailwindCSS, written in JavaScript (no TypeScript).
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Available scripts
+- `npm run dev` — start the Vite dev server with HMR.
+- `npm run build` — build the production bundle.
+- `npm run preview` — preview the production build locally.
 
-## Features
-
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
-
-## Getting Started
-
-### Installation
-
-Install the dependencies:
-
-```bash
-npm install
-```
-
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
+## Project structure
+- `index.html` — Vite entry HTML with global metadata and font links.
+- `app/main.jsx` — application entry that mounts the router.
+- `app/router.jsx` — standard React Router config using `createBrowserRouter`.
+- `app/pages/Home.jsx` — home route that renders the portfolio.
+- `app/pages/PortfolioPageV2.jsx` — alternate portfolio layout available at `/v2`.
+- `app/components/PortfolioPage.jsx` — main portfolio layout and content.
 
 ## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+TailwindCSS 4 is enabled via `app/app.css`; extend the theme there as needed.
