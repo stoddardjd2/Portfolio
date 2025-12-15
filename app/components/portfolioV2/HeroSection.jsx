@@ -13,9 +13,12 @@ const badgeVariants = {
 
 function HeroSection() {
   return (
-    <MotionSection className="mb-16 relative min-h-[calc(100vh-128px)] " delay={0.05} >
+    <MotionSection
+      className="mb-16 relative min-h-[calc(100vh-128px)] "
+      delay={0.05}
+    >
       <div className="z-10 relative h-full w-full ">
-        <MotionSection delay={14.5}>
+        <MotionSection delay={12.6}>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300 mb-8">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
@@ -42,7 +45,8 @@ function HeroSection() {
             className=""
             initialDelayMs={100}
             defaultSpeed={30}
-            defaultEraseSpeed={10}
+            defaultEraseSpeed={20}
+            showCursor={true}
             sections={[
               {
                 text: "I Am a Full Stack Developer.",
@@ -71,7 +75,7 @@ function HeroSection() {
         </h1>
 
         <MotionSection
-          delay={4.1}
+          delay={4.2}
           duration={1.5}
           defaultVariants={{
             hidden: { opacity: 0, y: 40 },
@@ -83,6 +87,7 @@ function HeroSection() {
               className=""
               initialDelayMs={4400}
               defaultSpeed={10}
+              showCursor={true}
               sections={[
                 {
                   text: "Full-stack engineer & founder experienced in production systems and AI-powered workflows.",
@@ -99,16 +104,21 @@ function HeroSection() {
                   mode: "letter",
                   pauseAfter: 600,
                 },
+                  {
+                  text: " Scroll down to see how.",
+                  mode: "letter",
+                  pauseAfter: 600,
+                },
               ]}
             />
-          </p>
+          </p> 
         </MotionSection>
 
         <MotionSection
           delay={0}
           duration={0.7}
           staggerChildren={0.2}
-          delayChildren={13.2}
+          delayChildren={11.6}
           defaultVariants={{
             hidden: { opacity: 0 },
             visible: { opacity: 1 },
@@ -150,7 +160,7 @@ function HeroSection() {
           delay={0.1}
           duration={0.6}
           staggerChildren={0.1}
-          delayChildren={13.9}
+          delayChildren={12.1}
           defaultVariants={{
             hidden: { opacity: 0 },
             visible: { opacity: 1 },
@@ -200,7 +210,7 @@ function HeroSection() {
 
       <MotionSection
         className="mb-32 absolute top-0 z-0 right-[-50px]"
-        delay={15}
+        delay={12.9}
         duration={2}
         defaultVariants={{
           hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
@@ -216,7 +226,7 @@ function HeroSection() {
 
       <MotionSection
         className="flex justify-center absolute bottom-10 left-1/2 -translate-x-1/2 mx-auto"
-        delay={16}
+        delay={13.6}
         duration={1.4}
         defaultVariants={{
           hidden: { opacity: 0, y: 20 },

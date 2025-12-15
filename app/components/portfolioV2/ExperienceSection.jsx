@@ -13,14 +13,34 @@ function ExperienceSection() {
           company="Splitify"
           timeframe="2023 - Present"
           bullets={[
-            "Built and launched a production SaaS handling billing, payments, and messaging.",
-            "Owned frontend, backend, infra, analytics, and product strategy end-to-end.",
-            "Scaled to paying users with robust scheduling, SMS workflows, and observability.",
+            "Founded and built a production SaaS automating shared expenses, payments, and SMS reminders to reduce friction in group billing.",
+            "Owned the entire stack end-to-end: product, frontend, backend, infrastructure, analytics, and automated social media growth.",
+            "Shipped a reliable, automated system supporting real users and live payments.",
+            "Ran early-stage paid acquisition experiments, iterating on messaging, funnels, and onboarding to drive signups.",
+            "Implemented end-to-end analytics across onboarding, activation, payments, conversion, retention, and LTV.",
+            "Developed internal tooling for real-time analytics, cost projections, abuse detection, and user behavior analysis.",
           ]}
         />
         <ExperienceEntry
-          role="Senior Software Engineer"
-          company="Freelance"
+          role="Founder / Full-Stack Engineer"
+          company="Splitify"
+          timeframe="2023 – Present"
+          bullets={[
+            "Founded and built a production SaaS automating shared expenses, payments, and SMS reminders to reduce friction in group billing.",
+            "Owned the full product lifecycle end-to-end across strategy, UX, frontend, backend APIs, infrastructure, analytics, and growth.",
+            "Designed backend systems for recurring billing, timezone-aware scheduling, payment tracking, and reliable message delivery.",
+            "Integrated payments, bank linking, and SMS providers with robust error handling, observability, and cost controls.",
+            "Shipped a fault-tolerant system handling live users and real money with safe retries, idempotency, and abuse prevention.",
+            "Built internal admin dashboards for real-time analytics, cost projections, and monitoring suspicious user behavior.",
+            "Implemented end-to-end analytics across onboarding, activation, payments, conversion, retention, and LTV.",
+            "Ran early-stage paid acquisition experiments across channels, iterating on messaging and onboarding to improve activation.",
+            "Continuously iterated on product features and UI/UX based on user data, support feedback, and insights from production.",
+          ]}
+        />
+
+        <ExperienceEntry
+          role="Full-Stack Engineer"
+          company="the85ers"
           timeframe="2021 - 2023"
           bullets={[
             "Delivered full-stack features for startups, from UX prototypes to production releases.",
@@ -29,8 +49,8 @@ function ExperienceSection() {
           ]}
         />
         <ExperienceEntry
-          role="Software Engineer"
-          company="Various"
+          role="Full-Stack Engineer"
+          company="2351 Labs"
           timeframe="2018 - 2021"
           bullets={[
             "Built internal tools, APIs, and dashboards for data-heavy workflows.",
@@ -57,7 +77,7 @@ function ExperienceEntry({ role, company, timeframe, bullets }) {
         {bullets.map((item) => (
           <li key={item} className="flex gap-2">
             <span
-              className="iconify w-4 h-4 text-emerald-400"
+              className="iconify w-4 h-4 text-blue-400"
               data-icon="lucide:dot"
             ></span>
             <span>{item}</span>

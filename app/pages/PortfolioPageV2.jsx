@@ -17,7 +17,6 @@ function PortfolioPageV2() {
       <main id="top" className="max-w-5xl mx-auto px-6 pt-32 pb-24">
         <HeroSection />
         <ValueSection />
-        <SkillsSection />
         <ProjectsSection />
         <ExperienceSection />
         <CaseStudySection />
@@ -25,6 +24,8 @@ function PortfolioPageV2() {
           <AboutSection />
           <TestimonialsSection />
         </div>
+        <SkillsSection />
+
         <ContactSection />
       </main>
     </div>
