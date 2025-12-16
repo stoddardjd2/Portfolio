@@ -1,0 +1,489 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { createPortal } from "react-dom";
+
+function useInView(ref, { threshold = 0.35, rootMargin = "0px" } = {}) {
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => setInView(entries[0]?.isIntersecting ?? false),
+      { threshold, rootMargin }
+    );
+
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [ref, threshold, rootMargin]);
+
+  return inView;
+}
+
+// small helper to lock body scroll when modal is open
+// lock BOTH html + body (prevents scroll in all layouts)
+function useLockHtmlScroll(locked) {
+  useEffect(() => {
+    if (!locked) return;
+
+    const html = document.documentElement;
+    const body = document.body;
+
+    const scrollY = window.scrollY;
+
+    // Store previous styles
+    const prevHtmlPosition = html.style.position;
+    const prevHtmlTop = html.style.top;
+    const prevHtmlWidth = html.style.width;
+
+    // Freeze scroll WITHOUT hiding scrollbar
+    html.style.position = "fixed";
+    html.style.top = `-${scrollY}px`;
+    html.style.width = "100%";
+
+    return () => {
+      // Restore styles
+      html.style.position = prevHtmlPosition;
+      html.style.top = prevHtmlTop;
+      html.style.width = prevHtmlWidth;
+
+      window.scrollTo(0, scrollY);
+    };
+  }, [locked]);
+}
+// Reusable inner slideshow renderer (so modal = exact same UI/logic)
+function SlideshowInner({
+  list,
+  title,
+  aspectRatio,
+  maxHeightPx,
+  autoplay,
+  intervalMs,
+  pauseOnHover,
+  loop,
+  autoplayOnlyWhenInView,
+  inViewThreshold,
+  inViewRootMargin,
+  showArrows,
+  showDots,
+  showCounter,
+  showPlayPause,
+  enableKeyboard,
+  enableSwipe,
+  slideFocus,
+  className,
+  imgClassName,
+  onIndexChange,
+  // NEW:
+  enableClickToOpen,
+  onOpenModal,
+  initialIndex,
+  isModal = false,
+  onRequestClose,
+}) {
+  const count = list.length;
+  const canSlide = count > 1;
+
+  const safeInit = Math.min(Math.max(0, initialIndex), Math.max(0, count - 1));
+  const [idx, setIdx] = useState(safeInit);
+  const [hover, setHover] = useState(false);
+  const [playing, setPlaying] = useState(autoplay);
+
+  // keep idx stable if list changes
+  useEffect(() => {
+    if (idx >= count) setIdx(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [count]);
+
+  // update local playing if parent changes autoplay
+  useEffect(() => setPlaying(autoplay), [autoplay]);
+
+  // NEW: if initialIndex changes (e.g. opening modal on clicked image), jump
+  useEffect(() => {
+    setIdx(safeInit);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [safeInit, count]);
+
+  const clampPct = (n, fallback) => {
+    const v = Number(n);
+    if (!Number.isFinite(v)) return fallback;
+    return Math.min(100, Math.max(0, v));
+  };
+
+  const getSlideFocus = (i) => {
+    const src = list[i];
+    const base =
+      typeof slideFocus === "function"
+        ? slideFocus(i, src)
+        : Array.isArray(slideFocus)
+        ? slideFocus[i]
+        : null;
+
+    const xPct = clampPct(base?.xPct, 50);
+    const yPct = clampPct(base?.yPct, 50);
+    return { xPct, yPct };
+  };
+
+  const goTo = (next) => {
+    if (!canSlide) return;
+
+    setIdx((current) => {
+      let n = typeof next === "function" ? next(current) : next;
+
+      if (loop) n = (n + count) % count;
+      else n = Math.min(Math.max(0, n), count - 1);
+
+      onIndexChange?.(n);
+      return n;
+    });
+  };
+
+  const prev = () => goTo((i) => i - 1);
+  const next = () => goTo((i) => i + 1);
+
+  // in-view gating (disabled in modal)
+  const rootRef = useRef(null);
+  const inView = useInView(rootRef, {
+    threshold: inViewThreshold,
+    rootMargin: inViewRootMargin,
+  });
+
+  // autoplay
+  useEffect(() => {
+    if (!canSlide) return;
+    if (!playing) return;
+    if (pauseOnHover && hover) return;
+    if (!isModal && autoplayOnlyWhenInView && !inView) return;
+
+    const id = setInterval(() => goTo((i) => i + 1), intervalMs);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    canSlide,
+    playing,
+    pauseOnHover,
+    hover,
+    intervalMs,
+    count,
+    loop,
+    autoplayOnlyWhenInView,
+    inView,
+    isModal,
+  ]);
+
+  // keyboard
+  useEffect(() => {
+    if (!enableKeyboard || !canSlide) return;
+
+    const onKeyDown = (e) => {
+      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") next();
+      if (isModal && e.key === "Escape") onRequestClose?.();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enableKeyboard, canSlide, count, isModal, onRequestClose]);
+
+  const dragProps = enableSwipe
+    ? {
+        drag: "x",
+        dragConstraints: { left: 0, right: 0 },
+        dragElastic: 0.18,
+        onDragEnd: (_, info) => {
+          const offset = info.offset.x;
+          const velocity = info.velocity.x;
+          const swipe = Math.abs(offset) * velocity;
+
+          if (offset > 60 || swipe > 12000) prev();
+          else if (offset < -60 || swipe < -12000) next();
+        },
+      }
+    : {};
+
+  const containerStyle = {
+    aspectRatio,
+    ...(maxHeightPx ? { maxHeight: `${maxHeightPx}px` } : null),
+  };
+
+  const { xPct, yPct } = getSlideFocus(idx);
+  const objectPosition = `${xPct}% ${yPct}%`;
+
+  return (
+    <div
+      ref={rootRef}
+      className={
+        "relative w-full overflow-hidden rounded-lg border border-neutral-800 " +
+        className
+      }
+      style={containerStyle}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      <AnimatePresence mode="sync" initial={false}>
+        <motion.img
+          key={list[idx] || idx}
+          src={list[idx]}
+          alt={`${title} preview ${idx + 1}`}
+          loading="lazy"
+          className={
+            "absolute inset-0 h-full w-full object-cover select-none " +
+            (enableClickToOpen ? "cursor-pointer " : "") +
+            imgClassName
+          }
+          style={{ objectPosition }}
+          initial={{ opacity: 0.001, scale: 1.002 }}
+          animate={{ opacity: 1, scale: 1, objectPosition }}
+          exit={{ opacity: 0.001, scale: 1.002 }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          onClick={() => {
+            if (!enableClickToOpen) return;
+            onOpenModal?.(idx);
+          }}
+          {...dragProps}
+        />
+      </AnimatePresence>
+
+      {(showCounter || showPlayPause) && canSlide && (
+        <div className="absolute left-3 right-3 top-3 flex items-center justify-between pointer-events-none">
+          {showCounter ? (
+            <div className="rounded-full border border-white/10 bg-black/25 px-2.5 py-1 text-[11px] text-white/90 backdrop-blur-md">
+              {idx + 1} / {count}
+            </div>
+          ) : (
+            <span />
+          )}
+
+          {showPlayPause && (
+            <button
+              type="button"
+              onClick={() => setPlaying((p) => !p)}
+              className="pointer-events-auto rounded-full border border-white/10 bg-black/25 px-2.5 py-1 text-[11px] text-white/90 backdrop-blur-md hover:bg-black/35 transition"
+              aria-label={playing ? "Pause slideshow" : "Play slideshow"}
+            >
+              {playing ? "Pause" : "Play"}
+            </button>
+          )}
+        </div>
+      )}
+
+      {canSlide && showArrows && (
+        <>
+          <button
+            type="button"
+            onClick={prev}
+            aria-label="Previous image"
+            className="group absolute left-3 top-1/2 -translate-y-1/2
+              h-9 w-9 rounded-full bg-neutral-950 backdrop-blur-md
+              border border-white/10 text-white/85
+              shadow-lg shadow-black/20 transition-all
+              hover:bg-neutral-900 hover:scale-105 active:scale-95"
+          >
+            <span className="block text-lg leading-none transition-transform group-hover:-translate-x-0.5">
+              ‹
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={next}
+            aria-label="Next image"
+            className="group absolute right-3 top-1/2 -translate-y-1/2
+              h-9 w-9 rounded-full bg-neutral-950 backdrop-blur-md
+              border border-white/10 text-white/85
+              shadow-lg shadow-black/20 transition-all
+              hover:bg-neutral-900 hover:scale-105 active:scale-95"
+          >
+            <span className="block text-lg leading-none transition-transform group-hover:translate-x-0.5">
+              ›
+            </span>
+          </button>
+        </>
+      )}
+
+      {canSlide && showDots && (
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+          {list.map((_, dotIdx) => (
+            <button
+              key={dotIdx}
+              type="button"
+              onClick={() => goTo(dotIdx)}
+              className={
+                "h-1.5 w-1.5 rounded-full transition-opacity " +
+                (dotIdx === idx
+                  ? "bg-white opacity-90"
+                  : "bg-white opacity-30 hover:opacity-60")
+              }
+              aria-label={`Go to image ${dotIdx + 1}`}
+            />
+          ))}
+        </div>
+      )}
+
+      <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]" />
+    </div>
+  );
+}
+
+export default function ProjectSlideshow({
+  targetElementForModal = "top", //required
+
+  images = [],
+  title = "Project",
+  initialIndex = 0,
+
+  // sizing
+  aspectRatio = "16 / 9",
+  maxHeightPx,
+
+  // behavior
+  autoplay = true,
+  intervalMs = 4000,
+  pauseOnHover = true,
+  loop = true,
+
+  autoplayOnlyWhenInView = true,
+  inViewThreshold = 0.35,
+  inViewRootMargin = "0px",
+
+  // UI toggles
+  showArrows = true,
+  showDots = true,
+  showCounter = false,
+  showPlayPause = false,
+
+  // interaction
+  enableKeyboard = true,
+  enableSwipe = true,
+
+  slideFocus,
+  className = "",
+  imgClassName = "",
+  onIndexChange,
+  // NEW
+  openModalOnClick = true,
+}) {
+  const list = useMemo(() => (images?.length ? images : []), [images]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalStartIdx, setModalStartIdx] = useState(initialIndex);
+
+  useLockHtmlScroll(modalOpen);
+
+  const openModal = (startIdx) => {
+    setModalStartIdx(startIdx ?? 0);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => setModalOpen(false);
+  const portalEl =
+    typeof document !== "undefined"
+      ? document.getElementById(targetElementForModal) || document.body
+      : null;
+
+  // keep modalStartIdx aligned if parent changes initialIndex
+  useEffect(() => {
+    if (!modalOpen) setModalStartIdx(initialIndex);
+  }, [initialIndex, modalOpen]);
+
+  if (!list.length) return null;
+
+  return (
+    <>
+      {/* Inline slideshow */}
+      <SlideshowInner
+        list={list}
+        title={title}
+        initialIndex={initialIndex}
+        aspectRatio={aspectRatio}
+        maxHeightPx={maxHeightPx}
+        autoplay={autoplay}
+        intervalMs={intervalMs}
+        pauseOnHover={pauseOnHover}
+        loop={loop}
+        autoplayOnlyWhenInView={autoplayOnlyWhenInView}
+        inViewThreshold={inViewThreshold}
+        inViewRootMargin={inViewRootMargin}
+        showArrows={showArrows}
+        showDots={showDots}
+        showCounter={showCounter}
+        showPlayPause={showPlayPause}
+        enableKeyboard={enableKeyboard}
+        enableSwipe={enableSwipe}
+        slideFocus={slideFocus}
+        className={className}
+        imgClassName={imgClassName}
+        onIndexChange={onIndexChange}
+        enableClickToOpen={openModalOnClick}
+        onOpenModal={openModal}
+      />
+
+      {/* Fullscreen modal */}
+      {portalEl &&
+        createPortal(
+          <AnimatePresence>
+            {modalOpen && (
+              <motion.div
+                className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onMouseDown={(e) => {
+                  console.log("down", e.target, e.currentTarget);
+                  if (e.target === e.currentTarget) closeModal();
+                }}
+                role="dialog"
+                aria-modal="true"
+              >
+                {/* Close button */}
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  aria-label="Close"
+                  className="fixed right-4 top-4 z-[10000]
+              h-10 w-10 rounded-full bg-neutral-950/70 border border-white/10
+              text-white/90 hover:bg-neutral-900 transition
+              shadow-lg shadow-black/30 grid place-items-center"
+                >
+                  <span className="text-2xl leading-none">×</span>
+                </button>
+
+                {/* Centered stage */}
+                <div className="w-full max-w-6xl">
+                  <SlideshowInner
+                    list={list}
+                    title={title}
+                    initialIndex={modalStartIdx}
+                    aspectRatio={aspectRatio}
+                    maxHeightPx={undefined}
+                    autoplay={autoplay}
+                    intervalMs={intervalMs}
+                    pauseOnHover={pauseOnHover}
+                    loop={loop}
+                    autoplayOnlyWhenInView={false}
+                    inViewThreshold={inViewThreshold}
+                    inViewRootMargin={inViewRootMargin}
+                    showArrows={showArrows}
+                    showDots={showDots}
+                    showCounter={showCounter}
+                    showPlayPause={showPlayPause}
+                    enableKeyboard={enableKeyboard}
+                    enableSwipe={enableSwipe}
+                    slideFocus={slideFocus}
+                    className={"w-full max-h-[85vh]"}
+                    imgClassName={imgClassName}
+                    onIndexChange={onIndexChange}
+                    enableClickToOpen={false}
+                    isModal
+                    onRequestClose={closeModal}
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          portalEl
+        )}
+    </>
+  );
+}

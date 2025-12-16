@@ -9,12 +9,15 @@ import CaseStudySection from "../components/portfolioV2/CaseStudySection.jsx";
 import AboutSection from "../components/portfolioV2/AboutSection.jsx";
 import TestimonialsSection from "../components/portfolioV2/TestimonialsSection.jsx";
 import ContactSection from "../components/portfolioV2/ContactSection.jsx";
-
+import { useState } from "react";
+import ContactModal from "../components/portfolioV2/ContactModal.jsx";
 function PortfolioPageV2() {
+  const [open, setOpen] = useState(false);
+
   return (
     <div className="bg-neutral-950 text-neutral-400 antialiased selection:bg-neutral-800 selection:text-white min-h-screen">
       <NavBar />
-      <main id="top" className="max-w-5xl mx-auto px-6 pt-32 pb-24">
+      <main id="top" className="max-w-5xl mx-auto px-6 pb-24">
         <HeroSection />
         <ValueSection />
         <ProjectsSection />
@@ -26,8 +29,9 @@ function PortfolioPageV2() {
         </div>
         <SkillsSection />
 
-        <ContactSection />
+        <ContactSection setOpen={setOpen} />
       </main>
+      <ContactModal open={open} onClose={() => setOpen(false)} />
     </div>
   );
 }

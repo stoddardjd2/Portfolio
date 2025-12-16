@@ -38,7 +38,7 @@ function ValueSection() {
       <div className="grid md:grid-cols-2 gap-6">
         <ValueCard
           icon="lucide:box"
-          title="End-to-end Product Engineering"
+          title="End-to-End Product Engineering"
           description="From idea + UX + frontend + backend + deployment. I handle the entire lifecycle efficiently."
         />
         <ValueCard

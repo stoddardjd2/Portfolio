@@ -78,6 +78,9 @@
 #root{
   overflow: hidden;
 }
+html{
+  overflow-y: scroll;
+}
 
 html,
 body {

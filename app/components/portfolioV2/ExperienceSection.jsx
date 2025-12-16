@@ -8,19 +8,7 @@ function ExperienceSection() {
         Experience
       </h2>
       <div className="space-y-4">
-        <ExperienceEntry
-          role="Founder / Full-Stack Engineer"
-          company="Splitify"
-          timeframe="2023 - Present"
-          bullets={[
-            "Founded and built a production SaaS automating shared expenses, payments, and SMS reminders to reduce friction in group billing.",
-            "Owned the entire stack end-to-end: product, frontend, backend, infrastructure, analytics, and automated social media growth.",
-            "Shipped a reliable, automated system supporting real users and live payments.",
-            "Ran early-stage paid acquisition experiments, iterating on messaging, funnels, and onboarding to drive signups.",
-            "Implemented end-to-end analytics across onboarding, activation, payments, conversion, retention, and LTV.",
-            "Developed internal tooling for real-time analytics, cost projections, abuse detection, and user behavior analysis.",
-          ]}
-        />
+ 
         <ExperienceEntry
           role="Founder / Full-Stack Engineer"
           company="Splitify"
@@ -48,6 +36,7 @@ function ExperienceSection() {
             "Improved performance and reliability across Node/React stacks.",
           ]}
         />
+
         <ExperienceEntry
           role="Full-Stack Engineer"
           company="2351 Labs"

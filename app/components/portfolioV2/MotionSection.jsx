@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { motion } from "framer-motion";
+
+const motionMap = {
+  section: motion.section,
+  div: motion.div,
+  footer: motion.footer,
+  header: motion.header,
+  main: motion.main,
+  article: motion.article,
+  nav: motion.nav,
+  aside: motion.aside,
+};
 
 function MotionSection({
   as: Element = "section",
   delay = 0,
   duration = 1.2,
+  viewPortTrigger = 0.4,
   staggerChildren,
   delayChildren,
   children,
@@ -15,22 +27,29 @@ function MotionSection({
   },
   ...rest
 }) {
-  const MotionTag = motion(Element);
+  // ✅ stable component type across renders
+  const MotionTag = useMemo(() => {
+    if (typeof Element === "string") return motionMap[Element] || motion(Element);
+    // If Element is a React component, create once per Element reference
+    return motion(Element);
+  }, [Element]);
 
-  const transition = {
-    duration,
-    delay,
-    ease: [0.22, 1, 0.36, 1],
-    ...(staggerChildren || delayChildren
-      ? { staggerChildren, delayChildren }
-      : {}),
-  };
+  const transition = useMemo(() => {
+    return {
+      duration,
+      delay,
+      ease: [0.22, 1, 0.36, 1],
+      ...(staggerChildren || delayChildren
+        ? { staggerChildren, delayChildren }
+        : {}),
+    };
+  }, [duration, delay, staggerChildren, delayChildren]);
 
   return (
     <MotionTag
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.4 }}
+      viewport={{ once: true, amount: viewPortTrigger }}
       variants={defaultVariants}
       transition={transition}
       className={className}
