@@ -20,8 +20,8 @@ function ContactSection({ setOpen }) {
                 Let's Build Something Great
               </h2>
               <p className="text-neutral-400 mb-8 max-w-md font-light">
-                I am open to full-time full-stack roles, backend roles, and
-                product-focused engineering positions.
+                I am open to full-stack, backend, frontend  and
+                product-focused roles.
               </p>
 
               <div className="flex gap-4  flex-wrap ">

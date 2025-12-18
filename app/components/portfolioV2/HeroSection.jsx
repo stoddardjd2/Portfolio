@@ -31,7 +31,7 @@ const TIMING = {
   paragraphMotionDurationS: 1.5,
 
   // 5) Paragraph Typewriter
-  paragraphTypewriterInitialDelayMs:4800,
+  paragraphTypewriterInitialDelayMs: 4800,
   paragraphTypewriterSpeedMs: 7,
   paragraphTypewriterPauseAfterMs: 300,
 
@@ -145,8 +145,8 @@ function HeroSection() {
                   mode: "letter",
                   retypeText: "I Am More Than Just a Full Stack Developer.",
                   pauseAfter: TIMING.h1TypewriterPauseAfterMs,
-                  pauseBeforeErase: 1000,
-                  breakAfter: [5],
+                  pauseBeforeErase: 331000,
+                  breakAfterRetype: [5],
                   highlights: {
                     Full: "text-neutral-500",
                     Stack: "text-neutral-500",

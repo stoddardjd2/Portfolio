@@ -10,11 +10,11 @@ function TestimonialsSection() {
       <div className="space-y-4">
         <TestimonialCard
           quote="Jared delivers far beyond expectations. He takes full ownership of features and ships production-quality work fast."
-          source="Product Manager / Collaborator"
+          source="Senior Engineer"
         />
         <TestimonialCard
-          quote="A rare mix of engineering talent, design instinct, and founder-level responsibility."
-          source="Startup Advisor"
+          quote="Consistently delivers polished, scalable frontend systems with thoughtful design judgment."
+          source="Client Services Lead"
         />
       </div>
     </MotionSection>

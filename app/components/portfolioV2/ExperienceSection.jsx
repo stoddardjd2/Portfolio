@@ -117,34 +117,31 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
           timeframe="Mar 2023 – Dec 2023"
           highlights={[
             "department operations",
+            "operational efficiency",
             "performance targets",
-            "profitability",
-            "50%",
-            "repeatable",
+            "profitability +50%",
+            "process optimization",
             "product rotation",
             "replenishment workflows",
-            "expired inventory",
-            "30%",
-            "inventory accuracy",
-            "20%",
+            "expired inventory −30%",
+            "inventory accuracy +20%",
             "discrepancy analysis",
             "mobile inventory tools",
-            "product levels",
-            "cross-functional team",
-            "staffing",
-            "workload distribution",
+            "real-time visibility",
+            "cross-functional leadership",
+            "staffing & prioritization",
             "customer experience",
-            "sales performance",
+            "sales outcomes",
           ]}
           highlightsOn={highlightsOn}
           bullets={[
-            "Owned end-to-end department operations, treating the department as a system with measurable inputs, outputs, and performance targets.",
-            "Increased department profitability by approximately 50% within the first quarter by identifying inefficiencies and implementing repeatable operational processes.",
-            "Redesigned product rotation and replenishment workflows, reducing expired inventory loss by roughly 30%.",
-            "Improved inventory accuracy by ~20% through systematic reporting, discrepancy analysis, and tighter controls on damaged and missing items.",
-            "Leveraged mobile inventory tools to streamline stocking, reduce manual errors, and improve real-time visibility into product levels.",
-            "Led daily execution for a cross-functional team, balancing staffing, workload distribution, and priority shifts under time constraints.",
-            "Maintained high standards for organization, cleanliness, and product presentation to improve customer experience and sales performance.",
+            "Owned end-to-end department operations, managing the team as a system with measurable inputs, outputs, and performance targets.",
+            "Improved department profitability by ~50% in the first quarter through process optimization and operational efficiency.",
+            "Redesigned product rotation and replenishment workflows, reducing expired inventory loss by approximately 30%.",
+            "Increased inventory accuracy by ~20% through structured reporting, discrepancy analysis, and tighter controls.",
+            "Streamlined stocking workflows using mobile inventory tools to reduce errors and improve real-time visibility.",
+            "Led daily execution for a cross-functional team, balancing staffing, priorities, and time-sensitive workloads.",
+            "Maintained high standards for organization and presentation to improve customer experience and sales outcomes.",
           ]}
         />
       </div>
@@ -196,31 +193,33 @@ function ExperienceEntry({
   highlightsOn = true,
 }) {
   return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900/20 p-4 sm:p-5 md:p-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-3">
-        <div>
-          <p className="text-sm font-semibold text-white">{role}</p>
-          <p className="text-sm text-neutral-500">{company}</p>
+    <MotionSection id="projects" className="scroll-mt-30" delay={0.12}>
+      <div className="rounded-xl border border-neutral-800 bg-neutral-900/20 p-4 sm:p-5 md:p-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-3">
+          <div>
+            <p className="text-sm font-semibold text-white">{role}</p>
+            <p className="text-sm text-neutral-500">{company}</p>
+          </div>
+          <p className="text-xs text-neutral-500">{timeframe}</p>
         </div>
-        <p className="text-xs text-neutral-500">{timeframe}</p>
-      </div>
 
-      <ul className="space-y-2 text-sm text-neutral-400">
-        {bullets.map((item, idx) => (
-          <li key={`${company}-${idx}`} className="flex gap-2">
-            <span className="mt-[2px] inline-flex h-4 w-4 items-center justify-center shrink-0 text-blue-400">
-              <span
-                className="iconify block !h-4 !w-4"
-                data-icon="lucide:dot"
-              />
-            </span>
-            <span className="flex-1 min-w-0">
-              {highlightsOn ? highlightText(item, highlights) : item}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
+        <ul className="space-y-2 text-sm text-neutral-400">
+          {bullets.map((item, idx) => (
+            <li key={`${company}-${idx}`} className="flex gap-2">
+              <span className="mt-[2px] inline-flex h-4 w-4 items-center justify-center shrink-0 text-blue-400">
+                <span
+                  className="iconify block !h-4 !w-4"
+                  data-icon="lucide:dot"
+                />
+              </span>
+              <span className="flex-1 min-w-0">
+                {highlightsOn ? highlightText(item, highlights) : item}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </MotionSection>
   );
 }
 

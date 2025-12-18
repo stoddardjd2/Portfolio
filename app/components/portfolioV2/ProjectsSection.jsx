@@ -111,12 +111,12 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           "Plaid API",
         ]}
         features={[
-          "Idempotent, failure-tolerant payment and messaging systems built for retries, webhook replays, and failures.",
-          "Stripe payments with Plaid bank linking to dynamically track and update recurring expense splits.",
-          "Dynamic recurring billing and reminder cron jobs with custom intervals and full timezone awareness.",
-          "SMS pay-by-link payment flows via Telnyx with rate limiting and abuse safeguards to control costs.",
-          "Designed data models for multi-user shared expenses with custom splits and reconciliation.",
-          "Internal analytics dashboards for LTV, CAC, user segmentation, and cost forecasting.",
+          "Built reliable payment and messaging systems that safely handle retries, webhook replays, and service failures.",
+          "Integrated Stripe payments and Plaid bank connections to keep recurring expense splits accurate and up to date.",
+          "Implemented recurring billing and reminder schedules with flexible intervals and correct handling across time zones.",
+          "Created SMS pay-by-link payment flows using Telnyx, with safeguards to prevent abuse and control messaging costs.",
+          "Designed data models to support shared expenses across multiple users, including custom splits and reconciliation.",
+          "Built internal dashboards to track revenue, acquisition costs, user segments, and operational spend.",
           "Zero-account payment experience for recipients, reducing friction while preserving security and traceability.",
         ]}
         featureHighlights={[
@@ -386,7 +386,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         expandedLabel={"Hide Older Projects"}
         items={[
           <ProjectCard
-            title="Meal Planner — Weekly Planning & Budgeting Tool"
+            title="Smart Meal Planner — Weekly Planning & Budgeting Tool"
             iconDisableRounding={true}
             description="A web-based meal planning application that helps users organize weekly meals, adjust serving sizes, and generate shopping lists, with smart recommendations to reduce cost and ingredient waste."
             highlightsOn={highlightsOn}

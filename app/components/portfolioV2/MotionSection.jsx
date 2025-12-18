@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 
 const motionMap = {
@@ -12,44 +12,109 @@ const motionMap = {
   aside: motion.aside,
 };
 
+import { useEffect, useState } from "react";
+
+/**
+ * Triggers true when at least `px` vertical pixels of the element
+ * are visible in the viewport.
+ */
+function usePxInView(
+  ref,
+  px = 120,
+  { root = null, rootMargin = "0px", once = true } = {}
+) {
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || (once && inView)) return;
+
+    // Dense thresholds so we get intersectionRect updates
+    const thresholds = Array.from({ length: 101 }, (_, i) => i / 100);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visiblePx = Math.max(
+          0,
+          Math.min(
+            entry.boundingClientRect.height,
+            entry.intersectionRect.height
+          )
+        );
+
+        if (visiblePx >= px) {
+          setInView(true);
+          if (once) observer.disconnect();
+        } else if (!once) {
+          setInView(false);
+        }
+      },
+      { root, rootMargin, threshold: thresholds }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [ref, px, root, rootMargin, once, inView]);
+
+  return inView;
+}
+
 function MotionSection({
   as: Element = "section",
+
+  // animation
   delay = 0,
   duration = 1.2,
-  viewPortTrigger = 0.2,
+
+  // PIXEL-BASED trigger
+  triggerPx = 120,
+  triggerOnce = true,
+  rootMargin = "0px",
+
   staggerChildren,
   delayChildren,
-  children,
+
   className = "",
+  children,
+
   defaultVariants = {
     hidden: { opacity: 0, y: 42, filter: "blur(2px)" },
     visible: { opacity: 1, y: 0, filter: "blur(0px)" },
   },
+
   ...rest
 }) {
-  // ✅ stable component type across renders
+  const ref = useRef(null);
+
+  const isVisible = usePxInView(ref, triggerPx, {
+    once: triggerOnce,
+    rootMargin,
+  });
+
   const MotionTag = useMemo(() => {
-    if (typeof Element === "string") return motionMap[Element] || motion(Element);
-    // If Element is a React component, create once per Element reference
+    if (typeof Element === "string") {
+      return motionMap[Element] || motion(Element);
+    }
     return motion(Element);
   }, [Element]);
 
-  const transition = useMemo(() => {
-    return {
+  const transition = useMemo(
+    () => ({
       duration,
       delay,
       ease: [0.22, 1, 0.36, 1],
       ...(staggerChildren || delayChildren
         ? { staggerChildren, delayChildren }
         : {}),
-    };
-  }, [duration, delay, staggerChildren, delayChildren]);
+    }),
+    [duration, delay, staggerChildren, delayChildren]
+  );
 
   return (
     <MotionTag
+      ref={ref}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: viewPortTrigger }}
+      animate={isVisible ? "visible" : "hidden"}
       variants={defaultVariants}
       transition={transition}
       className={className}

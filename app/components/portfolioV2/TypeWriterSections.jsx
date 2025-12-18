@@ -1,24 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 
-/**
- * sections = [
- *   {
- *     text: "Full-stack engineer & founder…",
- *     retypeText?: "Full-stack engineer & product-focused founder…",
- *     skipTypingMain?: boolean,  // if true, main text appears instantly (no typing), but erase/retype still runs
- *     mode?: "word" | "letter",
- *     speed?: number,           // typing speed (ms)
- *     eraseSpeed?: number,      // backspace speed (ms)
- *     pauseAfter?: number,      // pause after final text before next section
- *     pauseBeforeErase?: number,// pause after typing main text before erasing (or after instant show)
- *     highlights?: { [plainWord]: "tailwind classes" },
- *     breakAfter?: number[],    // word indices to insert <br /> after
- *   },
- *   ...
- * ]
- */
-
 export function TypewriterSections({
   sections,
   defaultMode = "word",
@@ -27,8 +9,8 @@ export function TypewriterSections({
   defaultPauseAfter = 400,
   defaultPauseBeforeErase = 600,
   initialDelayMs = 0,
-  showCursor = false, // toggle blinking cursor
-  cursorChar = "| ", // cursor character
+  showCursor = false,
+  cursorChar = "| ",
   className = "",
 }) {
   const rootRef = useRef(null);
@@ -38,10 +20,8 @@ export function TypewriterSections({
   const [unitIdx, setUnitIdx] = useState(0);
   const [phase, setPhase] = useState("typingMain"); // "typingMain" | "erasing" | "typingRetyped"
 
-  // Strip punctuation only
   const baseNormalizeWord = (w) => (w || "").replace(/[.,!?;:"()]/g, "");
 
-  // Highlight lookup: try raw, lower, upper
   const resolveHighlightClass = (highlights, rawWord) => {
     const plain = baseNormalizeWord(rawWord);
     return (
@@ -67,8 +47,7 @@ export function TypewriterSections({
       const mainText = normalizeText(s.text);
       const retypeText = s.retypeText ? normalizeText(s.retypeText) : null;
 
-      const makeWords = (txt) => (txt.trim() ? txt.trim().split(/\s+/) : []); // no leading/trailing/empty “words”
-
+      const makeWords = (txt) => (txt.trim() ? txt.trim().split(/\s+/) : []);
       const mainWords = makeWords(mainText);
       const retypeWords = retypeText ? makeWords(retypeText) : null;
 
@@ -93,6 +72,11 @@ export function TypewriterSections({
       const mainUnits = buildUnits(mainText, mainWords);
       const retypeUnits = retypeText ? buildUnits(retypeText, retypeWords) : null;
 
+      // ✅ NEW: allow per-text/per-retype breaks, with legacy fallback
+      const legacyBreakAfter = s.breakAfter || [];
+      const breakAfterMain = s.breakAfterMain ?? legacyBreakAfter;
+      const breakAfterRetype = s.breakAfterRetype ?? legacyBreakAfter;
+
       return {
         mode,
         speed,
@@ -110,7 +94,8 @@ export function TypewriterSections({
         retypeUnits,
 
         highlights: s.highlights || {},
-        breakAfter: s.breakAfter || [],
+        breakAfterMain,
+        breakAfterRetype,
       };
     });
   }, [
@@ -122,7 +107,6 @@ export function TypewriterSections({
     defaultPauseBeforeErase,
   ]);
 
-  // Core typing / erasing state machine
   useEffect(() => {
     if (!inView) return;
     if (sectionIdx >= processed.length) return;
@@ -147,29 +131,22 @@ export function TypewriterSections({
 
     if (phase === "typingMain") {
       if (unitIdx < mainUnits.length) {
-        // NEW: instant reveal if skipTypingMain
         if (skipTypingMain) {
           delay = isFirstMain ? initialDelayMs : 0;
         } else {
           delay = isFirstMain ? initialDelayMs : speed;
         }
       } else if (sec.retypeText && retypeUnits && retypeUnits.length) {
-        delay = pauseBeforeErase; // finished typing main; wait then start erasing
+        delay = pauseBeforeErase;
       } else {
-        delay = pauseAfter; // finished section, no retype
+        delay = pauseAfter;
       }
     } else if (phase === "erasing") {
-      if (unitIdx > 0) {
-        delay = eraseSpeed;
-      } else {
-        delay = 0; // done erasing, go type retype
-      }
+      if (unitIdx > 0) delay = eraseSpeed;
+      else delay = 0;
     } else if (phase === "typingRetyped") {
-      if (retypeUnits && unitIdx < retypeUnits.length) {
-        delay = speed;
-      } else {
-        delay = pauseAfter; // finished retyped text
-      }
+      if (retypeUnits && unitIdx < retypeUnits.length) delay = speed;
+      else delay = pauseAfter;
     } else {
       return;
     }
@@ -177,12 +154,8 @@ export function TypewriterSections({
     const timerId = setTimeout(() => {
       if (phase === "typingMain") {
         if (unitIdx < mainUnits.length) {
-          // NEW: jump to fully visible main text
-          if (skipTypingMain) {
-            setUnitIdx(mainUnits.length);
-          } else {
-            setUnitIdx((n) => n + 1);
-          }
+          if (skipTypingMain) setUnitIdx(mainUnits.length);
+          else setUnitIdx((n) => n + 1);
         } else if (sec.retypeText && retypeUnits && retypeUnits.length) {
           setPhase("erasing");
           setUnitIdx(mainUnits.length);
@@ -211,35 +184,30 @@ export function TypewriterSections({
       }
 
       if (phase === "typingRetyped" && retypeUnits) {
-        if (unitIdx < retypeUnits.length) {
-          setUnitIdx((n) => n + 1);
-        } else {
+        if (unitIdx < retypeUnits.length) setUnitIdx((n) => n + 1);
+        else {
           setSectionIdx((i) => i + 1);
           setUnitIdx(0);
           setPhase("typingMain");
         }
-        return;
       }
     }, delay);
 
     return () => clearTimeout(timerId);
   }, [inView, sectionIdx, unitIdx, phase, processed, initialDelayMs]);
 
-  // Render with highlights + br, but DO NOT output <br/> when it's the last visible thing
-  const renderUnits = (sec, unitsArr, wordsArr, visibleCount) => {
-    const { mode, highlights, breakAfter } = sec;
+  // ✅ UPDATED: pass breakAfter explicitly per render (main vs retype)
+  const renderUnits = (sec, unitsArr, wordsArr, visibleCount, breakAfter) => {
+    const { mode, highlights } = sec;
     const visibleUnits = unitsArr.slice(0, visibleCount);
 
     return visibleUnits.map((unit, idx) => {
-      // WORD MODE
       if (mode === "word") {
         const rawWord = unit;
         const colorClass = resolveHighlightClass(highlights, rawWord);
 
         const isBreak = breakAfter.includes(idx);
         const isLastVisible = idx === visibleUnits.length - 1;
-
-        // only render the <br /> once something AFTER it is visible
         const shouldRenderBreakNow = isBreak && !isLastVisible;
 
         return (
@@ -250,7 +218,6 @@ export function TypewriterSections({
         );
       }
 
-      // LETTER MODE (unit = { char, wordIndex })
       const { char, wordIndex } = unit;
       let highlightClass = "";
 
@@ -265,8 +232,6 @@ export function TypewriterSections({
 
       const isBreak = wordIndex !== null && breakAfter.includes(wordIndex);
       const isLastVisible = idx === visibleUnits.length - 1;
-
-      // only render the <br /> once something AFTER it is visible
       const shouldRenderBreakNow = isBreak && !isLastVisible;
 
       return (
@@ -283,13 +248,7 @@ export function TypewriterSections({
     showCursor && i === sectionIdx && sectionIdx < processed.length;
 
   return (
-    <span
-      ref={rootRef}
-      className={className}
-      // no pre-wrap: let <br /> control line breaks,
-      // and we control spaces manually
-      style={{ whiteSpace: "normal" }}
-    >
+    <span ref={rootRef} className={className} style={{ whiteSpace: "normal" }}>
       {processed.map((sec, i) => {
         const {
           mainWords,
@@ -298,35 +257,38 @@ export function TypewriterSections({
           retypeWords,
           retypeUnits,
           skipTypingMain,
+          breakAfterMain,
+          breakAfterRetype,
         } = sec;
 
-        // Sections BEFORE current → fully rendered final state (with highlights)
         if (i < sectionIdx) {
           if (retypeText && retypeUnits && retypeUnits.length) {
             return (
               <span key={i}>
-                {renderUnits(sec, retypeUnits, retypeWords || [], retypeUnits.length)}
+                {renderUnits(
+                  sec,
+                  retypeUnits,
+                  retypeWords || [],
+                  retypeUnits.length,
+                  breakAfterRetype
+                )}
               </span>
             );
           }
           return (
             <span key={i}>
-              {renderUnits(sec, mainUnits, mainWords, mainUnits.length)}
+              {renderUnits(sec, mainUnits, mainWords, mainUnits.length, breakAfterMain)}
             </span>
           );
         }
 
-        // Sections AFTER current → nothing yet
-        if (i > sectionIdx) {
-          return <span key={i} />;
-        }
+        if (i > sectionIdx) return <span key={i} />;
 
-        // CURRENT SECTION
         let unitsToUse = mainUnits;
         let wordsToUse = mainWords;
         let visibleCount = unitIdx;
+        let breaksToUse = breakAfterMain;
 
-        // NEW: if skipping typing main, render it fully during typingMain
         if (phase === "typingMain" && skipTypingMain) {
           visibleCount = mainUnits.length;
         }
@@ -335,9 +297,10 @@ export function TypewriterSections({
           unitsToUse = retypeUnits;
           wordsToUse = retypeWords || [];
           visibleCount = unitIdx;
+          breaksToUse = breakAfterRetype;
         }
 
-        const content = renderUnits(sec, unitsToUse, wordsToUse, visibleCount);
+        const content = renderUnits(sec, unitsToUse, wordsToUse, visibleCount, breaksToUse);
         const showCursorHere = shouldShowCursorForSection(i);
 
         return (
