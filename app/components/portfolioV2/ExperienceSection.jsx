@@ -48,6 +48,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
             "LTV",
             "Google Ads",
           ]}
+          highlightsOn={highlightsOn}
           bullets={[
             "Founded and built a production SaaS automating shared expenses, payments, and SMS reminders to reduce friction in group billing.",
             "Owned the full product lifecycle end-to-end across strategy, UX, frontend, backend APIs, infrastructure, analytics, and growth.",
@@ -74,6 +75,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
             "responsive assets",
             "brand-safe",
           ]}
+          highlightsOn={highlightsOn}
           bullets={[
             "Collaborated with designers, creative directors, and partners to ship cinematic, motion-driven experiences using reusable systems.",
             "Translated brand and editorial direction into production-ready UI with dynamic heroes, image sequencing, and narrative flow.",
@@ -97,6 +99,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
             "Netlify",
             "Render",
           ]}
+          highlightsOn={highlightsOn}
           bullets={[
             "Designed and built a production-grade internal catalog platform to centralize services, libraries, and tooling across teams.",
             "Delivered a white-labeled, themeable UI adaptable to multiple clients and internal brands while maintaining a consistent core system.",
@@ -113,14 +116,27 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
           company="Safeway"
           timeframe="Mar 2023 – Dec 2023"
           highlights={[
-            "process optimization",
-            "operational metrics",
-            "inventory systems",
-            "workflow design",
-            "mobile tooling",
-            "data accuracy",
-            "team leadership",
+            "department operations",
+            "performance targets",
+            "profitability",
+            "50%",
+            "repeatable",
+            "product rotation",
+            "replenishment workflows",
+            "expired inventory",
+            "30%",
+            "inventory accuracy",
+            "20%",
+            "discrepancy analysis",
+            "mobile inventory tools",
+            "product levels",
+            "cross-functional team",
+            "staffing",
+            "workload distribution",
+            "customer experience",
+            "sales performance",
           ]}
+          highlightsOn={highlightsOn}
           bullets={[
             "Owned end-to-end department operations, treating the department as a system with measurable inputs, outputs, and performance targets.",
             "Increased department profitability by approximately 50% within the first quarter by identifying inefficiencies and implementing repeatable operational processes.",
@@ -171,13 +187,13 @@ function highlightText(text, highlights = []) {
     );
   });
 }
-
 function ExperienceEntry({
   role,
   company,
   timeframe,
   bullets,
   highlights = [],
+  highlightsOn = true,
 }) {
   return (
     <div className="rounded-xl border border-neutral-800 bg-neutral-900/20 p-4 sm:p-5 md:p-6">
@@ -190,8 +206,8 @@ function ExperienceEntry({
       </div>
 
       <ul className="space-y-2 text-sm text-neutral-400">
-        {bullets.map((item) => (
-          <li key={item} className="flex gap-2">
+        {bullets.map((item, idx) => (
+          <li key={`${company}-${idx}`} className="flex gap-2">
             <span className="mt-[2px] inline-flex h-4 w-4 items-center justify-center shrink-0 text-blue-400">
               <span
                 className="iconify block !h-4 !w-4"
@@ -199,7 +215,7 @@ function ExperienceEntry({
               />
             </span>
             <span className="flex-1 min-w-0">
-              {highlightText(item, highlights)}
+              {highlightsOn ? highlightText(item, highlights) : item}
             </span>
           </li>
         ))}
