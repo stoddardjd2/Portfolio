@@ -10,7 +10,7 @@ const badgeVariants = {
   visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
-const baseDelay = 15.8;
+const baseDelay = 10.8;
 /**
  * One place to control ALL timings, in the order they appear.
  * - Keep units consistent (ms for typewriter, seconds for MotionSection delays/durations)
