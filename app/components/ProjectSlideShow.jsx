@@ -227,7 +227,7 @@ function SlideshowInner({
           key={list[idx] || idx}
           src={list[idx]}
           alt={`${title} preview ${idx + 1}`}
-          loading="lazy"
+          loading="eager"
           className={
             "absolute inset-0 h-full w-full object-cover select-none " +
             (enableClickToOpen ? "cursor-pointer " : "") +
