@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
  * Triggers true when at least `px` vertical pixels of the element
  * are visible in the viewport.
  */
+
 function usePxInView(
   ref,
   px = 120,
@@ -29,20 +30,38 @@ function usePxInView(
     const el = ref.current;
     if (!el || (once && inView)) return;
 
-    // Dense thresholds so we get intersectionRect updates
+    // Immediate sync check (helps "already visible on load" cases)
+    const syncCheck = () => {
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+
+      const visible = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+      const required = Math.min(px, r.height || px);
+
+      return visible >= required;
+    };
+
+    if (syncCheck()) {
+      setInView(true);
+      return;
+    }
+
+    // Dense thresholds so intersectionRect updates frequently
     const thresholds = Array.from({ length: 101 }, (_, i) => i / 100);
 
     const observer = new IntersectionObserver(
       ([entry]) => {
+        const elH = entry.boundingClientRect.height;
+
+        // If the element is smaller than px, require only its full height
+        const requiredPx = Math.min(px, elH || px);
+
         const visiblePx = Math.max(
           0,
-          Math.min(
-            entry.boundingClientRect.height,
-            entry.intersectionRect.height
-          )
+          Math.min(elH, entry.intersectionRect.height)
         );
 
-        if (visiblePx >= px) {
+        if (visiblePx >= requiredPx) {
           setInView(true);
           if (once) observer.disconnect();
         } else if (!once) {
@@ -54,10 +73,12 @@ function usePxInView(
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [ref, px, root, rootMargin, once, inView]);
+  }, [px, root, rootMargin, once, inView]);
 
   return inView;
 }
+
+
 
 function MotionSection({
   as: Element = "section",
