@@ -145,7 +145,7 @@ function HeroSection() {
                   mode: "letter",
                   retypeText: "I Am More Than Just a Full Stack Developer.",
                   pauseAfter: TIMING.h1TypewriterPauseAfterMs,
-                  pauseBeforeErase: 331000,
+                  pauseBeforeErase: 1000,
                   breakAfterRetype: [5],
                   highlights: {
                     Full: "text-neutral-500",
