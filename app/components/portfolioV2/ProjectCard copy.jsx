@@ -198,7 +198,7 @@ export default function ProjectCard({
                             href={brand.href}
                             target={brand.href ? "_blank" : undefined}
                             rel={brand.href ? "noreferrer" : undefined}
-                            className="flex items-center gap-2 rounded-full border border-neutral-800 bg-neutral-900/40 px-3 py-1 text-[11px] text-neutral-300 hover:border-neutral-600 transition-colors"
+                            className="flex items-center gap-2 rounded-full border border-neutral-800 bg-neutral-900 px-3 py-1 text-[11px] text-neutral-300 hover:border-neutral-600 transition-colors"
                           >
                             {brand.logo && (
                               <img
@@ -362,7 +362,7 @@ export default function ProjectCard({
               {badges.map((badge) => (
                 <span
                   key={badge}
-                  className="px-2 py-0.5 text-[10px] text-neutral-500 border border-neutral-800 rounded"
+                  className="px-2 py-1 rounded border border-neutral-800 bg-neutral-900 text-xs text-neutral-300"
                 >
                   {badge}
                 </span>
@@ -416,11 +416,11 @@ function FeatureItem({
   return (
     <li className="flex items-start gap-3 text-sm text-neutral-400">
       <span
-        className={`iconify text-neutral-300 inline-block align-middle leading-none text-[16px] mt-0.5 flex-shrink-0 ${iconColorClass}`}
+        className={`iconify  inline-block align-middle leading-none text-[16px] mt-0.5 flex-shrink-0 ${iconColorClass}`}
         data-icon={icon}
         aria-hidden="true"
       />
-      <span className={emphasis ? "text-neutral-200 font-medium" : ""}>
+      <span className={emphasis ? "text-neutral-400 font-medium" : "text-neutral-300 font-normal"}>
         {highlightText(text, highlights)}
       </span>
     </li>

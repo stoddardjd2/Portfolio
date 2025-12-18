@@ -73,7 +73,7 @@ function SkillsSection() {
   return (
     <MotionSection
       id="skills"
-      className="mb-32"
+      className="scroll-mt-30"
       delay={0.1}
       duration={0.6}
     >
@@ -127,7 +127,7 @@ function SkillsSection() {
             "Aggregation Pipelines",
             "Optimized Queries",
             "AWS / Vercel / Netlify",
-            "Web scraping",
+            "Web Scraping",
             "Data Modeling & Optimization",
           ]}
         />
@@ -139,7 +139,7 @@ function SkillsSection() {
             "Performance Optimization",
             "SEO & Analytics",
             "Accessibility",
-            "Admin dashboards & tools",
+            "Admin Dashboards & Tools",
             "Rapid Prototyping & Iteration",
           ]}
         />

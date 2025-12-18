@@ -13,17 +13,24 @@ import { useState } from "react";
 import ContactModal from "../components/portfolioV2/ContactModal.jsx";
 function PortfolioPageV2() {
   const [open, setOpen] = useState(false);
+  const [highlightsOn, setHighlightsOn] = useState(false);
 
   return (
     <div className="bg-neutral-950 text-neutral-400 antialiased selection:bg-neutral-800 selection:text-white min-h-screen">
       <NavBar />
-      <main id="top" className="max-w-5xl mx-auto px-6 pb-24">
+      <main id="top" className="max-w-5xl mx-auto px-5 sm:px-6 pb-24 space-y-[clamp(4rem,8vw,8rem)]">
         <HeroSection />
         <ValueSection />
-        <ProjectsSection />
-        <ExperienceSection />
-        <CaseStudySection />
-        <div className="grid lg:grid-cols-2 gap-16 mb-32">
+        <ProjectsSection
+          highlightsOn={highlightsOn}
+          setHighlightsOn={setHighlightsOn}
+        />
+        <ExperienceSection
+          highlightsOn={highlightsOn}
+          setHighlightsOn={setHighlightsOn}
+        />
+        {/* <CaseStudySection /> */}
+        <div className="grid lg:grid-cols-2 gap-16">
           <AboutSection />
           <TestimonialsSection />
         </div>

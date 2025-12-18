@@ -10,7 +10,7 @@ const itemVariants = {
 function ValueSection() {
   return (
     <MotionSection
-      className="mb-32 border-t border-dashed border-neutral-800 pt-16"
+      className="border-t border-dashed border-neutral-800 pt-16"
       delay={0.1}
       duration={1}
       staggerChildren={0.05}

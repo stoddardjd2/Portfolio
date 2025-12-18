@@ -58,53 +58,10 @@ const TIMING = {
   scrollIndicatorDurationS: 1.4,
 };
 
-const TIMING2 = {
-  // 1) Hero wrapper
-  heroContainerDelayS: 0.05,
-
-  // 3) H1 Typewriter (headline)
-  h1TypewriterInitialDelayMs: 100,
-  h1TypewriterSpeedMs: 35,
-  h1TypewriterEraseSpeedMs: 20,
-  h1TypewriterPauseAfterMs: 100,
-
-  // 4) Paragraph wrapper motion (fade/slide in)
-  paragraphMotionDelayS: 0,
-  paragraphMotionDurationS: 1.5,
-
-  // 5) Paragraph Typewriter
-  paragraphTypewriterInitialDelayMs: 0,
-  paragraphTypewriterSpeedMs: 4,
-  paragraphTypewriterPauseAfterMs: 300,
-
-  // 6) CTA buttons motion group
-  ctasMotionDelayS: 0,
-  ctasMotionDurationS: 0.7,
-  ctasMotionStaggerChildrenS: 0.2,
-  ctasMotionDelayChildrenS: 0,
-
-  // 7) Badges row motion group
-  badgesMotionDelayS: 0.1,
-  badgesMotionDurationS: 0.6,
-  badgesMotionStaggerChildrenS: 0.1,
-  badgesMotionDelayChildrenS: 0,
-
-  // 8) Portrait motion
-  portraitDelayS: 0,
-  portraitDurationS: 2,
-
-  // 2) Availability pill
-  availabilityPillDelayS: 0,
-
-  // 9) Scroll indicator motion
-  scrollIndicatorDelayS: 0,
-  scrollIndicatorDurationS: 1.4,
-};
-
 function HeroSection() {
   return (
     <MotionSection
-      className="relative min-h-[calc(100vh-56px)] flex justify-center items-start lg:items-center pt-20 lg:pt-0"
+      className="relative min-h-[calc(100vh-56px)] flex justify-center items-center "
       delay={TIMING.heroContainerDelayS}
     >
       <div className="relative h-full w-full ">
@@ -116,20 +73,12 @@ function HeroSection() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
               </span>
-              Open to Full-Time &amp; Contract Work
+              Open to Full-Time Roles &amp; Contract Work
             </div>
           </MotionSection>
 
           {/* 3) Headline typewriter */}
-          <h1
-            className={`
-    text-2xl xxxs:text-3xl xxs:text-4xl sm:text-6xl
-    font-semibold tracking-tighter text-white mb-4 lg:mb-6
-    leading-[1.1]
-    min-h-[calc(2*1.1em)]
-  `}
-          >
-            {" "}
+          <h1 className="text-4xl min-h-[140px] md:text-6xl font-semibold tracking-tighter text-white mb-6 leading-[1.1]">
             <TypewriterSections
               className=""
               initialDelayMs={TIMING.h1TypewriterInitialDelayMs}
@@ -162,7 +111,7 @@ function HeroSection() {
               visible: { opacity: 1, y: 0 },
             }}
           >
-            <p className=" text-md sm:text-lg  min-h-[165px] md:text-xl text-neutral-400 max-w-2xl mb-8 leading-relaxed font-light">
+            <p className="text-lg  min-h-[165px] md:text-xl text-neutral-400 max-w-2xl mb-8 leading-relaxed font-light">
               {/* 5) Paragraph typewriter */}
               <TypewriterSections
                 className=""
@@ -250,9 +199,9 @@ function HeroSection() {
               visible: { opacity: 1 },
             }}
           >
-            <div className="flex items-center w-fit justify-center flex-wrap gap-x-6 gap-y-4 text-xs font-medium text-neutral-500 uppercase tracking-wide">
+            <div className="flex items-center gap-6 text-xs font-medium text-neutral-500 uppercase tracking-wide">
               <motion.div
-                className="flex items-center whitespace-nowrap gap-2"
+                className="flex items-center gap-2"
                 variants={badgeVariants}
               >
                 <span
@@ -263,7 +212,7 @@ function HeroSection() {
               </motion.div>
 
               <motion.div
-                className="flex items-center  whitespace-nowrap gap-2"
+                className="flex items-center gap-2"
                 variants={badgeVariants}
               >
                 <span
@@ -274,7 +223,7 @@ function HeroSection() {
               </motion.div>
 
               <motion.div
-                className="flex items-center  whitespace-nowrap gap-2"
+                className="flex items-center gap-2"
                 variants={badgeVariants}
               >
                 <span
@@ -285,7 +234,7 @@ function HeroSection() {
               </motion.div>
 
               <motion.div
-                className="flex items-center  whitespace-nowrap gap-2"
+                className="flex items-center gap-2"
                 variants={badgeVariants}
               >
                 <span
@@ -300,7 +249,7 @@ function HeroSection() {
 
         {/* 8) Portrait motion */}
         <MotionSection
-          className="lg:absolute flex pb-16 lg:pb-0 mt-16 items-center justify-center bottom-0 z-0 right-0"
+          className="absolute bottom-0 z-0 right-0"
           delay={TIMING.portraitDelayS}
           duration={TIMING.portraitDurationS}
           defaultVariants={{
@@ -310,7 +259,7 @@ function HeroSection() {
         >
           <img
             src={portraitGrayNoBg}
-            className="lg:h-[470px] px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
+            className="h-[470px] scale-x-[-1]"
             alt="Portrait"
           />
         </MotionSection>
@@ -318,7 +267,7 @@ function HeroSection() {
 
       {/* 9) Scroll indicator motion */}
       <MotionSection
-        className="flex lg:inline hidden justify-center absolute bottom-10 left-1/2 -translate-x-1/2 mx-auto"
+        className="flex justify-center absolute bottom-10 left-1/2 -translate-x-1/2 mx-auto"
         delay={TIMING.scrollIndicatorDelayS}
         duration={TIMING.scrollIndicatorDurationS}
         defaultVariants={{

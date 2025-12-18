@@ -9,18 +9,22 @@ function AboutSection() {
       </h2>
       <div className="prose prose-invert prose-sm text-neutral-400">
         <p className="mb-4">
-          Hi, I am Jared -- a full-stack developer who loves building systems
-          that feel effortless for users and powerful under the hood. I thrive
-          where engineering, UX, and real-world product constraints meet.
+          I’m Jared, a full-stack engineer and founder with hands-on experience
+          building and shipping production systems, including AI-powered
+          workflows. I focus on creating software that feels intuitive to users
+          while remaining precise, reliable, and scalable under the hood.
         </p>
         <p className="mb-4">
-          As a solo founder, I have learned how to design intuitive interfaces,
-          architect scalable backends, debug complex date logic, and ship
-          features fast that people actually want.
+          I use AI intentionally, understanding where it accelerates
+          development and where manual engineering is required for correctness,
+          performance, and long-term maintainability. Having launched real
+          products, I bring a strong UX/UI perspective and a practical
+          understanding of what drives adoption, engagement, and conversion.
         </p>
         <p>
-          I am looking to join a team where I can bring this level of ownership,
-          velocity, and product insight to real-world engineering challenges.
+          I’m looking to join a team where I can apply this product-driven
+          mindset, technical depth, and execution speed to meaningful
+          engineering challenges.
         </p>
       </div>
     </MotionSection>

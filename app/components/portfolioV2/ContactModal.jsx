@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import emailjs from "emailjs-com";
-
 const EMAIL = "Jared.stoddard2@gmail.com";
-
+// https://dashboard.emailjs.com/admin
 export default function ContactModal({ open, onClose }) {
   const formRef = useRef(null);
   const [status, setStatus] = useState("idle");
@@ -38,7 +37,7 @@ export default function ContactModal({ open, onClose }) {
   const copyEmail = async () => {
     try {
       await navigator.clipboard.writeText(EMAIL);
-      setCopied(true);
+      sethCopied(true);
       setTimeout(() => setCopied(false), 3600);
     } catch {
       /* silently fail */
