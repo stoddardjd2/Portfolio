@@ -16,7 +16,7 @@ function MotionSection({
   as: Element = "section",
   delay = 0,
   duration = 1.2,
-  viewPortTrigger = 0.4,
+  viewPortTrigger = 0.2,
   staggerChildren,
   delayChildren,
   children,
