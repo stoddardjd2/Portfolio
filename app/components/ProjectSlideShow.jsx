@@ -290,7 +290,7 @@ function SlideshowInner({
             onClick={prev}
             aria-label="Previous image"
             className="group absolute left-3 top-1/2 -translate-y-1/2
-              h-9 w-9 rounded-full bg-neutral-950/40 
+              h-9 w-9 rounded-full bg-neutral-950/80 
               border border-white/10 text-white/85
               shadow-lg shadow-black/20 transition-all
               hover:bg-neutral-900 hover:scale-105 active:scale-95"
@@ -305,7 +305,7 @@ function SlideshowInner({
             onClick={next}
             aria-label="Next image"
             className="group absolute right-3 top-1/2 -translate-y-1/2
-              h-9 w-9 rounded-full bg-neutral-950/40
+              h-9 w-9 rounded-full bg-neutral-950/80
               border border-white/10 text-white/85
               shadow-lg shadow-black/20 transition-all
               hover:bg-neutral-900 hover:scale-105 active:scale-95"

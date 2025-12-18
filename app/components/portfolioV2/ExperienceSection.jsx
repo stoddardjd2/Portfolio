@@ -107,6 +107,30 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
             "Delivered interactive, data-dense UIs with sortable, resizable tables and responsive layouts for desktop and mobile workflows.",
           ]}
         />
+
+        <ExperienceEntry
+          role="Department Manager"
+          company="Safeway"
+          timeframe="Mar 2023 – Dec 2023"
+          highlights={[
+            "process optimization",
+            "operational metrics",
+            "inventory systems",
+            "workflow design",
+            "mobile tooling",
+            "data accuracy",
+            "team leadership",
+          ]}
+          bullets={[
+            "Owned end-to-end department operations, treating the department as a system with measurable inputs, outputs, and performance targets.",
+            "Increased department profitability by approximately 50% within the first quarter by identifying inefficiencies and implementing repeatable operational processes.",
+            "Redesigned product rotation and replenishment workflows, reducing expired inventory loss by roughly 30%.",
+            "Improved inventory accuracy by ~20% through systematic reporting, discrepancy analysis, and tighter controls on damaged and missing items.",
+            "Leveraged mobile inventory tools to streamline stocking, reduce manual errors, and improve real-time visibility into product levels.",
+            "Led daily execution for a cross-functional team, balancing staffing, workload distribution, and priority shifts under time constraints.",
+            "Maintained high standards for organization, cleanliness, and product presentation to improve customer experience and sales performance.",
+          ]}
+        />
       </div>
     </MotionSection>
   );
