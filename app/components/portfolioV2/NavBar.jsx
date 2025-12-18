@@ -6,7 +6,7 @@ function NavBar() {
       <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
         <a
           href="#top"
-          className="text-sm font-medium tracking-widest text-white hover:text-neutral-300 transition-colors uppercase"
+          className="text-sm mr-2 font-medium tracking-widest text-white hover:text-neutral-300 transition-colors uppercase"
         >
           Jared Stoddard
         </a>
@@ -14,7 +14,7 @@ function NavBar() {
           <a href="#projects" className="hover:text-white transition-colors">
             Projects
           </a>
-          <a href="#experience" className="hover:text-white transition-colors">
+          <a href="#experience" className="sm:inline hidden hover:text-white transition-colors">
             Experience
           </a>
           <a href="#skills" className="hover:text-white transition-colors">
