@@ -90,6 +90,20 @@ function SlideshowInner({
   const [hover, setHover] = useState(false);
   const [playing, setPlaying] = useState(autoplay);
 
+  useEffect(() => {
+    if (!canSlide) return;
+
+    const preload = (src) => {
+      if (!src) return;
+      const img = new Image();
+      img.decoding = "async";
+      img.src = src;
+    };
+
+    preload(list[(idx + 1) % count]);
+    preload(list[(idx - 1 + count) % count]);
+  }, [idx, list, count, canSlide]);
+
   // keep idx stable if list changes
   useEffect(() => {
     if (idx >= count) setIdx(0);
@@ -215,14 +229,14 @@ function SlideshowInner({
     <div
       ref={rootRef}
       className={
-        "relative w-full overflow-hidden rounded-lg border border-neutral-800 " +
+        "relative w-full overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900" +
         className
       }
       style={containerStyle}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <AnimatePresence mode="sync" initial={false}>
+      <AnimatePresence mode="popLayout" initial={false}>
         <motion.img
           key={list[idx] || idx}
           src={list[idx]}
@@ -234,10 +248,10 @@ function SlideshowInner({
             imgClassName
           }
           style={{ objectPosition }}
-          initial={{ opacity: 0.001, scale: 1.002 }}
+          initial={{ opacity: 0, scale: 1.002 }}
           animate={{ opacity: 1, scale: 1, objectPosition }}
-          exit={{ opacity: 0.001, scale: 1.002 }}
-          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          exit={{ opacity: 0, scale: 1.002 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           onClick={() => {
             if (!enableClickToOpen) return;
             onOpenModal?.(idx);
