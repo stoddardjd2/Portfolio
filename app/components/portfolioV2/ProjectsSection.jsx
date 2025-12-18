@@ -40,7 +40,7 @@ import plaidIcon from "../../assets/project-integration-icons/plaid.png";
 // import plaidIcon from "../../assets/project-integration-icons/plaid-full.png";
 // import telnyxIcon from "../../assets/project-integration-icons/telnyx.png";
 import telnyxIcon from "../../assets/project-integration-icons/telnyx-icon.png?format=png&quality=80&as=src";
-import stripeIcon from "../../assets/project-integration-icons/stripe.svg";
+import stripeIcon from "../../assets/project-integration-icons/stripe.svg?format=png&quality=80&as=src";
 import chatGptIcon from "../../assets/project-integration-icons/chatGpt.png?format=png&quality=80&as=src";
 import venmoIcon from "../../assets/project-integration-icons/venmo.svg?format=jpg&quality=80&as=src";
 import storiedSportsIcon from "../../assets/project-integration-icons/storiedSports.png?format=png&quality=80&as=src";
