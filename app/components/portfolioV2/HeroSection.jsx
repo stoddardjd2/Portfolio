@@ -10,7 +10,7 @@ const badgeVariants = {
   visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
-const baseDelay = 7
+const baseDelay = 15.8;
 /**
  * One place to control ALL timings, in the order they appear.
  * - Keep units consistent (ms for typewriter, seconds for MotionSection delays/durations)
@@ -27,34 +27,32 @@ const TIMING = {
   h1TypewriterPauseAfterMs: 100,
 
   // 4) Paragraph wrapper motion (fade/slide in)
-  paragraphMotionDelayS: 2.7,
+  paragraphMotionDelayS: 4.7,
   paragraphMotionDurationS: 1.5,
 
   // 5) Paragraph Typewriter
-  paragraphTypewriterInitialDelayMs: 2800,
-  paragraphTypewriterSpeedMs: 4,
+  paragraphTypewriterInitialDelayMs:4800,
+  paragraphTypewriterSpeedMs: 7,
   paragraphTypewriterPauseAfterMs: 300,
 
   // 8) Portrait motion
-  portraitDelayS: baseDelay + .1,
+  portraitDelayS: baseDelay + 0.1,
   portraitDurationS: 2,
-
 
   // 6) CTA buttons motion group
   ctasMotionDelayS: 0,
   ctasMotionDurationS: 0.7,
   ctasMotionStaggerChildrenS: 0.2,
-  ctasMotionDelayChildrenS: baseDelay + .3,
+  ctasMotionDelayChildrenS: baseDelay + 0.3,
 
   // 7) Badges row motion group
   badgesMotionDelayS: 0.1,
   badgesMotionDurationS: 0.6,
   badgesMotionStaggerChildrenS: 0.1,
-  badgesMotionDelayChildrenS: baseDelay + .6,
-
+  badgesMotionDelayChildrenS: baseDelay + 0.6,
 
   // 2) Availability pill
-  availabilityPillDelayS: baseDelay + .9,
+  availabilityPillDelayS: baseDelay + 0.9,
 
   // 9) Scroll indicator motion
   scrollIndicatorDelayS: baseDelay + 2.2,
@@ -141,11 +139,13 @@ function HeroSection() {
               showCursor={true}
               sections={[
                 {
-                  // text: "I Am a Full Stack Developer.",
-                  text: "I Am More Than Just a Full Stack Developer.",
+                  text: "I Am a Full Stack Developer.",
+                  // text: "I Am More Than Just a Full Stack Developer.",
+                  skipTypingMain: true,
                   mode: "letter",
-                  // retypeText: "I Am More Than Just a Full Stack Developer.",
+                  retypeText: "I Am More Than Just a Full Stack Developer.",
                   pauseAfter: TIMING.h1TypewriterPauseAfterMs,
+                  pauseBeforeErase: 1000,
                   breakAfter: [5],
                   highlights: {
                     Full: "text-neutral-500",
@@ -305,6 +305,7 @@ function HeroSection() {
         <MotionSection
           className="lg:absolute flex pb-16 lg:pb-0 mt-16 items-center justify-center bottom-0 z-0 right-0"
           delay={TIMING.portraitDelayS}
+          viewPortTrigger={0.2}
           duration={TIMING.portraitDurationS}
           defaultVariants={{
             hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
