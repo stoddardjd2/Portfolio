@@ -409,14 +409,13 @@ function highlightText(text, highlights = []) {
 function FeatureItem({
   text,
   icon = "lucide:check",
-  iconColorClass = "text-blue-400",
   emphasis = false,
   highlights = [], // NEW
 }) {
   return (
     <li className="flex items-start gap-3 text-sm text-neutral-400">
       <span
-        className={`iconify text-neutral-300 inline-block align-middle leading-none text-[16px] mt-0.5 flex-shrink-0 ${iconColorClass}`}
+        className={`iconify text-blue-400 inline-block align-middle leading-none text-[16px] mt-0.5 flex-shrink-0 `}
         data-icon={icon}
         aria-hidden="true"
       />

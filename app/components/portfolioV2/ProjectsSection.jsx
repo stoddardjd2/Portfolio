@@ -557,18 +557,6 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
   );
 }
 
-function FeatureItem({ text }) {
-  return (
-    <li className="flex items-start gap-3 text-sm text-neutral-400">
-      <span
-        className="iconify w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0"
-        data-icon="lucide:check"
-      ></span>
-      <span>
-        <strong className="text-neutral-300 font-normal">{text}</strong>
-      </span>
-    </li>
-  );
-}
+
 
 export default ProjectsSection;
