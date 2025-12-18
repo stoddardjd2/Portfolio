@@ -10,6 +10,7 @@ const badgeVariants = {
   visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
+const baseDelay = 7
 /**
  * One place to control ALL timings, in the order they appear.
  * - Keep units consistent (ms for typewriter, seconds for MotionSection delays/durations)
@@ -34,27 +35,29 @@ const TIMING = {
   paragraphTypewriterSpeedMs: 4,
   paragraphTypewriterPauseAfterMs: 300,
 
+  // 8) Portrait motion
+  portraitDelayS: baseDelay + .1,
+  portraitDurationS: 2,
+
+
   // 6) CTA buttons motion group
   ctasMotionDelayS: 0,
   ctasMotionDurationS: 0.7,
   ctasMotionStaggerChildrenS: 0.2,
-  ctasMotionDelayChildrenS: 11.7,
+  ctasMotionDelayChildrenS: baseDelay + .3,
 
   // 7) Badges row motion group
   badgesMotionDelayS: 0.1,
   badgesMotionDurationS: 0.6,
   badgesMotionStaggerChildrenS: 0.1,
-  badgesMotionDelayChildrenS: 12.3,
+  badgesMotionDelayChildrenS: baseDelay + .6,
 
-  // 8) Portrait motion
-  portraitDelayS: 11.5,
-  portraitDurationS: 2,
 
   // 2) Availability pill
-  availabilityPillDelayS: 11.9,
+  availabilityPillDelayS: baseDelay + .9,
 
   // 9) Scroll indicator motion
-  scrollIndicatorDelayS: 12.5,
+  scrollIndicatorDelayS: baseDelay + 2.2,
   scrollIndicatorDurationS: 1.4,
 };
 
