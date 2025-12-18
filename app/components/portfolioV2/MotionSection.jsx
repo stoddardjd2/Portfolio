@@ -88,7 +88,7 @@ function MotionSection({
   duration = 1.2,
 
   // PIXEL-BASED trigger
-  triggerPx = 120,
+  triggerPx = 200,
   triggerOnce = true,
   rootMargin = "0px",
 

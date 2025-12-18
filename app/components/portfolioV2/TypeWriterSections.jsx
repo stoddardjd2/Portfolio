@@ -18,7 +18,12 @@ export function TypewriterSections({
 
   const [sectionIdx, setSectionIdx] = useState(0);
   const [unitIdx, setUnitIdx] = useState(0);
-  const [phase, setPhase] = useState("typingMain"); // "typingMain" | "erasing" | "typingRetyped"
+  const [phase, setPhase] = useState("typingMain");
+
+  const rafRef = useRef(null);
+  const nextAtRef = useRef(null);
+
+  /* ---------------- helpers ---------------- */
 
   const baseNormalizeWord = (w) => (w || "").replace(/[.,!?;:"()]/g, "");
 
@@ -31,6 +36,8 @@ export function TypewriterSections({
       ""
     );
   };
+
+  /* ---------------- preprocessing ---------------- */
 
   const processed = useMemo(() => {
     return sections.map((s) => {
@@ -70,9 +77,10 @@ export function TypewriterSections({
       };
 
       const mainUnits = buildUnits(mainText, mainWords);
-      const retypeUnits = retypeText ? buildUnits(retypeText, retypeWords) : null;
+      const retypeUnits = retypeText
+        ? buildUnits(retypeText, retypeWords)
+        : null;
 
-      // ✅ NEW: allow per-text/per-retype breaks, with legacy fallback
       const legacyBreakAfter = s.breakAfter || [];
       const breakAfterMain = s.breakAfterMain ?? legacyBreakAfter;
       const breakAfterRetype = s.breakAfterRetype ?? legacyBreakAfter;
@@ -107,6 +115,8 @@ export function TypewriterSections({
     defaultPauseBeforeErase,
   ]);
 
+  /* ---------------- timing loop (stable across prod/dev) ---------------- */
+
   useEffect(() => {
     if (!inView) return;
     if (sectionIdx >= processed.length) return;
@@ -122,56 +132,58 @@ export function TypewriterSections({
       skipTypingMain,
     } = sec;
 
-    let delay;
-    const isFirstMain =
-      sectionIdx === 0 &&
-      phase === "typingMain" &&
-      unitIdx === 0 &&
-      initialDelayMs > 0;
+    const computeDelay = () => {
+      const isFirstMain =
+        sectionIdx === 0 &&
+        phase === "typingMain" &&
+        unitIdx === 0 &&
+        initialDelayMs > 0;
 
-    if (phase === "typingMain") {
-      if (unitIdx < mainUnits.length) {
-        if (skipTypingMain) {
-          delay = isFirstMain ? initialDelayMs : 0;
-        } else {
-          delay = isFirstMain ? initialDelayMs : speed;
-        }
-      } else if (sec.retypeText && retypeUnits && retypeUnits.length) {
-        delay = pauseBeforeErase;
-      } else {
-        delay = pauseAfter;
-      }
-    } else if (phase === "erasing") {
-      if (unitIdx > 0) delay = eraseSpeed;
-      else delay = 0;
-    } else if (phase === "typingRetyped") {
-      if (retypeUnits && unitIdx < retypeUnits.length) delay = speed;
-      else delay = pauseAfter;
-    } else {
-      return;
-    }
-
-    const timerId = setTimeout(() => {
       if (phase === "typingMain") {
         if (unitIdx < mainUnits.length) {
-          if (skipTypingMain) setUnitIdx(mainUnits.length);
-          else setUnitIdx((n) => n + 1);
-        } else if (sec.retypeText && retypeUnits && retypeUnits.length) {
-          setPhase("erasing");
-          setUnitIdx(mainUnits.length);
-        } else {
-          setSectionIdx((i) => i + 1);
-          setUnitIdx(0);
-          setPhase("typingMain");
+          if (skipTypingMain) return isFirstMain ? initialDelayMs : 0;
+          return isFirstMain ? initialDelayMs : speed;
         }
-        return;
+        if (sec.retypeText && retypeUnits?.length) return pauseBeforeErase;
+        return pauseAfter;
       }
 
       if (phase === "erasing") {
-        if (unitIdx > 0) {
-          setUnitIdx((n) => n - 1);
-        } else {
-          if (sec.retypeText && retypeUnits && retypeUnits.length) {
+        return unitIdx > 0 ? eraseSpeed : 0;
+      }
+
+      if (phase === "typingRetyped") {
+        if (retypeUnits && unitIdx < retypeUnits.length) return speed;
+        return pauseAfter;
+      }
+
+      return null;
+    };
+
+    const tick = () => {
+      const now = performance.now();
+
+      if (nextAtRef.current == null) {
+        const d = computeDelay();
+        if (d != null) nextAtRef.current = now + d;
+      }
+
+      if (now >= nextAtRef.current) {
+        if (phase === "typingMain") {
+          if (unitIdx < mainUnits.length) {
+            if (skipTypingMain) setUnitIdx(mainUnits.length);
+            else setUnitIdx((n) => n + 1);
+          } else if (sec.retypeText && retypeUnits?.length) {
+            setPhase("erasing");
+            setUnitIdx(mainUnits.length);
+          } else {
+            setSectionIdx((i) => i + 1);
+            setUnitIdx(0);
+            setPhase("typingMain");
+          }
+        } else if (phase === "erasing") {
+          if (unitIdx > 0) setUnitIdx((n) => n - 1);
+          else if (sec.retypeText && retypeUnits?.length) {
             setPhase("typingRetyped");
             setUnitIdx(0);
           } else {
@@ -179,24 +191,33 @@ export function TypewriterSections({
             setUnitIdx(0);
             setPhase("typingMain");
           }
+        } else if (phase === "typingRetyped" && retypeUnits) {
+          if (unitIdx < retypeUnits.length) setUnitIdx((n) => n + 1);
+          else {
+            setSectionIdx((i) => i + 1);
+            setUnitIdx(0);
+            setPhase("typingMain");
+          }
         }
-        return;
+
+        const d = computeDelay();
+        nextAtRef.current = now + (d ?? 0);
       }
 
-      if (phase === "typingRetyped" && retypeUnits) {
-        if (unitIdx < retypeUnits.length) setUnitIdx((n) => n + 1);
-        else {
-          setSectionIdx((i) => i + 1);
-          setUnitIdx(0);
-          setPhase("typingMain");
-        }
-      }
-    }, delay);
+      rafRef.current = requestAnimationFrame(tick);
+    };
 
-    return () => clearTimeout(timerId);
+    rafRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+      nextAtRef.current = null;
+    };
   }, [inView, sectionIdx, unitIdx, phase, processed, initialDelayMs]);
 
-  // ✅ UPDATED: pass breakAfter explicitly per render (main vs retype)
+  /* ---------------- rendering ---------------- */
+
   const renderUnits = (sec, unitsArr, wordsArr, visibleCount, breakAfter) => {
     const { mode, highlights } = sec;
     const visibleUnits = unitsArr.slice(0, visibleCount);
@@ -205,15 +226,13 @@ export function TypewriterSections({
       if (mode === "word") {
         const rawWord = unit;
         const colorClass = resolveHighlightClass(highlights, rawWord);
-
         const isBreak = breakAfter.includes(idx);
-        const isLastVisible = idx === visibleUnits.length - 1;
-        const shouldRenderBreakNow = isBreak && !isLastVisible;
+        const isLast = idx === visibleUnits.length - 1;
 
         return (
           <React.Fragment key={idx}>
             <span className={colorClass}>{rawWord}</span>
-            {shouldRenderBreakNow ? <br /> : !isLastVisible ? " " : ""}
+            {isBreak && !isLast ? <br /> : !isLast ? " " : ""}
           </React.Fragment>
         );
       }
@@ -221,24 +240,25 @@ export function TypewriterSections({
       const { char, wordIndex } = unit;
       let highlightClass = "";
 
-      if (wordIndex !== null && wordsArr[wordIndex]) {
-        const rawWord = wordsArr[wordIndex];
-        highlightClass = resolveHighlightClass(highlights, rawWord);
+      if (wordIndex != null && wordsArr[wordIndex]) {
+        highlightClass = resolveHighlightClass(
+          highlights,
+          wordsArr[wordIndex]
+        );
       }
 
       const next = visibleUnits[idx + 1];
       const isLastCharOfWord =
-        wordIndex !== null && (!next || next.wordIndex !== wordIndex);
+        wordIndex != null && (!next || next.wordIndex !== wordIndex);
 
-      const isBreak = wordIndex !== null && breakAfter.includes(wordIndex);
-      const isLastVisible = idx === visibleUnits.length - 1;
-      const shouldRenderBreakNow = isBreak && !isLastVisible;
+      const isBreak = wordIndex != null && breakAfter.includes(wordIndex);
+      const isLast = idx === visibleUnits.length - 1;
 
       return (
         <React.Fragment key={idx}>
           <span className={highlightClass}>{char}</span>
           {isLastCharOfWord &&
-            (shouldRenderBreakNow ? <br /> : !isLastVisible ? " " : "")}
+            (isBreak && !isLast ? <br /> : !isLast ? " " : "")}
         </React.Fragment>
       );
     });
@@ -262,51 +282,49 @@ export function TypewriterSections({
         } = sec;
 
         if (i < sectionIdx) {
-          if (retypeText && retypeUnits && retypeUnits.length) {
-            return (
-              <span key={i}>
-                {renderUnits(
-                  sec,
-                  retypeUnits,
-                  retypeWords || [],
-                  retypeUnits.length,
-                  breakAfterRetype
-                )}
-              </span>
-            );
-          }
           return (
             <span key={i}>
-              {renderUnits(sec, mainUnits, mainWords, mainUnits.length, breakAfterMain)}
+              {retypeText && retypeUnits?.length
+                ? renderUnits(
+                    sec,
+                    retypeUnits,
+                    retypeWords || [],
+                    retypeUnits.length,
+                    breakAfterRetype
+                  )
+                : renderUnits(
+                    sec,
+                    mainUnits,
+                    mainWords,
+                    mainUnits.length,
+                    breakAfterMain
+                  )}
             </span>
           );
         }
 
         if (i > sectionIdx) return <span key={i} />;
 
-        let unitsToUse = mainUnits;
-        let wordsToUse = mainWords;
-        let visibleCount = unitIdx;
-        let breaksToUse = breakAfterMain;
+        let units = mainUnits;
+        let words = mainWords;
+        let visible = unitIdx;
+        let breaks = breakAfterMain;
 
         if (phase === "typingMain" && skipTypingMain) {
-          visibleCount = mainUnits.length;
+          visible = mainUnits.length;
         }
 
         if (phase === "typingRetyped" && retypeUnits) {
-          unitsToUse = retypeUnits;
-          wordsToUse = retypeWords || [];
-          visibleCount = unitIdx;
-          breaksToUse = breakAfterRetype;
+          units = retypeUnits;
+          words = retypeWords || [];
+          visible = unitIdx;
+          breaks = breakAfterRetype;
         }
-
-        const content = renderUnits(sec, unitsToUse, wordsToUse, visibleCount, breaksToUse);
-        const showCursorHere = shouldShowCursorForSection(i);
 
         return (
           <span key={i}>
-            {content}
-            {showCursorHere && (
+            {renderUnits(sec, units, words, visible, breaks)}
+            {shouldShowCursorForSection(i) && (
               <span
                 className={
                   "inline-block opacity-80 " +

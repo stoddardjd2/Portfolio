@@ -10,7 +10,7 @@ const badgeVariants = {
   visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
-const baseDelay = 10.8;
+const baseDelay = 17.5;
 /**
  * One place to control ALL timings, in the order they appear.
  * - Keep units consistent (ms for typewriter, seconds for MotionSection delays/durations)
@@ -22,8 +22,8 @@ const TIMING = {
 
   // 3) H1 Typewriter (headline)
   h1TypewriterInitialDelayMs: 100,
-  h1TypewriterSpeedMs: 35,
-  h1TypewriterEraseSpeedMs: 20,
+  h1TypewriterSpeedMs: 20,
+  h1TypewriterEraseSpeedMs: 1,
   h1TypewriterPauseAfterMs: 100,
 
   // 4) Paragraph wrapper motion (fade/slide in)
@@ -32,12 +32,12 @@ const TIMING = {
 
   // 5) Paragraph Typewriter
   paragraphTypewriterInitialDelayMs: 4800,
-  paragraphTypewriterSpeedMs: 7,
+  paragraphTypewriterSpeedMs: 0.001,
   paragraphTypewriterPauseAfterMs: 300,
 
   // 8) Portrait motion
-  portraitDelayS: baseDelay + 0.1,
-  portraitDurationS: 2,
+  // portraitDelayS: baseDelay + 0.1,
+  // portraitDurationS: 2,
 
   // 6) CTA buttons motion group
   ctasMotionDelayS: 0,
@@ -65,8 +65,8 @@ const TIMING2 = {
 
   // 3) H1 Typewriter (headline)
   h1TypewriterInitialDelayMs: 100,
-  h1TypewriterSpeedMs: 35,
-  h1TypewriterEraseSpeedMs: 20,
+  h1TypewriterSpeedMs: 20,
+  h1TypewriterEraseSpeedMs: 1,
   h1TypewriterPauseAfterMs: 100,
 
   // 4) Paragraph wrapper motion (fade/slide in)
@@ -75,7 +75,7 @@ const TIMING2 = {
 
   // 5) Paragraph Typewriter
   paragraphTypewriterInitialDelayMs: 0,
-  paragraphTypewriterSpeedMs: 4,
+  paragraphTypewriterSpeedMs: 2,
   paragraphTypewriterPauseAfterMs: 300,
 
   // 6) CTA buttons motion group
@@ -302,22 +302,22 @@ function HeroSection() {
         </div>
 
         {/* 8) Portrait motion */}
-        <MotionSection
+        <div
           className="lg:absolute flex pb-16 lg:pb-0 mt-16 items-center justify-center bottom-0 z-0 right-0"
-          delay={TIMING.portraitDelayS}
-          viewPortTrigger={0.2}
-          duration={TIMING.portraitDurationS}
-          defaultVariants={{
-            hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
-            visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
-          }}
+          // delay={TIMING.portraitDelayS}
+          // viewPortTrigger={0.2}
+          // duration={TIMING.portraitDurationS}
+          // defaultVariants={{
+          //   hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
+          //   visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
+          // }}
         >
           <img
             src={portraitGrayNoBg}
             className="lg:h-[470px] px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
             alt="Portrait"
           />
-        </MotionSection>
+        </div>
       </div>
 
       {/* 9) Scroll indicator motion */}
