@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // import portraitGrayNoBg from "@/assets/heavily-edited-ultra-white-cropped.png";
 import portraitGrayNoBg from "@/assets/heavily-edited-fotor-glasses-white-cropped.png";
 import MotionSection from "./MotionSection.jsx";
@@ -10,7 +10,7 @@ const badgeVariants = {
   visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
-const baseDelay = 9.7;
+const baseDelay = 12.4;
 /**
  * One place to control ALL timings, in the order they appear.
  * - Keep units consistent (ms for typewriter, seconds for MotionSection delays/durations)
@@ -27,12 +27,12 @@ const TIMING = {
   h1TypewriterPauseAfterMs: 100,
 
   // 4) Paragraph wrapper motion (fade/slide in)
-  paragraphMotionDelayS: 3.4,
+  paragraphMotionDelayS: 3.9,
   paragraphMotionDurationS: 1.5,
 
   // 5) Paragraph Typewriter
-  paragraphTypewriterInitialDelayMs: 3500,
-  paragraphTypewriterSpeedMs: 8,
+  paragraphTypewriterInitialDelayMs: 4000,
+  paragraphTypewriterSpeedMs: 4,
   paragraphTypewriterPauseAfterMs: 300,
 
   // 8) Portrait motion
@@ -102,7 +102,24 @@ const TIMING2 = {
   scrollIndicatorDurationS: 1.4,
 };
 
+function useIsMobile(breakpointPx = 1024) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < breakpointPx);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [breakpointPx]);
+
+  return isMobile;
+}
+
 function HeroSection() {
+  const isMobile = useIsMobile();
+
+  const Wrapper = isMobile ? MotionSection : "div";
+
   return (
     <MotionSection
       className="relative min-h-[calc(100vh-56px)] flex justify-center items-start lg:items-center pt-20 lg:pt-0"
@@ -124,11 +141,12 @@ function HeroSection() {
           {/* 3) Headline typewriter */}
           <h1
             className={`
-    text-2xl xxxs:text-3xl xxs:text-4xl sm:text-6xl
-    font-semibold tracking-tighter text-white mb-4 lg:mb-6
-    leading-[1.1]
-    min-h-[calc(2*1.1em)]
-  `}
+  text-[clamp(1.3075rem,7.6vw,3.75rem)]
+  leading-[1.1]
+  font-semibold tracking-tighter text-white
+  mb-4 lg:mb-4
+  min-h-[calc(2*1.2em)]
+`}
           >
             {" "}
             <TypewriterSections
@@ -318,22 +336,24 @@ function HeroSection() {
         </div>
 
         {/* 8) Portrait motion */}
-        <div
+        <Wrapper
+          {...(isMobile && {
+            delay: TIMING.portraitDelayS,
+            viewPortTrigger: 0.2,
+            duration: TIMING.portraitDurationS,
+            defaultVariants: {
+              hidden: { opacity: 0, y: 40, filter: "blur(0px)" },
+              visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+            },
+          })}
           className="lg:absolute flex pb-16 lg:pb-0 mt-16 items-center justify-center bottom-0 z-0 right-0"
-          // delay={TIMING.portraitDelayS}
-          // viewPortTrigger={0.2}
-          // duration={TIMING.portraitDurationS}
-          // defaultVariants={{
-          //   hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
-          //   visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
-          // }}
         >
           <img
             src={portraitGrayNoBg}
             className="lg:h-[470px] px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
             alt="Portrait"
           />
-        </div>
+        </Wrapper>
       </div>
 
       {/* 9) Scroll indicator motion */}
