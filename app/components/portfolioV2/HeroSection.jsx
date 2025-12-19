@@ -22,16 +22,16 @@ const TIMING = {
 
   // 3) H1 Typewriter (headline)
   h1TypewriterInitialDelayMs: 100,
-  h1TypewriterSpeedMs: 40,
+  h1TypewriterSpeedMs: 25,
   h1TypewriterEraseSpeedMs: 25,
   h1TypewriterPauseAfterMs: 100,
 
   // 4) Paragraph wrapper motion (fade/slide in)
-  paragraphMotionDelayS: 4.1,
+  paragraphMotionDelayS: 3.4,
   paragraphMotionDurationS: 1.5,
 
   // 5) Paragraph Typewriter
-  paragraphTypewriterInitialDelayMs: 4200,
+  paragraphTypewriterInitialDelayMs: 3500,
   paragraphTypewriterSpeedMs: 8,
   paragraphTypewriterPauseAfterMs: 300,
 
