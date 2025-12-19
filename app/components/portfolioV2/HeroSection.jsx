@@ -4,6 +4,7 @@ import portraitGrayNoBg from "@/assets/heavily-edited-fotor-glasses-white-croppe
 import MotionSection from "./MotionSection.jsx";
 import { motion } from "framer-motion";
 import { TypewriterSections } from "./TypeWriterSections.jsx";
+import downloadResume from "./resumeDownloadHelper.js";
 
 const badgeVariants = {
   hidden: { opacity: 0, y: 10, filter: "blur(3px)" },
@@ -16,6 +17,7 @@ const baseDelay = 10.2;
  * - Keep units consistent (ms for typewriter, seconds for MotionSection delays/durations)
  * - Labels match the exact animated elements below
  */
+
 const TIMING = {
   // 1) Hero wrapper
   heroContainerDelayS: 0.05,
@@ -32,7 +34,7 @@ const TIMING = {
 
   // 5) Paragraph Typewriter
   paragraphTypewriterInitialDelayMs: 3500,
-  paragraphTypewriterSpeedMs:1,
+  paragraphTypewriterSpeedMs: 1,
   paragraphTypewriterPauseAfterMs: 300,
 
   // 8) Portrait motion
@@ -259,12 +261,13 @@ function HeroSection() {
                 ></span>
               </motion.a>
 
-              <motion.a
+              <motion.button
+                type="button"
+                onClick={downloadResume}
                 variants={{
                   hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
                   visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
                 }}
-                href="#resume"
                 className="inline-flex items-center justify-center gap-2 h-10 px-6 rounded-md border border-neutral-800 text-neutral-300 text-sm font-medium hover:border-neutral-600 hover:text-white transition-colors bg-[#0E0E0E]"
               >
                 <span
@@ -272,7 +275,7 @@ function HeroSection() {
                   data-icon="lucide:download"
                 ></span>
                 Download Resume
-              </motion.a>
+              </motion.button>
             </div>
           </MotionSection>
 

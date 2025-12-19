@@ -1,4 +1,5 @@
 import React from "react";
+import downloadResume from "./resumeDownloadHelper";
 
 function NavBar() {
   return (
@@ -10,16 +11,21 @@ function NavBar() {
         >
           Jared Stoddard
         </a>
-        <div className="flex gap-6 text-xs font-medium">
-          <a href="#projects" className="hover:text-white transition-colors">
+        <div className=" flex gap-6 text-xs font-medium">
+          <a href="#projects" className=" hover:text-white transition-colors">
             Projects
           </a>
-          <a href="#experience" className="sm:inline hidden hover:text-white transition-colors">
+          <a href="#experience" className="xs:inline hidden hover:text-white transition-colors">
             Experience
           </a>
-          <a href="#skills" className="hover:text-white transition-colors">
+
+          <a
+            href="#skills"
+            className="xxs:inline hidden hover:text-white transition-colors"
+          >
             Skills
           </a>
+       
           <a href="#contact" className="hover:text-white transition-colors">
             Contact
           </a>
