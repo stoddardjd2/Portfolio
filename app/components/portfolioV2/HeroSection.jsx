@@ -174,7 +174,7 @@ function HeroSection() {
               hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
               visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
             }}
-            className="inline-flex items-center justify-center gap-2 h-10 px-6 rounded-md border border-neutral-800 text-neutral-300 text-sm font-medium hover:border-neutral-600 hover:text-white transition-colors bg-[#0E0E0E]"
+            className="inline-flex cursor-pointer items-center justify-center gap-2 h-10 px-6 rounded-md border border-neutral-800 text-neutral-300 text-sm font-medium hover:border-neutral-600 hover:text-white transition-colors bg-[#0E0E0E]"
           >
             <span
               className="iconify w-4 h-4"

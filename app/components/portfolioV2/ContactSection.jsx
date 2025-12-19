@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import MotionSection from "./MotionSection.jsx";
 import portraitGrayNoBg from "@/assets/heavily-edited-fotor-glasses-white-cropped.png";
+import downloadResume from "./resumeDownloadHelper.js";
 
 function ContactSection({ setOpen }) {
   const now = new Date();
@@ -15,8 +16,8 @@ function ContactSection({ setOpen }) {
       >
         <div className="flex flex-col md:flex-row justify-between md:items-end gap-8">
           <div className="flex items-center gap-4 flex-wrap">
-            <div>
-              <h2 className="text-3xl font-medium text-white tracking-tight mb-4">
+            <div className="inline-flex flex-col flex-none w-fit">
+              <h2 className="text-3xl w-fit font-medium text-white tracking-tight mb-4">
                 Let's Build Something Great
               </h2>
               <p className="text-neutral-400 mb-8 max-w-md font-light">
@@ -24,7 +25,7 @@ function ContactSection({ setOpen }) {
                 roles.
               </p>
 
-              <div className="flex gap-1.5 sm:gap-4  flex-wrap ">
+              <div className="flex gap-1.5 sm:gap-4 !gap-y-2 flex-wrap max-w-[350px]">
                 <button
                   type="button"
                   onClick={() => setOpen(true)}
@@ -54,10 +55,29 @@ function ContactSection({ setOpen }) {
                     data-icon="lucide:github"
                   ></span>
                 </a>
+                <span
+                  aria-hidden
+                  className="hidden sm:block w-0 basis-full h-0"
+                />
+                <button
+                  type="button"
+                  onClick={downloadResume}
+                  variants={{
+                    hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
+                    visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
+                  }}
+                  className="inline-flex flex-none   items-center justify-center gap-2 h-10 px-6 rounded-md border border-neutral-800 text-neutral-300 text-sm font-medium hover:border-neutral-600 hover:text-white transition-colors cursor-pointer"
+                >
+                  <span
+                    className="iconify w-4 h-4"
+                    data-icon="lucide:download"
+                  ></span>
+                  Download Resume
+                </button>
               </div>
             </div>
             <img
-              className="sm:h-[170px] mx-auto scale-x-[-1]  px-[clamp(.1rem,5vw,12.5rem)] lg:px-0"
+              className="sm:h-[230px] mt-auto mx-auto scale-x-[-1]  px-[clamp(.1rem,5vw,12.5rem)] lg:px-0"
               src={portraitGrayNoBg}
             />
           </div>
