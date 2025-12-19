@@ -20,11 +20,11 @@ function ContactSection({ setOpen }) {
                 Let's Build Something Great
               </h2>
               <p className="text-neutral-400 mb-8 max-w-md font-light">
-                I am open to full-stack, backend, frontend  and
-                product-focused roles.
+                I am open to full-stack, backend, frontend and product-focused
+                roles.
               </p>
 
-              <div className="flex gap-4  flex-wrap ">
+              <div className="flex gap-1.5 sm:gap-4  flex-wrap ">
                 <button
                   type="button"
                   onClick={() => setOpen(true)}

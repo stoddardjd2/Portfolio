@@ -47,6 +47,16 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
             "admin dashboards",
             "LTV",
             "Google Ads",
+            "rapid iteration",
+            "MVP",
+            "APIs",
+            "payments",
+            "cost projections",
+            "bank linking",
+            "paid acquisition",
+            "A/B testing",
+            "onboarding",
+            "automate social media"
           ]}
           highlightsOn={highlightsOn}
           bullets={[
@@ -60,6 +70,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
             "Implemented end-to-end analytics across onboarding, activation, payments, conversion, retention, and LTV.",
             "Ran early-stage paid acquisition experiments across channels, iterating on messaging and onboarding to improve activation.",
             "Continuously iterated on product features and UI/UX based on user data, support feedback, and insights from production.",
+            "Built custom software to automate social media content generation, scheduling, and performance tracking.",
             "Drove all marketing and growth initiatives, including SEO, Google Ads, A/B testing, analytics, and launch campaigns on major platforms.",
           ]}
         />
@@ -99,6 +110,10 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
             "MongoDB Atlas",
             "Netlify",
             "Render",
+            "white-labeled",
+            "internal catalog platform",
+            "documentation standards",
+            "responsive layouts"
           ]}
           highlightsOn={highlightsOn}
           bullets={[

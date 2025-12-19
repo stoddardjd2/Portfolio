@@ -18,7 +18,7 @@ function PortfolioPageV2() {
   return (
     <div className="bg-neutral-950 text-neutral-400 antialiased selection:bg-neutral-800 selection:text-white min-h-screen">
       <NavBar />
-      <main id="top" className="max-w-5xl mx-auto px-5 sm:px-6 pb-24 space-y-[clamp(4rem,8vw,8rem)]">
+      <main id="top" className="max-w-5xl mx-auto px-5 sm:px-6 pb-4 lg:pb-12 space-y-[clamp(4rem,8vw,8rem)]">
         <HeroSection />
         <ValueSection />
         <ProjectsSection

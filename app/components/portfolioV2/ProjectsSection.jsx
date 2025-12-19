@@ -50,7 +50,6 @@ import seattleReignFcIcon from "../../assets/project-integration-icons/seattleRe
 import uswntIcon from "../../assets/project-integration-icons/uswnt.png?format=jpg&quality=80&as=src";
 
 function ProjectsSection({ highlightsOn, setHighlightsOn }) {
-
   return (
     <MotionSection
       id="projects"
@@ -104,11 +103,18 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           "React 19",
           "React Router",
           "Node.js",
+          "Express.js",
           "MongoDB",
+          "Mongoose",
           "Tailwind",
           "Stripe API",
           "Telnyx API",
           "Plaid API",
+          "ChatGPT API",
+          "OAuth 2.0",
+          "RBAC",
+          "JWT Auth",
+          "Google Analytics",
         ]}
         features={[
           "Built reliable payment and messaging systems that safely handle retries, webhook replays, and service failures.",
@@ -138,6 +144,9 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           "CAC",
           "cost forecasting",
           "Zero-account",
+          "internal dashboards",
+          "reminder schedules",
+          "payment and messaging systems",
         ]}
         // OPTIONAL: if your ProjectCard supports these (recommended)
         // tag={{
@@ -156,20 +165,27 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       />
 
       <ProjectCard
-        title="The 85ers — Cinematic Storytelling Platform"
+        title="The 85ers - Cinematic Storytelling Platform"
         icon={the85ersLogo}
         integrationText={"Collaborated With"}
         integrations={[
-          { name: "Storied Sports", logo: storiedSportsIcon, rounded: false },
           { name: "Adidas", logo: adidasIcon },
-          { name: "The REALEST", logo: theRealestIcon },
           { name: "Seatle Reign FC", logo: seattleReignFcIcon },
           { name: "USWNT", logo: uswntIcon },
+          { name: "Storied Sports", logo: storiedSportsIcon, rounded: false },
+          { name: "The REALEST", logo: theRealestIcon },
         ]}
         highlightsOn={highlightsOn}
         setHighlightsOn={setHighlightsOn}
         description="A cinematic storytelling platform for the U.S. Women’s National Soccer Team built in partnership with adidas featuring motion-driven layouts and editorial visuals."
-        badges={["Framer Motion", "React", "Figma", "Tailwind"]}
+        badges={[
+          "React 19",
+          "React Router",
+          "Figma",
+          "Tailwind",
+          "Framer Motion",
+          "Google Analytics",
+        ]}
         images={[
           the85ersHomePageImg,
           the85erContactUsPageImg,
@@ -231,9 +247,14 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
             "React 19",
             "React Router",
             "Node.js",
-            "MongoDB",
             "Express.js",
+            "MongoDB",
+            "Mongoose",
             "Tailwind",
+            "OAuth 2.0",
+            "RBAC",
+            "JWT Auth",
+            "Google Analytics",
           ]}
           integrations={[
             { name: "Splitify", logo: splitifyLogoImg, rounded: false },
@@ -282,10 +303,15 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
             "Tailwind",
             "Node.js",
             "Express.js",
-            "ChatGPT Integration",
-            "TikTok Integration",
+            "ChatGPT API",
+            "TikTok API",
             "Prompt Engineering",
             "AI Workflows",
+            "MongoDB",
+            "Mongoose",
+            "OAuth 2.0",
+            "RBAC",
+            "JWT Auth",
           ]}
           features={[
             "Multi-step prompt engine that converts product context and pain points into TikTok-ready scripts.",
@@ -314,7 +340,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         />
       </div>
       <ProjectCard
-        title="Scrollos — Internal Catalog Platform"
+        title="Scrollos - Internal Catalog Platform"
         actions={[
           {
             href: "https://github.com/2351Labs/the-ui/?tab=readme-ov-file",
@@ -334,6 +360,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           "Node.js",
           "Express.js",
           "MongoDB Atlas",
+          "Mongoose",
           "OAuth 2.0",
           "RBAC",
           "JWT Auth",
@@ -431,7 +458,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
 
           <div className="grid md:grid-cols-2 gap-x-6">
             <ProjectCard
-              title="Collaborative To-Do List — Multi-User Task Manager"
+              title="Collaborative To-Do List"
               description="A simple full-stack to-do list application with user authentication and a backend for persisting and retrieving notes across sessions."
               highlightsOn={highlightsOn}
               setHighlightsOn={setHighlightsOn}
@@ -464,7 +491,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
             />
 
             <ProjectCard
-              title="Personal Daily Planner — Time-Based Task Organizer"
+              title="Personal Daily Planner - Time-Based Task Organizer"
               description="A lightweight daily planning tool that lets users manage hourly events with visual indicators for past, present, and upcoming tasks, with persistent local storage."
               badges={[
                 "JavaScript",
@@ -493,7 +520,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
             />
 
             <ProjectCard
-              title="Real-Time Chat App — WebSocket Messaging"
+              title="Real-Time Chat App - WebSocket Messaging"
               description="A real-time web chat application built with WebSockets, enabling instant message delivery and live updates across connected clients."
               badges={[
                 "JavaScript",
@@ -556,7 +583,5 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
     </MotionSection>
   );
 }
-
-
 
 export default ProjectsSection;
