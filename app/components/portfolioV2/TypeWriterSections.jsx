@@ -14,9 +14,6 @@ export function TypewriterSections({
   className = "",
 }) {
   const rootRef = useRef(null);
-
-  // ✅ Important: keep the observed element "measurable" even when no text is typed yet
-  // by ensuring it has at least 1 line of height.
   const inView = useInView(rootRef, { once: true, amount: 0.3 });
 
   const [sectionIdx, setSectionIdx] = useState(0);
@@ -109,22 +106,19 @@ export function TypewriterSections({
     defaultPauseBeforeErase,
   ]);
 
+  // core state machine
   useEffect(() => {
     if (!inView) return;
     if (sectionIdx >= processed.length) return;
 
     const sec = processed[sectionIdx];
-    const {
-      mainUnits,
-      retypeUnits,
-      speed,
-      eraseSpeed,
-      pauseAfter,
-      pauseBeforeErase,
-      skipTypingMain,
-    } = sec;
+    const { mainUnits, retypeUnits, speed, eraseSpeed, pauseAfter, pauseBeforeErase, skipTypingMain } =
+      sec;
+
+    const hasRetype = !!(sec.retypeText && retypeUnits && retypeUnits.length);
 
     let delay;
+
     const isFirstMain =
       sectionIdx === 0 &&
       phase === "typingMain" &&
@@ -133,19 +127,13 @@ export function TypewriterSections({
 
     if (phase === "typingMain") {
       if (unitIdx < mainUnits.length) {
-        if (skipTypingMain) {
-          delay = isFirstMain ? initialDelayMs : 0;
-        } else {
-          delay = isFirstMain ? initialDelayMs : speed;
-        }
-      } else if (sec.retypeText && retypeUnits && retypeUnits.length) {
-        delay = pauseBeforeErase;
+        if (skipTypingMain) delay = isFirstMain ? initialDelayMs : 0;
+        else delay = isFirstMain ? initialDelayMs : speed;
       } else {
-        delay = pauseAfter;
+        delay = hasRetype ? pauseBeforeErase : pauseAfter;
       }
     } else if (phase === "erasing") {
-      if (unitIdx > 0) delay = eraseSpeed;
-      else delay = 0;
+      delay = unitIdx > 0 ? eraseSpeed : 0;
     } else if (phase === "typingRetyped") {
       if (retypeUnits && unitIdx < retypeUnits.length) delay = speed;
       else delay = pauseAfter;
@@ -158,9 +146,30 @@ export function TypewriterSections({
         if (unitIdx < mainUnits.length) {
           if (skipTypingMain) setUnitIdx(mainUnits.length);
           else setUnitIdx((n) => n + 1);
-        } else if (sec.retypeText && retypeUnits && retypeUnits.length) {
+          return;
+        }
+
+        if (hasRetype) {
           setPhase("erasing");
           setUnitIdx(mainUnits.length);
+          return;
+        }
+
+        setSectionIdx((i) => i + 1);
+        setUnitIdx(0);
+        setPhase("typingMain");
+        return;
+      }
+
+      if (phase === "erasing") {
+        if (unitIdx > 0) {
+          setUnitIdx((n) => n - 1);
+          return;
+        }
+
+        if (hasRetype) {
+          setPhase("typingRetyped");
+          setUnitIdx(0);
         } else {
           setSectionIdx((i) => i + 1);
           setUnitIdx(0);
@@ -169,25 +178,10 @@ export function TypewriterSections({
         return;
       }
 
-      if (phase === "erasing") {
-        if (unitIdx > 0) {
-          setUnitIdx((n) => n - 1);
-        } else {
-          if (sec.retypeText && retypeUnits && retypeUnits.length) {
-            setPhase("typingRetyped");
-            setUnitIdx(0);
-          } else {
-            setSectionIdx((i) => i + 1);
-            setUnitIdx(0);
-            setPhase("typingMain");
-          }
-        }
-        return;
-      }
-
       if (phase === "typingRetyped" && retypeUnits) {
-        if (unitIdx < retypeUnits.length) setUnitIdx((n) => n + 1);
-        else {
+        if (unitIdx < retypeUnits.length) {
+          setUnitIdx((n) => n + 1);
+        } else {
           setSectionIdx((i) => i + 1);
           setUnitIdx(0);
           setPhase("typingMain");
@@ -198,6 +192,9 @@ export function TypewriterSections({
     return () => clearTimeout(timerId);
   }, [inView, sectionIdx, unitIdx, phase, processed, initialDelayMs]);
 
+  // ✅ render tokens so earlier content doesn't get “rewritten”
+  // - stable keys include content + index
+  // - always append separator (space/br) so last token doesn't toggle later
   const renderUnits = (sec, unitsArr, wordsArr, visibleCount, breakAfter) => {
     const { mode, highlights } = sec;
     const visibleUnits = unitsArr.slice(0, visibleCount);
@@ -206,15 +203,12 @@ export function TypewriterSections({
       if (mode === "word") {
         const rawWord = unit;
         const colorClass = resolveHighlightClass(highlights, rawWord);
-
         const isBreak = breakAfter.includes(idx);
-        const isLastVisible = idx === visibleUnits.length - 1;
-        const shouldRenderBreakNow = isBreak && !isLastVisible;
 
         return (
-          <React.Fragment key={idx}>
+          <React.Fragment key={`${idx}-${rawWord}`}>
             <span className={colorClass}>{rawWord}</span>
-            {shouldRenderBreakNow ? <br /> : !isLastVisible ? " " : ""}
+            {isBreak ? <br /> : " "}
           </React.Fragment>
         );
       }
@@ -223,8 +217,7 @@ export function TypewriterSections({
       let highlightClass = "";
 
       if (wordIndex !== null && wordsArr[wordIndex]) {
-        const rawWord = wordsArr[wordIndex];
-        highlightClass = resolveHighlightClass(highlights, rawWord);
+        highlightClass = resolveHighlightClass(highlights, wordsArr[wordIndex]);
       }
 
       const next = visibleUnits[idx + 1];
@@ -232,14 +225,11 @@ export function TypewriterSections({
         wordIndex !== null && (!next || next.wordIndex !== wordIndex);
 
       const isBreak = wordIndex !== null && breakAfter.includes(wordIndex);
-      const isLastVisible = idx === visibleUnits.length - 1;
-      const shouldRenderBreakNow = isBreak && !isLastVisible;
 
       return (
-        <React.Fragment key={idx}>
+        <React.Fragment key={`${idx}-${char}`}>
           <span className={highlightClass}>{char}</span>
-          {isLastCharOfWord &&
-            (shouldRenderBreakNow ? <br /> : !isLastVisible ? " " : "")}
+          {isLastCharOfWord ? (isBreak ? <br /> : " ") : null}
         </React.Fragment>
       );
     });
@@ -254,12 +244,11 @@ export function TypewriterSections({
       className={className}
       style={{
         whiteSpace: "normal",
-        // ✅ ensures the observer target has a measurable box even when empty
         display: "inline-block",
         minHeight: "1em",
       }}
     >
-      {/* ✅ invisible sentinel to guarantee layout/height on first paint */}
+      {/* sentinel so inView triggers even with empty content */}
       <span
         aria-hidden="true"
         style={{ display: "inline-block", width: 1, height: "1em", opacity: 0 }}
@@ -279,17 +268,12 @@ export function TypewriterSections({
           breakAfterRetype,
         } = sec;
 
+        // completed sections render fully
         if (i < sectionIdx) {
           if (retypeText && retypeUnits && retypeUnits.length) {
             return (
               <span key={i}>
-                {renderUnits(
-                  sec,
-                  retypeUnits,
-                  retypeWords || [],
-                  retypeUnits.length,
-                  breakAfterRetype
-                )}
+                {renderUnits(sec, retypeUnits, retypeWords || [], retypeUnits.length, breakAfterRetype)}
               </span>
             );
           }
@@ -300,8 +284,10 @@ export function TypewriterSections({
           );
         }
 
+        // future sections empty
         if (i > sectionIdx) return <span key={i} />;
 
+        // current section partial
         let unitsToUse = mainUnits;
         let wordsToUse = mainWords;
         let visibleCount = unitIdx;
@@ -327,8 +313,7 @@ export function TypewriterSections({
             {showCursorHere && (
               <span
                 className={
-                  "inline-block opacity-80 " +
-                  (phase === "erasing" ? "" : "animate-pulse")
+                  "inline-block opacity-80 " + (phase === "erasing" ? "" : "animate-pulse")
                 }
               >
                 {cursorChar}
