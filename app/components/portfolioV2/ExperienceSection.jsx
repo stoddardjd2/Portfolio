@@ -37,7 +37,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
         <ExperienceEntry
           role="Founder / Full-Stack Engineer"
           company="Splitify"
-          timeframe="2023 – Present"
+          timeframe="July 2025 – Present"
           highlights={[
             "production SaaS",
             "SMS reminders",
@@ -50,7 +50,8 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
           ]}
           highlightsOn={highlightsOn}
           bullets={[
-            "Founded and built a production SaaS automating shared expenses, payments, and SMS reminders to reduce friction in group billing.",
+            "Founded and built a platform automating shared expenses, payments, and SMS reminders to reduce friction in group billing.",
+            "Shipped an MVP to live users in less than a month, balancing rapid iteration with reliability, security, and real-money constraints.",
             "Owned the full product lifecycle end-to-end across strategy, UX, frontend, backend APIs, infrastructure, analytics, and growth.",
             "Designed backend systems for recurring billing, timezone-aware scheduling, payment tracking, and reliable message delivery.",
             "Integrated payments, bank linking, and SMS providers with robust error handling, observability, and cost controls.",
@@ -66,7 +67,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
         <ExperienceEntry
           role="Full-Stack Engineer"
           company="the85ers"
-          timeframe="2021 – 2023"
+          timeframe="Feb 2025  – Present"
           highlights={[
             "Framer Motion",
             "motion-driven",
@@ -88,7 +89,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
         <ExperienceEntry
           role="Full-Stack Engineer"
           company="2351 Labs"
-          timeframe="2018 – 2021"
+          timeframe="Jul 2024 - Feb 2025"
           highlights={[
             "OAuth 2.0",
             "JWT",
@@ -113,8 +114,8 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
 
         <ExperienceEntry
           role="Department Manager"
-          company="Safeway"
-          timeframe="Mar 2023 – Dec 2023"
+          company="Safeway & Kroger"
+          timeframe="Apr 2018 - Dec 2023"
           highlights={[
             "department operations",
             "operational efficiency",
