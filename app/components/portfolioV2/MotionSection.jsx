@@ -1,24 +1,10 @@
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-
-const motionMap = {
-  section: motion.section,
-  div: motion.div,
-  footer: motion.footer,
-  header: motion.header,
-  main: motion.main,
-  article: motion.article,
-  nav: motion.nav,
-  aside: motion.aside,
-};
-
-import { useEffect, useState } from "react";
 
 /**
  * Triggers true when at least `px` vertical pixels of the element
  * are visible in the viewport.
  */
-
 function usePxInView(
   ref,
   px = 120,
@@ -46,14 +32,11 @@ function usePxInView(
       return;
     }
 
-    // Dense thresholds so intersectionRect updates frequently
     const thresholds = Array.from({ length: 101 }, (_, i) => i / 100);
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         const elH = entry.boundingClientRect.height;
-
-        // If the element is smaller than px, require only its full height
         const requiredPx = Math.min(px, elH || px);
 
         const visiblePx = Math.max(
@@ -78,8 +61,6 @@ function usePxInView(
   return inView;
 }
 
-
-
 function MotionSection({
   as: Element = "section",
 
@@ -87,10 +68,14 @@ function MotionSection({
   delay = 0,
   duration = 1.2,
 
-  // PIXEL-BASED trigger
+  // ✅ manual trigger (set true when your function fires)
+  active = false,
+
+  // ✅ pixel trigger options (keep these)
   triggerPx = 200,
   triggerOnce = true,
   rootMargin = "0px",
+  autoTrigger = true, // set false if you want ONLY manual
 
   staggerChildren,
   delayChildren,
@@ -107,16 +92,20 @@ function MotionSection({
 }) {
   const ref = useRef(null);
 
-  const isVisible = usePxInView(ref, triggerPx, {
+  const pxVisible = usePxInView(ref, triggerPx, {
     once: triggerOnce,
     rootMargin,
   });
 
+  // ✅ Final gate:
+  // - manual active always wins
+  // - otherwise fall back to px trigger if enabled
+  const isVisible = active || (autoTrigger ? pxVisible : false);
+
   const MotionTag = useMemo(() => {
-    if (typeof Element === "string") {
-      return motionMap[Element] || motion(Element);
-    }
-    return motion(Element);
+    // Keep it safe and simple: strings only (your usage doesn’t need `as`)
+    // If you do want `as="div"` etc, you can expand later.
+    return typeof Element === "string" ? motion[Element] || motion.section : motion.section;
   }, [Element]);
 
   const transition = useMemo(

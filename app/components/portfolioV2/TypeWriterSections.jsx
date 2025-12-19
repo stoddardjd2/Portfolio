@@ -12,6 +12,9 @@ export function TypewriterSections({
   showCursor = false,
   cursorChar = "| ",
   className = "",
+  onFinish,
+  runKey = 0, // ✅ only restarts when this changes
+  start = true, // ✅ runs only when true
 }) {
   const rootRef = useRef(null);
   const inView = useInView(rootRef, { once: true, amount: 0.3 });
@@ -19,20 +22,41 @@ export function TypewriterSections({
   // render state
   const [sectionIdx, setSectionIdx] = useState(0);
   const [unitIdx, setUnitIdx] = useState(0);
-  const [phase, setPhase] = useState("typingMain"); // "typingMain" | "erasing" | "typingRetyped"
+  const [phase, setPhase] = useState("typingMain"); // typingMain | erasing | typingRetyped | waitingNextSectionMain | waitingNextSectionRetyped
 
-  // internal refs (avoid stale closures + keep rAF loop stable)
+  // internal refs
   const sectionIdxRef = useRef(0);
   const unitIdxRef = useRef(0);
   const phaseRef = useRef("typingMain");
 
   // rAF timing refs
   const rafIdRef = useRef(null);
-  const nextDueAtRef = useRef(0);
+  const nextDueAtRef = useRef(Number.POSITIVE_INFINITY);
   const startedRef = useRef(false);
 
-  // limit catch-up steps per frame (prevents jumpy fast-forward after tab throttling)
-  const MAX_STEPS_PER_FRAME = 120;
+  // delay gate
+  const initialDelayUntilRef = useRef(0);
+  const delayArmedRef = useRef(false);
+  const typingAllowedRef = useRef(false);
+
+  // latest onFinish/start
+  const onFinishRef = useRef(onFinish);
+  useEffect(() => {
+    onFinishRef.current = onFinish;
+  }, [onFinish]);
+
+  const startRef = useRef(start);
+  useEffect(() => {
+    startRef.current = start;
+  }, [start]);
+
+  // finish once
+  const finishedFiredRef = useRef(false);
+  const fireFinishedOnce = () => {
+    if (finishedFiredRef.current) return;
+    finishedFiredRef.current = true;
+    if (typeof onFinishRef.current === "function") onFinishRef.current();
+  };
 
   const baseNormalizeWord = (w) => (w || "").replace(/[.,!?;:"()]/g, "");
   const resolveHighlightClass = (highlights, rawWord) => {
@@ -64,7 +88,6 @@ export function TypewriterSections({
       const mainWords = makeWords(mainText);
       const retypeWords = retypeText ? makeWords(retypeText) : null;
 
-      // ✅ robust letter-mode mapping: does NOT overcount wordIndex on multiple spaces
       const buildUnits = (txt, wordsForTxt) => {
         if (mode === "word") return wordsForTxt;
 
@@ -74,10 +97,8 @@ export function TypewriterSections({
 
         for (let i = 0; i < txt.length; i++) {
           const char = txt[i];
-
           if (/\s/.test(char)) {
             units.push({ char, wordIndex: null });
-
             if (inWord) {
               inWord = false;
               wordIndex += 1;
@@ -87,7 +108,6 @@ export function TypewriterSections({
             inWord = true;
           }
         }
-
         return units;
       };
 
@@ -128,30 +148,39 @@ export function TypewriterSections({
     defaultPauseBeforeErase,
   ]);
 
-  // keep refs synced with state
+  // ✅ FREEZE processed during a run (prevents flashing when parent rerenders)
+  const processedRef = useRef(processed);
+  const runProcessedRef = useRef(processed); // snapshot used during active run
+  useEffect(() => {
+    processedRef.current = processed;
+    if (!startedRef.current) runProcessedRef.current = processed;
+  }, [processed]);
+
+  const initialDelayMsRef = useRef(initialDelayMs);
+  useEffect(() => {
+    initialDelayMsRef.current = initialDelayMs;
+  }, [initialDelayMs]);
+
+  // keep refs synced
   useEffect(() => {
     sectionIdxRef.current = sectionIdx;
   }, [sectionIdx]);
-
   useEffect(() => {
     unitIdxRef.current = unitIdx;
   }, [unitIdx]);
-
   useEffect(() => {
     phaseRef.current = phase;
   }, [phase]);
 
-  // helpers to update BOTH refs + state (single source of truth)
+  // commit helpers
   const commitSectionIdx = (v) => {
     sectionIdxRef.current = v;
     setSectionIdx(v);
   };
-
   const commitUnitIdx = (v) => {
     unitIdxRef.current = v;
     setUnitIdx(v);
   };
-
   const commitPhase = (v) => {
     phaseRef.current = v;
     setPhase(v);
@@ -160,35 +189,101 @@ export function TypewriterSections({
   const cancelLoop = () => {
     if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
     rafIdRef.current = null;
+
     startedRef.current = false;
+
+    delayArmedRef.current = false;
+    typingAllowedRef.current = false;
+    initialDelayUntilRef.current = 0;
+
+    nextDueAtRef.current = Number.POSITIVE_INFINITY;
+
+    runProcessedRef.current = processedRef.current;
   };
 
-  // time-based rAF loop (consistent speed)
+  const runKeyRef = useRef(runKey);
+
   useEffect(() => {
     if (!inView) return;
-    if (!processed.length) return;
 
-    // start fresh if needed
-    if (!startedRef.current) {
-      startedRef.current = true;
+    const latestProc = processedRef.current;
+    if (!latestProc.length) return;
 
-      // ensure state & refs aligned on first start
-      sectionIdxRef.current = sectionIdxRef.current || 0;
-      unitIdxRef.current = unitIdxRef.current || 0;
-      phaseRef.current = phaseRef.current || "typingMain";
-
-      const now = performance.now();
-      nextDueAtRef.current = now + (initialDelayMs > 0 ? initialDelayMs : 0);
+    // stop immediately if start is false
+    if (!startRef.current) {
+      if (startedRef.current) cancelLoop();
+      return;
     }
 
+    // runKey forces restart
+    if (runKeyRef.current !== runKey) {
+      runKeyRef.current = runKey;
+      finishedFiredRef.current = false;
+      cancelLoop();
+    }
+
+    // don't restart if already running or done
+    if (startedRef.current || finishedFiredRef.current) return;
+
+    startedRef.current = true;
+
+    // ✅ snapshot sections for this run
+    runProcessedRef.current = processedRef.current;
+
+    // hard reset visible state
+    commitSectionIdx(0);
+    commitUnitIdx(0);
+    commitPhase("typingMain");
+
+    // arm delay
+    const t0 = performance.now();
+    const delay = initialDelayMsRef.current || 0;
+
+    delayArmedRef.current = true;
+    typingAllowedRef.current = delay <= 0;
+
+    initialDelayUntilRef.current = t0 + delay;
+    nextDueAtRef.current = delay > 0 ? initialDelayUntilRef.current : t0;
+
     const tick = (now) => {
-      const sIdx = sectionIdxRef.current;
-      if (sIdx >= processed.length) {
+      if (!startRef.current) {
         cancelLoop();
         return;
       }
 
-      const sec = processed[sIdx];
+      const curProc = runProcessedRef.current;
+
+      // finished?
+      if (sectionIdxRef.current >= curProc.length) {
+        fireFinishedOnce();
+        cancelLoop();
+        return;
+      }
+
+      // delay gate
+      if (delayArmedRef.current && !typingAllowedRef.current) {
+        if (now < initialDelayUntilRef.current) {
+          rafIdRef.current = requestAnimationFrame(tick);
+          return;
+        }
+        typingAllowedRef.current = true;
+        nextDueAtRef.current = now;
+      }
+
+      if (!typingAllowedRef.current) {
+        rafIdRef.current = requestAnimationFrame(tick);
+        return;
+      }
+
+      if (now < nextDueAtRef.current) {
+        rafIdRef.current = requestAnimationFrame(tick);
+        return;
+      }
+
+      // one step per frame
+      const sIdx = sectionIdxRef.current;
+      const sec = curProc[sIdx];
+
       const {
         mainUnits,
         retypeUnits,
@@ -200,120 +295,130 @@ export function TypewriterSections({
       } = sec;
 
       const hasRetype = !!(sec.retypeText && retypeUnits && retypeUnits.length);
+      const p = phaseRef.current;
+      const u = unitIdxRef.current;
 
-      let steps = 0;
-
-      // advance while "due", but clamp per frame for smoothness
-      while (now >= nextDueAtRef.current && steps < MAX_STEPS_PER_FRAME) {
-        steps += 1;
-
-        const p = phaseRef.current;
-        const u = unitIdxRef.current;
-
-        if (p === "typingMain") {
-          // skipTypingMain: show full main text, but still honor initial delay + subsequent pauses/erase
-          if (skipTypingMain) {
-            if (u !== mainUnits.length) {
-              commitUnitIdx(mainUnits.length);
-            } else {
-              // already fully shown; go to pause
-              nextDueAtRef.current = now + (hasRetype ? pauseBeforeErase : pauseAfter);
-
-              if (hasRetype) {
-                commitPhase("erasing");
-                // ensure erase starts from full length
-                if (unitIdxRef.current !== mainUnits.length) commitUnitIdx(mainUnits.length);
-              } else {
-                commitSectionIdx(sIdx + 1);
-                commitUnitIdx(0);
-                commitPhase("typingMain");
-              }
-            }
-            continue;
-          }
-
-          // normal typing
-          if (u < mainUnits.length) {
-            commitUnitIdx(u + 1);
-            nextDueAtRef.current = now + speed;
-            continue;
-          }
-
-          // end of main text
-          nextDueAtRef.current = now + (hasRetype ? pauseBeforeErase : pauseAfter);
-
-          if (hasRetype) {
-            commitPhase("erasing");
-            commitUnitIdx(mainUnits.length);
-          } else {
-            commitSectionIdx(sIdx + 1);
-            commitUnitIdx(0);
-            commitPhase("typingMain");
-          }
-          continue;
-        }
-
-        if (p === "erasing") {
-          if (u > 0) {
-            commitUnitIdx(u - 1);
-            nextDueAtRef.current = now + eraseSpeed;
-            continue;
-          }
-
-          // finished erasing
-          if (hasRetype) {
-            commitPhase("typingRetyped");
-            commitUnitIdx(0);
-            nextDueAtRef.current = now + speed;
-          } else {
-            commitSectionIdx(sIdx + 1);
-            commitUnitIdx(0);
-            commitPhase("typingMain");
-            nextDueAtRef.current = now + speed;
-          }
-          continue;
-        }
-
-        if (p === "typingRetyped") {
-          if (!retypeUnits) {
-            // safety fallback
-            commitSectionIdx(sIdx + 1);
-            commitUnitIdx(0);
-            commitPhase("typingMain");
-            nextDueAtRef.current = now + speed;
-            continue;
-          }
-
-          if (u < retypeUnits.length) {
-            commitUnitIdx(u + 1);
-            nextDueAtRef.current = now + speed;
-            continue;
-          }
-
-          // end of retype
-          nextDueAtRef.current = now + pauseAfter;
-          commitSectionIdx(sIdx + 1);
-          commitUnitIdx(0);
-          commitPhase("typingMain");
-          continue;
-        }
-
-        // unknown phase: bail safely
-        commitPhase("typingMain");
+      const advanceSection = () => {
+        const nextS = sectionIdxRef.current + 1;
+        commitSectionIdx(nextS);
         commitUnitIdx(0);
+        commitPhase("typingMain");
+
+        if (nextS >= curProc.length) {
+          fireFinishedOnce();
+          cancelLoop();
+          return true;
+        }
+        return false;
+      };
+
+      // ✅ waiting phases that actually honor pauseAfter
+      if (p === "waitingNextSectionMain" || p === "waitingNextSectionRetyped") {
+        if (advanceSection()) return;
         nextDueAtRef.current = now + speed;
+        rafIdRef.current = requestAnimationFrame(tick);
+        return;
       }
 
+      if (p === "typingMain") {
+        if (skipTypingMain) {
+          if (u !== mainUnits.length) {
+            commitUnitIdx(mainUnits.length);
+            nextDueAtRef.current = now + speed;
+          } else {
+            if (hasRetype) {
+              // pauseBeforeErase is honored by due-time; phase can switch now
+              nextDueAtRef.current = now + pauseBeforeErase;
+              commitPhase("erasing");
+              commitUnitIdx(mainUnits.length);
+            } else {
+              // ✅ HOLD for pauseAfter, THEN advance
+              commitPhase("waitingNextSectionMain");
+              nextDueAtRef.current = now + pauseAfter;
+            }
+          }
+          rafIdRef.current = requestAnimationFrame(tick);
+          return;
+        }
+
+        if (u < mainUnits.length) {
+          commitUnitIdx(u + 1);
+          nextDueAtRef.current = now + speed;
+          rafIdRef.current = requestAnimationFrame(tick);
+          return;
+        }
+
+        if (hasRetype) {
+          nextDueAtRef.current = now + pauseBeforeErase;
+          commitPhase("erasing");
+          commitUnitIdx(mainUnits.length);
+          rafIdRef.current = requestAnimationFrame(tick);
+          return;
+        }
+
+        // ✅ HOLD for pauseAfter, THEN advance
+        commitPhase("waitingNextSectionMain");
+        nextDueAtRef.current = now + pauseAfter;
+        rafIdRef.current = requestAnimationFrame(tick);
+        return;
+      }
+
+      if (p === "erasing") {
+        if (u > 0) {
+          commitUnitIdx(u - 1);
+          nextDueAtRef.current = now + eraseSpeed;
+          rafIdRef.current = requestAnimationFrame(tick);
+          return;
+        }
+
+        if (hasRetype) {
+          commitPhase("typingRetyped");
+          commitUnitIdx(0);
+          nextDueAtRef.current = now + speed;
+        } else {
+          if (advanceSection()) return;
+          nextDueAtRef.current = now + speed;
+        }
+
+        rafIdRef.current = requestAnimationFrame(tick);
+        return;
+      }
+
+      if (p === "typingRetyped") {
+        if (!retypeUnits) {
+          if (advanceSection()) return;
+          nextDueAtRef.current = now + speed;
+          rafIdRef.current = requestAnimationFrame(tick);
+          return;
+        }
+
+        if (u < retypeUnits.length) {
+          commitUnitIdx(u + 1);
+          nextDueAtRef.current = now + speed;
+          rafIdRef.current = requestAnimationFrame(tick);
+          return;
+        }
+
+        // ✅ HOLD for pauseAfter, THEN advance (and keep showing retyped text)
+        commitPhase("waitingNextSectionRetyped");
+        nextDueAtRef.current = now + pauseAfter;
+        rafIdRef.current = requestAnimationFrame(tick);
+        return;
+      }
+
+      // fallback
+      commitPhase("typingMain");
+      commitUnitIdx(0);
+      nextDueAtRef.current = now + speed;
       rafIdRef.current = requestAnimationFrame(tick);
     };
 
     rafIdRef.current = requestAnimationFrame(tick);
 
     return () => cancelLoop();
-    // NOTE: processed is stable via useMemo; if sections change, loop restarts.
-  }, [inView, processed, initialDelayMs]);
+  }, [inView, runKey, start]);
 
-  // ✅ stable rendering so earlier content doesn't “rewrite”
+  // rendering helper
   const renderUnits = (sec, unitsArr, wordsArr, visibleCount, breakAfter) => {
     const { mode, highlights } = sec;
     const visibleUnits = unitsArr.slice(0, visibleCount);
@@ -354,18 +459,16 @@ export function TypewriterSections({
     });
   };
 
+  const activeProcessed = runProcessedRef.current;
+
   const shouldShowCursorForSection = (i) =>
-    showCursor && i === sectionIdx && sectionIdx < processed.length;
+    showCursor && i === sectionIdx && sectionIdx < activeProcessed.length;
 
   return (
     <span
       ref={rootRef}
       className={className}
-      style={{
-        whiteSpace: "normal",
-        display: "inline-block",
-        minHeight: "1em",
-      }}
+      style={{ whiteSpace: "normal", display: "inline-block", minHeight: "1em" }}
     >
       {/* sentinel so inView triggers even with empty content */}
       <span
@@ -375,7 +478,7 @@ export function TypewriterSections({
         .
       </span>
 
-      {processed.map((sec, i) => {
+      {activeProcessed.map((sec, i) => {
         const {
           mainWords,
           mainUnits,
@@ -422,7 +525,10 @@ export function TypewriterSections({
           visibleCount = mainUnits.length;
         }
 
-        if (phase === "typingRetyped" && retypeUnits) {
+        const showRetyped =
+          phase === "typingRetyped" || phase === "waitingNextSectionRetyped";
+
+        if (showRetyped && retypeUnits) {
           unitsToUse = retypeUnits;
           wordsToUse = retypeWords || [];
           visibleCount = unitIdx;

@@ -111,132 +111,9 @@ function HeroSection() {
     ]
   );
 
-  const HeroContent = (
-    <MotionSection
-      className="absolute lg:static top-0 bg-neutral-950/90 h-full w-full lg:bg-transparent lg:height-fit"
-      delay={TIMING.paragraphMotionDelayS}
-      duration={TIMING.paragraphMotionDurationS}
-      autoTrigger={false}
-      active={heroIsFinished}
-      defaultVariants={{
-        hidden: { opacity: 0, y: 0 },
-        visible: { opacity: 1, y: 0 },
-      }}
-    >
-      <p className=" text-md sm:text-lg   min-h-[165px] md:text-xl text-white/90 lg:text-neutral-400 max-w-2xl mb-8 leading-relaxed font-light">
-        {/* 5) Paragraph typewriter */}
-        <TypewriterSections
-          className=""
-          initialDelayMs={TIMING.paragraphTypewriterInitialDelayMs}
-          defaultSpeed={TIMING.paragraphTypewriterSpeedMs}
-          showCursor={true}
-          runKey={1} // never restarts
-          start={heroIsFinished} // manual trigger (only used when autoTrigger=true)
-          onFinish={() => {
-            setheroParagraphIsFinished(true);
-          }}
-          sections={paragraphSections}
-        />
-      </p>
-      {/* 6) CTA buttons motion group */}
-      <MotionSection
-        delay={TIMING.ctasMotionDelayS}
-        duration={TIMING.ctasMotionDurationS}
-        staggerChildren={TIMING.ctasMotionStaggerChildrenS}
-        delayChildren={TIMING.ctasMotionDelayChildrenS}
-        autoTrigger={false}
-        active={heroParagraphIsFinished}
-        // defaultVariants={{
-        //   hidden: { opacity: 0 },
-        //   visible: { opacity: 1 },
-        // }}
-      >
-        <div className="flex flex-col sm:flex-row gap-4 mb-12">
-          <motion.a
-            variants={{
-              hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
-              visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
-            }}
-            href="#projects"
-            className="inline-flex items-center justify-center gap-2 h-10 px-6 rounded-md bg-white text-neutral-950 text-sm font-medium hover:bg-neutral-200 transition-colors"
-          >
-            View My Projects
-            <span
-              className="iconify w-4 h-4"
-              data-icon="lucide:arrow-right"
-            ></span>
-          </motion.a>
-
-          <motion.button
-            type="button"
-            onClick={downloadResume}
-            variants={{
-              hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
-              visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
-            }}
-            className="inline-flex items-center justify-center gap-2 h-10 px-6 rounded-md border border-neutral-800 text-neutral-300 text-sm font-medium hover:border-neutral-600 hover:text-white transition-colors bg-[#0E0E0E]"
-          >
-            <span
-              className="iconify w-4 h-4"
-              data-icon="lucide:download"
-            ></span>
-            Download Resume
-          </motion.button>
-        </div>
-      </MotionSection>
-
-      {/* 7) Badges row motion group */}
-      <MotionSection
-        delay={TIMING.badgesMotionDelayS}
-        duration={TIMING.badgesMotionDurationS}
-        staggerChildren={TIMING.badgesMotionStaggerChildrenS}
-        delayChildren={TIMING.badgesMotionDelayChildrenS}
-        autoTrigger={false}
-        active={heroParagraphIsFinished}
-      >
-        <div className="flex items-center text-white/90 lg w-fit justify-center flex-wrap gap-x-6 gap-y-4 text-xs font-medium lg:text-neutral-500 uppercase tracking-wide">
-          <motion.div
-            className="flex items-center whitespace-nowrap gap-2"
-            variants={badgeVariants}
-          >
-            <span
-              className="iconify w-4 h-4 "
-              data-icon="lucide:map-pin"
-            ></span>{" "}
-            US-Based
-          </motion.div>
-
-          <motion.div
-            className="flex items-center  whitespace-nowrap gap-2"
-            variants={badgeVariants}
-          >
-            <span className="iconify w-4 h-4" data-icon="lucide:layers"></span>{" "}
-            Full-Stack
-          </motion.div>
-
-          <motion.div
-            className="flex items-center  whitespace-nowrap gap-2"
-            variants={badgeVariants}
-          >
-            <span className="iconify w-4 h-4" data-icon="lucide:flame"></span>{" "}
-            Builder &amp; Founder
-          </motion.div>
-
-          <motion.div
-            className="flex items-center  whitespace-nowrap gap-2"
-            variants={badgeVariants}
-          >
-            <span className="iconify w-4 h-4" data-icon="lucide:brain"></span>{" "}
-            AI Expert
-          </motion.div>
-        </div>
-      </MotionSection>
-    </MotionSection>
-  );
-
   return (
     <MotionSection
-      className="relative min-h-[calc(100vh-56px)] mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
+      className="relative min-h-[calc(100vh-56px)] flex justify-center items-start lg:items-center pt-20 lg:pt-0"
       delay={TIMING.heroContainerDelayS}
     >
       <div className="relative h-full w-full ">
@@ -320,7 +197,7 @@ function HeroSection() {
               viewPortTrigger: 0.2,
               duration: TIMING.portraitDurationS,
             })}
-            className="lg:absolute  relative  flex pb-10 lg:pb-0 lg:mt-16 items-center justify-center bottom-0 z-0 right-0"
+            className="lg:absolute  flex pb-16 lg:pb-0 mt-16 items-center justify-center bottom-0 z-0 right-0"
           >
             <img
               src={portraitGrayNoBg}
@@ -328,11 +205,140 @@ function HeroSection() {
               alt="Portrait"
             />
 
-            {/* 4) Paragraph wrapper motion */}
 
-            {isMobile && HeroContent}
+            
           </Wrapper>
-          {!isMobile && HeroContent}
+
+          {/* 4) Paragraph wrapper motion */}
+          <MotionSection
+            delay={TIMING.paragraphMotionDelayS}
+            duration={TIMING.paragraphMotionDurationS}
+            autoTrigger={false}
+            active={heroIsFinished}
+            defaultVariants={{
+              hidden: { opacity: 0, y: 40 },
+              visible: { opacity: 1, y: 0 },
+            }}
+          >
+            <p className=" text-md sm:text-lg  min-h-[165px] md:text-xl text-neutral-400 max-w-2xl mb-8 leading-relaxed font-light">
+              {/* 5) Paragraph typewriter */}
+              <TypewriterSections
+                className=""
+                initialDelayMs={TIMING.paragraphTypewriterInitialDelayMs}
+                defaultSpeed={TIMING.paragraphTypewriterSpeedMs}
+                showCursor={true}
+                runKey={1} // never restarts
+                start={heroIsFinished} // manual trigger (only used when autoTrigger=true)
+                onFinish={() => {
+                  setheroParagraphIsFinished(true);
+                }}
+                sections={paragraphSections}
+              />
+            </p>
+          </MotionSection>
+
+          {/* 6) CTA buttons motion group */}
+          <MotionSection
+            delay={TIMING.ctasMotionDelayS}
+            duration={TIMING.ctasMotionDurationS}
+            staggerChildren={TIMING.ctasMotionStaggerChildrenS}
+            delayChildren={TIMING.ctasMotionDelayChildrenS}
+            autoTrigger={false}
+            active={heroParagraphIsFinished}
+            // defaultVariants={{
+            //   hidden: { opacity: 0 },
+            //   visible: { opacity: 1 },
+            // }}
+          >
+            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <motion.a
+                variants={{
+                  hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
+                  visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
+                }}
+                href="#projects"
+                className="inline-flex items-center justify-center gap-2 h-10 px-6 rounded-md bg-white text-neutral-950 text-sm font-medium hover:bg-neutral-200 transition-colors"
+              >
+                View My Projects
+                <span
+                  className="iconify w-4 h-4"
+                  data-icon="lucide:arrow-right"
+                ></span>
+              </motion.a>
+
+              <motion.button
+                type="button"
+                onClick={downloadResume}
+                variants={{
+                  hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
+                  visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
+                }}
+                className="inline-flex items-center justify-center gap-2 h-10 px-6 rounded-md border border-neutral-800 text-neutral-300 text-sm font-medium hover:border-neutral-600 hover:text-white transition-colors bg-[#0E0E0E]"
+              >
+                <span
+                  className="iconify w-4 h-4"
+                  data-icon="lucide:download"
+                ></span>
+                Download Resume
+              </motion.button>
+            </div>
+          </MotionSection>
+
+          {/* 7) Badges row motion group */}
+          <MotionSection
+            delay={TIMING.badgesMotionDelayS}
+            duration={TIMING.badgesMotionDurationS}
+            staggerChildren={TIMING.badgesMotionStaggerChildrenS}
+            delayChildren={TIMING.badgesMotionDelayChildrenS}
+            autoTrigger={false}
+            active={heroParagraphIsFinished}
+          >
+            <div className="flex items-center w-fit justify-center flex-wrap gap-x-6 gap-y-4 text-xs font-medium text-neutral-500 uppercase tracking-wide">
+              <motion.div
+                className="flex items-center whitespace-nowrap gap-2"
+                variants={badgeVariants}
+              >
+                <span
+                  className="iconify w-4 h-4"
+                  data-icon="lucide:map-pin"
+                ></span>{" "}
+                US-Based
+              </motion.div>
+
+              <motion.div
+                className="flex items-center  whitespace-nowrap gap-2"
+                variants={badgeVariants}
+              >
+                <span
+                  className="iconify w-4 h-4"
+                  data-icon="lucide:layers"
+                ></span>{" "}
+                Full-Stack
+              </motion.div>
+
+              <motion.div
+                className="flex items-center  whitespace-nowrap gap-2"
+                variants={badgeVariants}
+              >
+                <span
+                  className="iconify w-4 h-4"
+                  data-icon="lucide:flame"
+                ></span>{" "}
+                Builder &amp; Founder
+              </motion.div>
+
+              <motion.div
+                className="flex items-center  whitespace-nowrap gap-2"
+                variants={badgeVariants}
+              >
+                <span
+                  className="iconify w-4 h-4"
+                  data-icon="lucide:brain"
+                ></span>{" "}
+                AI Expert
+              </motion.div>
+            </div>
+          </MotionSection>
         </div>
       </div>
 
