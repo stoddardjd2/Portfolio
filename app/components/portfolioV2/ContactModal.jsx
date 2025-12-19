@@ -37,7 +37,7 @@ export default function ContactModal({ open, onClose }) {
   const copyEmail = async () => {
     try {
       await navigator.clipboard.writeText(EMAIL);
-      sethCopied(true);
+      setCopied(true);
       setTimeout(() => setCopied(false), 3600);
     } catch {
       /* silently fail */
