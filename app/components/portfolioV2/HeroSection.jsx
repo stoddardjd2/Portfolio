@@ -95,7 +95,7 @@ function HeroSection() {
         pauseAfter: TIMING.paragraphTypewriterPauseAfterMs,
       },
       {
-        text: " I have launched real products, giving me UX/UI insight others lack and a proven ability to drive conversions and engagement.",
+        text: " I have shipped real full-stack products end-to-end, building scalable frontends, APIs, and production systems.",
         mode: "letter",
         pauseAfter: TIMING.paragraphTypewriterPauseAfterMs,
       },
@@ -123,7 +123,7 @@ function HeroSection() {
         visible: { opacity: 1, y: 0 },
       }}
     >
-      <p className=" text-md sm:text-lg   min-h-[165px] md:text-xl text-white/90 lg:text-neutral-400 max-w-2xl mb-8 leading-relaxed font-light">
+      <p className=" text-md sm:text-lg   min-h-[165px] md:text-xl text-white/75 lg:text-neutral-400 max-w-2xl mb-8 leading-relaxed font-light">
         {/* 5) Paragraph typewriter */}
         <TypewriterSections
           className=""
@@ -194,7 +194,7 @@ function HeroSection() {
         autoTrigger={false}
         active={heroParagraphIsFinished}
       >
-        <div className="flex items-center text-white/90 lg w-fit justify-center flex-wrap gap-x-6 gap-y-4 text-xs font-medium lg:text-neutral-500 uppercase tracking-wide">
+        <div className="flex items-center text-white/75 lg w-fit justify-center flex-wrap gap-x-6 gap-y-4 text-xs font-medium lg:text-neutral-500 uppercase tracking-wide">
           <motion.div
             className="flex items-center whitespace-nowrap gap-2"
             variants={badgeVariants}
