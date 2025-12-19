@@ -16,12 +16,25 @@ export function TypewriterSections({
   const rootRef = useRef(null);
   const inView = useInView(rootRef, { once: true, amount: 0.3 });
 
+  // render state
   const [sectionIdx, setSectionIdx] = useState(0);
   const [unitIdx, setUnitIdx] = useState(0);
   const [phase, setPhase] = useState("typingMain"); // "typingMain" | "erasing" | "typingRetyped"
 
-  const baseNormalizeWord = (w) => (w || "").replace(/[.,!?;:"()]/g, "");
+  // internal refs (avoid stale closures + keep rAF loop stable)
+  const sectionIdxRef = useRef(0);
+  const unitIdxRef = useRef(0);
+  const phaseRef = useRef("typingMain");
 
+  // rAF timing refs
+  const rafIdRef = useRef(null);
+  const nextDueAtRef = useRef(0);
+  const startedRef = useRef(false);
+
+  // limit catch-up steps per frame (prevents jumpy fast-forward after tab throttling)
+  const MAX_STEPS_PER_FRAME = 120;
+
+  const baseNormalizeWord = (w) => (w || "").replace(/[.,!?;:"()]/g, "");
   const resolveHighlightClass = (highlights, rawWord) => {
     const plain = baseNormalizeWord(rawWord);
     return (
@@ -51,21 +64,30 @@ export function TypewriterSections({
       const mainWords = makeWords(mainText);
       const retypeWords = retypeText ? makeWords(retypeText) : null;
 
+      // ✅ robust letter-mode mapping: does NOT overcount wordIndex on multiple spaces
       const buildUnits = (txt, wordsForTxt) => {
         if (mode === "word") return wordsForTxt;
 
         const units = [];
         let wordIndex = 0;
+        let inWord = false;
 
         for (let i = 0; i < txt.length; i++) {
           const char = txt[i];
+
           if (/\s/.test(char)) {
             units.push({ char, wordIndex: null });
-            wordIndex++;
+
+            if (inWord) {
+              inWord = false;
+              wordIndex += 1;
+            }
           } else {
             units.push({ char, wordIndex });
+            inWord = true;
           }
         }
+
         return units;
       };
 
@@ -106,95 +128,192 @@ export function TypewriterSections({
     defaultPauseBeforeErase,
   ]);
 
-  // core state machine
+  // keep refs synced with state
+  useEffect(() => {
+    sectionIdxRef.current = sectionIdx;
+  }, [sectionIdx]);
+
+  useEffect(() => {
+    unitIdxRef.current = unitIdx;
+  }, [unitIdx]);
+
+  useEffect(() => {
+    phaseRef.current = phase;
+  }, [phase]);
+
+  // helpers to update BOTH refs + state (single source of truth)
+  const commitSectionIdx = (v) => {
+    sectionIdxRef.current = v;
+    setSectionIdx(v);
+  };
+
+  const commitUnitIdx = (v) => {
+    unitIdxRef.current = v;
+    setUnitIdx(v);
+  };
+
+  const commitPhase = (v) => {
+    phaseRef.current = v;
+    setPhase(v);
+  };
+
+  const cancelLoop = () => {
+    if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+    rafIdRef.current = null;
+    startedRef.current = false;
+  };
+
+  // time-based rAF loop (consistent speed)
   useEffect(() => {
     if (!inView) return;
-    if (sectionIdx >= processed.length) return;
+    if (!processed.length) return;
 
-    const sec = processed[sectionIdx];
-    const { mainUnits, retypeUnits, speed, eraseSpeed, pauseAfter, pauseBeforeErase, skipTypingMain } =
-      sec;
+    // start fresh if needed
+    if (!startedRef.current) {
+      startedRef.current = true;
 
-    const hasRetype = !!(sec.retypeText && retypeUnits && retypeUnits.length);
+      // ensure state & refs aligned on first start
+      sectionIdxRef.current = sectionIdxRef.current || 0;
+      unitIdxRef.current = unitIdxRef.current || 0;
+      phaseRef.current = phaseRef.current || "typingMain";
 
-    let delay;
-
-    const isFirstMain =
-      sectionIdx === 0 &&
-      phase === "typingMain" &&
-      unitIdx === 0 &&
-      initialDelayMs > 0;
-
-    if (phase === "typingMain") {
-      if (unitIdx < mainUnits.length) {
-        if (skipTypingMain) delay = isFirstMain ? initialDelayMs : 0;
-        else delay = isFirstMain ? initialDelayMs : speed;
-      } else {
-        delay = hasRetype ? pauseBeforeErase : pauseAfter;
-      }
-    } else if (phase === "erasing") {
-      delay = unitIdx > 0 ? eraseSpeed : 0;
-    } else if (phase === "typingRetyped") {
-      if (retypeUnits && unitIdx < retypeUnits.length) delay = speed;
-      else delay = pauseAfter;
-    } else {
-      return;
+      const now = performance.now();
+      nextDueAtRef.current = now + (initialDelayMs > 0 ? initialDelayMs : 0);
     }
 
-    const timerId = setTimeout(() => {
-      if (phase === "typingMain") {
-        if (unitIdx < mainUnits.length) {
-          if (skipTypingMain) setUnitIdx(mainUnits.length);
-          else setUnitIdx((n) => n + 1);
-          return;
-        }
-
-        if (hasRetype) {
-          setPhase("erasing");
-          setUnitIdx(mainUnits.length);
-          return;
-        }
-
-        setSectionIdx((i) => i + 1);
-        setUnitIdx(0);
-        setPhase("typingMain");
+    const tick = (now) => {
+      const sIdx = sectionIdxRef.current;
+      if (sIdx >= processed.length) {
+        cancelLoop();
         return;
       }
 
-      if (phase === "erasing") {
-        if (unitIdx > 0) {
-          setUnitIdx((n) => n - 1);
-          return;
+      const sec = processed[sIdx];
+      const {
+        mainUnits,
+        retypeUnits,
+        speed,
+        eraseSpeed,
+        pauseAfter,
+        pauseBeforeErase,
+        skipTypingMain,
+      } = sec;
+
+      const hasRetype = !!(sec.retypeText && retypeUnits && retypeUnits.length);
+
+      let steps = 0;
+
+      // advance while "due", but clamp per frame for smoothness
+      while (now >= nextDueAtRef.current && steps < MAX_STEPS_PER_FRAME) {
+        steps += 1;
+
+        const p = phaseRef.current;
+        const u = unitIdxRef.current;
+
+        if (p === "typingMain") {
+          // skipTypingMain: show full main text, but still honor initial delay + subsequent pauses/erase
+          if (skipTypingMain) {
+            if (u !== mainUnits.length) {
+              commitUnitIdx(mainUnits.length);
+            } else {
+              // already fully shown; go to pause
+              nextDueAtRef.current = now + (hasRetype ? pauseBeforeErase : pauseAfter);
+
+              if (hasRetype) {
+                commitPhase("erasing");
+                // ensure erase starts from full length
+                if (unitIdxRef.current !== mainUnits.length) commitUnitIdx(mainUnits.length);
+              } else {
+                commitSectionIdx(sIdx + 1);
+                commitUnitIdx(0);
+                commitPhase("typingMain");
+              }
+            }
+            continue;
+          }
+
+          // normal typing
+          if (u < mainUnits.length) {
+            commitUnitIdx(u + 1);
+            nextDueAtRef.current = now + speed;
+            continue;
+          }
+
+          // end of main text
+          nextDueAtRef.current = now + (hasRetype ? pauseBeforeErase : pauseAfter);
+
+          if (hasRetype) {
+            commitPhase("erasing");
+            commitUnitIdx(mainUnits.length);
+          } else {
+            commitSectionIdx(sIdx + 1);
+            commitUnitIdx(0);
+            commitPhase("typingMain");
+          }
+          continue;
         }
 
-        if (hasRetype) {
-          setPhase("typingRetyped");
-          setUnitIdx(0);
-        } else {
-          setSectionIdx((i) => i + 1);
-          setUnitIdx(0);
-          setPhase("typingMain");
+        if (p === "erasing") {
+          if (u > 0) {
+            commitUnitIdx(u - 1);
+            nextDueAtRef.current = now + eraseSpeed;
+            continue;
+          }
+
+          // finished erasing
+          if (hasRetype) {
+            commitPhase("typingRetyped");
+            commitUnitIdx(0);
+            nextDueAtRef.current = now + speed;
+          } else {
+            commitSectionIdx(sIdx + 1);
+            commitUnitIdx(0);
+            commitPhase("typingMain");
+            nextDueAtRef.current = now + speed;
+          }
+          continue;
         }
-        return;
+
+        if (p === "typingRetyped") {
+          if (!retypeUnits) {
+            // safety fallback
+            commitSectionIdx(sIdx + 1);
+            commitUnitIdx(0);
+            commitPhase("typingMain");
+            nextDueAtRef.current = now + speed;
+            continue;
+          }
+
+          if (u < retypeUnits.length) {
+            commitUnitIdx(u + 1);
+            nextDueAtRef.current = now + speed;
+            continue;
+          }
+
+          // end of retype
+          nextDueAtRef.current = now + pauseAfter;
+          commitSectionIdx(sIdx + 1);
+          commitUnitIdx(0);
+          commitPhase("typingMain");
+          continue;
+        }
+
+        // unknown phase: bail safely
+        commitPhase("typingMain");
+        commitUnitIdx(0);
+        nextDueAtRef.current = now + speed;
       }
 
-      if (phase === "typingRetyped" && retypeUnits) {
-        if (unitIdx < retypeUnits.length) {
-          setUnitIdx((n) => n + 1);
-        } else {
-          setSectionIdx((i) => i + 1);
-          setUnitIdx(0);
-          setPhase("typingMain");
-        }
-      }
-    }, delay);
+      rafIdRef.current = requestAnimationFrame(tick);
+    };
 
-    return () => clearTimeout(timerId);
-  }, [inView, sectionIdx, unitIdx, phase, processed, initialDelayMs]);
+    rafIdRef.current = requestAnimationFrame(tick);
 
-  // ✅ render tokens so earlier content doesn't get “rewritten”
-  // - stable keys include content + index
-  // - always append separator (space/br) so last token doesn't toggle later
+    return () => cancelLoop();
+    // NOTE: processed is stable via useMemo; if sections change, loop restarts.
+  }, [inView, processed, initialDelayMs]);
+
+  // ✅ stable rendering so earlier content doesn't “rewrite”
   const renderUnits = (sec, unitsArr, wordsArr, visibleCount, breakAfter) => {
     const { mode, highlights } = sec;
     const visibleUnits = unitsArr.slice(0, visibleCount);
@@ -273,7 +392,13 @@ export function TypewriterSections({
           if (retypeText && retypeUnits && retypeUnits.length) {
             return (
               <span key={i}>
-                {renderUnits(sec, retypeUnits, retypeWords || [], retypeUnits.length, breakAfterRetype)}
+                {renderUnits(
+                  sec,
+                  retypeUnits,
+                  retypeWords || [],
+                  retypeUnits.length,
+                  breakAfterRetype
+                )}
               </span>
             );
           }

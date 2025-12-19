@@ -10,7 +10,7 @@ const badgeVariants = {
   visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
-const baseDelay = 10.2;
+const baseDelay = 11;
 /**
  * One place to control ALL timings, in the order they appear.
  * - Keep units consistent (ms for typewriter, seconds for MotionSection delays/durations)
@@ -32,7 +32,7 @@ const TIMING = {
 
   // 5) Paragraph Typewriter
   paragraphTypewriterInitialDelayMs: 3500,
-  paragraphTypewriterSpeedMs:1,
+  paragraphTypewriterSpeedMs: 2,
   paragraphTypewriterPauseAfterMs: 300,
 
   // 8) Portrait motion

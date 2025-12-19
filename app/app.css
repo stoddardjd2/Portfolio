@@ -82,14 +82,16 @@
 
 #root {
   overflow: hidden;
+  background-color: #0a0a0a;
 }
 html {
   overflow-y: scroll;
+  background-color: #0a0a0a;
 }
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-[#0a0a0a];
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
