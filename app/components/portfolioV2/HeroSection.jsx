@@ -10,7 +10,7 @@ const badgeVariants = {
   visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
-const baseDelay = 17.5;
+const baseDelay = 9.7;
 /**
  * One place to control ALL timings, in the order they appear.
  * - Keep units consistent (ms for typewriter, seconds for MotionSection delays/durations)
@@ -22,17 +22,17 @@ const TIMING = {
 
   // 3) H1 Typewriter (headline)
   h1TypewriterInitialDelayMs: 100,
-  h1TypewriterSpeedMs: 20,
-  h1TypewriterEraseSpeedMs: 1,
+  h1TypewriterSpeedMs: 40,
+  h1TypewriterEraseSpeedMs: 25,
   h1TypewriterPauseAfterMs: 100,
 
   // 4) Paragraph wrapper motion (fade/slide in)
-  paragraphMotionDelayS: 4.7,
+  paragraphMotionDelayS: 4.1,
   paragraphMotionDurationS: 1.5,
 
   // 5) Paragraph Typewriter
-  paragraphTypewriterInitialDelayMs: 4800,
-  paragraphTypewriterSpeedMs: 0.001,
+  paragraphTypewriterInitialDelayMs: 4200,
+  paragraphTypewriterSpeedMs: 8,
   paragraphTypewriterPauseAfterMs: 300,
 
   // 8) Portrait motion
@@ -139,20 +139,36 @@ function HeroSection() {
               showCursor={true}
               sections={[
                 {
-                  text: "I Am a Full Stack Developer.",
+                  text: "I am a full stack developer.",
                   // text: "I Am More Than Just a Full Stack Developer.",
                   skipTypingMain: true,
                   mode: "letter",
-                  retypeText: "I Am More Than Just a Full Stack Developer.",
+                  retypeText: "I am more than just a full stack developer.",
                   pauseAfter: TIMING.h1TypewriterPauseAfterMs,
                   pauseBeforeErase: 1000,
                   breakAfterRetype: [5],
                   highlights: {
-                    Full: "text-neutral-500",
-                    Stack: "text-neutral-500",
+                    full: "text-neutral-500",
+                    stack: "text-neutral-500",
                   },
                 },
               ]}
+              //    sections={[
+              //   {
+              //     text: "I Am a Full Stack Developer.",
+              //     // text: "I Am More Than Just a Full Stack Developer.",
+              //     skipTypingMain: true,
+              //     mode: "letter",
+              //     retypeText: "I Am More Than Just a Full Stack Developer.",
+              //     pauseAfter: TIMING.h1TypewriterPauseAfterMs,
+              //     pauseBeforeErase: 1000,
+              //     breakAfterRetype: [5],
+              //     highlights: {
+              //       Full: "text-neutral-500",
+              //       Stack: "text-neutral-500",
+              //     },
+              //   },
+              // ]}
             />
           </h1>
 
