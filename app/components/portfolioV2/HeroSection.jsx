@@ -236,7 +236,7 @@ function HeroSection() {
 
   return (
     <MotionSection
-      className="relative min-h-[calc(100vh-56px)] mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
+      className="relative min-h-[840px] xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100vh-56px)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
       delay={TIMING.heroContainerDelayS}
     >
       <div className="relative h-full w-full ">

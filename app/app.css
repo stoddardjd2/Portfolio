@@ -19,6 +19,7 @@
   --animate-bounce-down: bounceDown 1.2s ease-in-out infinite;
 
   /* breakpoints */
+  --breakpoint-xxxxs: 300px;
   --breakpoint-xxxs: 345px;
   --breakpoint-xxs: 385px;
   --breakpoint-xs: 420px;
