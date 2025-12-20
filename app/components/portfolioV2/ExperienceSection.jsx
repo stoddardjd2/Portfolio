@@ -56,23 +56,33 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
             "paid acquisition",
             "A/B testing",
             "onboarding",
-            "automate social media"
+            "automate social media",
           ]}
           highlightsOn={highlightsOn}
           bullets={[
-            "Founded and built a platform automating shared expenses, payments, and SMS reminders to reduce friction in group billing.",
-            "Shipped an MVP to live users in less than a month, balancing rapid iteration with reliability, security, and real-money constraints.",
+            "Founded and built a platform automating shared expenses, payments, and SMS reminders for live users and real-money transactions.",
+            "Shipped an MVP to live users in under one month, balancing rapid iteration with reliability, security, and financial constraints.",
             "Owned the full product lifecycle end-to-end across strategy, UX, frontend, backend APIs, infrastructure, analytics, and growth.",
             "Designed backend systems for recurring billing, timezone-aware scheduling, payment tracking, and reliable message delivery.",
-            "Integrated payments, bank linking, and SMS providers with robust error handling, observability, and cost controls.",
-            "Shipped a fault-tolerant system handling live users and real money with safe retries, idempotency, and abuse prevention.",
-            "Built internal admin dashboards for real-time analytics, cost projections, and monitoring suspicious user behavior.",
+            "Integrated payments, bank linking, and SMS providers with robust error handling, observability, cost controls, and idempotency.",
+            "Built fault-tolerant systems and internal admin dashboards for analytics, cost projections, and monitoring suspicious behavior.",
             "Implemented end-to-end analytics across onboarding, activation, payments, conversion, retention, and LTV.",
-            "Ran early-stage paid acquisition experiments across channels, iterating on messaging and onboarding to improve activation.",
-            "Continuously iterated on product features and UI/UX based on user data, support feedback, and insights from production.",
-            "Built custom software to automate social media content generation, scheduling, and performance tracking.",
-            "Drove all marketing and growth initiatives, including SEO, Google Ads, A/B testing, analytics, and launch campaigns on major platforms.",
+            "Drove growth through paid acquisition experiments, SEO, A/B testing, and continuous product and UI/UX iteration.",
           ]}
+          // bullets={[
+          //   "Founded and built a platform automating shared expenses, payments, and SMS reminders to reduce friction in group billing.",
+          //   "Shipped an MVP to live users in less than a month, balancing rapid iteration with reliability, security, and real-money constraints.",
+          //   "Owned the full product lifecycle end-to-end across strategy, UX, frontend, backend APIs, infrastructure, analytics, and growth.",
+          //   "Designed backend systems for recurring billing, timezone-aware scheduling, payment tracking, and reliable message delivery.",
+          //   "Integrated payments, bank linking, and SMS providers with robust error handling, observability, and cost controls.",
+          //   "Shipped a fault-tolerant system handling live users and real money with safe retries, idempotency, and abuse prevention.",
+          //   "Built internal admin dashboards for real-time analytics, cost projections, and monitoring suspicious user behavior.",
+          //   "Implemented end-to-end analytics across onboarding, activation, payments, conversion, retention, and LTV.",
+          //   "Ran early-stage paid acquisition experiments across channels, iterating on messaging and onboarding to improve activation.",
+          //   "Continuously iterated on product features and UI/UX based on user data, support feedback, and insights from production.",
+          //   "Built custom software to automate social media content generation, scheduling, and performance tracking.",
+          //   "Drove all marketing and growth initiatives, including SEO, Google Ads, A/B testing, analytics, and launch campaigns on major platforms.",
+          // ]}
         />
 
         <ExperienceEntry
@@ -89,7 +99,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
           ]}
           highlightsOn={highlightsOn}
           bullets={[
-            "Collaborated with designers, creative directors, and partners to ship cinematic, motion-driven experiences using reusable systems.",
+            "Collaborated with designers, creative directors, and brand partners, including Adidas, to ship cinematic, motion-driven experiences.",
             "Translated brand and editorial direction into production-ready UI with dynamic heroes, image sequencing, and narrative flow.",
             "Built an image pipeline with responsive assets, lazy loading, and modern formats to meet professional publishing standards.",
             "Implemented custom Framer Motion animation systems for scroll-based reveals and transitions, balancing impact with performance.",
@@ -113,7 +123,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
             "white-labeled",
             "internal catalog platform",
             "documentation standards",
-            "responsive layouts"
+            "responsive layouts",
           ]}
           highlightsOn={highlightsOn}
           bullets={[
