@@ -24,7 +24,7 @@ const TIMING = {
 
   // 3) H1 Typewriter (headline)
   h1TypewriterInitialDelayMs: 100,
-  h1TypewriterSpeedMs: 20,
+  h1TypewriterSpeedMs: 30,
   h1TypewriterEraseSpeedMs: 15,
   h1TypewriterPauseAfterMs: 100,
 
@@ -34,7 +34,7 @@ const TIMING = {
 
   // 5) Paragraph Typewriter
   paragraphTypewriterInitialDelayMs: 500,
-  paragraphTypewriterSpeedMs: 1,
+  paragraphTypewriterSpeedMs: 20,
   paragraphTypewriterPauseAfterMs: 300,
 
   // 8) Portrait motion
