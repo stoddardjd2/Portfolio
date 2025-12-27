@@ -33,7 +33,7 @@ const TIMING = {
   paragraphMotionDurationS: 1.5,
 
   // 5) Paragraph Typewriter
-  paragraphTypewriterInitialDelayMs: 500,
+  paragraphTypewriterInitialDelayMs: 800,
   paragraphTypewriterSpeedMs: 20,
   paragraphTypewriterPauseAfterMs: 300,
 
@@ -272,7 +272,7 @@ function HeroSection() {
               initialDelayMs={TIMING.h1TypewriterInitialDelayMs}
               defaultSpeed={TIMING.h1TypewriterSpeedMs}
               defaultEraseSpeed={TIMING.h1TypewriterEraseSpeedMs}
-              showCursor={true}
+              // showCursor={true}
               onFinish={() => {
                 setHeroIsFinished(true);
                 console.log("FINSIHED");
@@ -280,14 +280,15 @@ function HeroSection() {
               runKey={0} // never restarts
               sections={[
                 {
-                  text: "I am a full-stack engineer.",
-                  // text: "I Am More Than Just a Full Stack Developer.",
+                  // text: "I am a full-stack engineer.",
+                  text: "I am more than just a full-stack engineer.",
                   skipTypingMain: true,
                   mode: "letter",
-                  retypeText: "I am more than just a full-stack engineer.",
+                  // retypeText: "I am more than just a full-stack engineer.",
                   pauseAfter: TIMING.h1TypewriterPauseAfterMs,
                   pauseBeforeErase: 1000,
                   breakAfterRetype: [5],
+                  breakAfterMain:[5],
                   highlights: {
                     "full-stack": "text-neutral-500",
                     // stack: "text-neutral-500",
