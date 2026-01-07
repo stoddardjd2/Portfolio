@@ -24,7 +24,7 @@ function ValueSection() {
       icon: "lucide:shield-check",
       title: "Highly Reliable System Design",
       description:
-        "Background schedulers, payments, SMS, and webhooks designed for fault tolerance.",
+        "Reliable background workers for scheduling, payments, SMS messaging, and webhook automation.",
     },
     {
       icon: "lucide:message-square",
@@ -36,7 +36,7 @@ function ValueSection() {
       icon: "lucide:zap",
       title: "AI-Enhanced Development",
       description:
-        "I use AI-assisted workflows and deep engineering knowledge to move fast while keeping systems stable and correct.",
+        "I use AI-assisted workflows and my deep engineering knowledge to move fast while keeping systems stable.",
     },
   ];
 
@@ -87,7 +87,7 @@ function ValueSection() {
 function ValueCard({ icon, title, description }) {
   return (
     <div
-      className="group p-6 rounded-xl border border-neutral-800 bg-neutral-900/20 hover:border-neutral-700 transition-all duration-300"
+      className="group p-6 h-full rounded-xl border border-neutral-800 bg-neutral-900/20 hover:border-neutral-700 transition-all duration-300"
       style={{ willChange: "transform, opacity, filter" }}
     >
       <div className="h-10 w-10 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center mb-4 text-white group-hover:scale-110 transition-transform">

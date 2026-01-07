@@ -54,7 +54,7 @@ function CaseStudySection() {
 function CaseItem({ step, color, title, text }) {
   const colorClasses = {
     red: "bg-red-500/10 text-red-500",
-    blue: "bg-blue-500/10 text-blue-500",
+    blue: "bg-slate-500/10 text-slate-400",
     emerald: "bg-emerald-500/10 text-emerald-500",
   }[color];
 

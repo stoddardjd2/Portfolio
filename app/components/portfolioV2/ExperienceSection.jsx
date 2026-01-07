@@ -232,7 +232,7 @@ function ExperienceEntry({
         <ul className="space-y-2 text-sm text-neutral-400">
           {bullets.map((item, idx) => (
             <li key={`${company}-${idx}`} className="flex gap-2">
-              <span className="mt-[2px] inline-flex h-4 w-4 items-center justify-center shrink-0 text-blue-400">
+              <span className="mt-[2px] inline-flex h-4 w-4 items-center justify-center shrink-0 text-slate-400">
                 <span
                   className="iconify block !h-4 !w-4"
                   data-icon="lucide:dot"

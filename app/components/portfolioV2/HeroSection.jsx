@@ -2,7 +2,15 @@ import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import portraitGrayNoBg from "@/assets/heavily-edited-fotor-glasses-white-cropped.png";
 import downloadResume from "./resumeDownloadHelper.js";
-import { ArrowRight, Download, MapPin, Layers, Flame, Brain } from "lucide-react";
+import {
+  ArrowRight,
+  Download,
+  MapPin,
+  Layers,
+  Flame,
+  Brain,
+} from "lucide-react";
+import CompanyBanner from "./CompanyBanner.jsx";
 
 /**
  * ✅ SINGLE SOURCE OF TRUTH (all timings/easing/offsets here)
@@ -93,10 +101,9 @@ function makeVariants(m) {
       opacity: 1,
       y: 0,
       filter: blur(0),
-      transition: { duration:0.75, ease: m.easeEnter, delay: 0.2 },
+      transition: { duration: 0.75, ease: m.easeEnter, delay: 0.2 },
     },
   };
-
 
   // portrait wrap + img as variants (so no inline transition needed)
   const portraitWrap = {
@@ -200,18 +207,26 @@ function HeroSection() {
       >
         Full-stack engineer &amp; founder experienced in production systems and
         AI-powered workflows. I use AI effectively, understand its limitations,
-        and know when manual engineering delivers better precision. I have shipped
-        real full-stack products end-to-end, building scalable frontends, APIs,
-        and production systems.{" "}
+        and know when manual engineering delivers better precision. I have
+        shipped real full-stack products end-to-end, building scalable
+        frontends, APIs, and production systems.{" "}
         <span className="text-white/80">Scroll down to see how.</span>
       </motion.p>
 
       {/* CTA buttons */}
-      <motion.div className="flex flex-col sm:flex-row gap-4 mb-12" variants={V.container}>
+      <motion.div
+        className="flex flex-col sm:flex-row gap-4 mb-8"
+        variants={V.container}
+      >
         <motion.a
           href="#projects"
           variants={V.fadeUp}
-          {...V.hoverLift}
+          whileHover={{
+            y: -4,
+            transition: { duration: 0.15, ease: MOTION.easeHover },
+          }}
+          animate={{ y: 0 }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
           className="inline-flex items-center justify-center gap-2 h-10 px-6 rounded-md bg-white text-neutral-950 text-sm font-medium hover:bg-neutral-200 transition-colors"
         >
           View My Projects
@@ -222,7 +237,12 @@ function HeroSection() {
           type="button"
           onClick={downloadResume}
           variants={V.fadeUp}
-          {...V.hoverLift}
+          whileHover={{
+            y: -4,
+            transition: { duration: 0.15, ease: MOTION.easeHover },
+          }}
+          animate={{ y: 0 }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
           className="inline-flex cursor-pointer items-center justify-center gap-2 h-10 px-6 rounded-md border border-neutral-800 text-neutral-300 text-sm font-medium hover:border-neutral-600 hover:text-white transition-colors bg-[#0E0E0E]"
         >
           <Download className="w-4 h-4" aria-hidden="true" />
@@ -230,8 +250,13 @@ function HeroSection() {
         </motion.button>
       </motion.div>
 
+      {/* Company Banner */}
+      <div className="mb-8 max-w-[60%]">
+        <CompanyBanner />
+      </div>
+
       {/* Badges */}
-      <motion.div
+      {/* <motion.div
         className="flex items-center text-white/75 w-fit justify-center flex-wrap gap-x-6 gap-y-4 text-xs font-medium lg:text-neutral-500 uppercase tracking-wide"
         variants={V.container}
       >
@@ -254,13 +279,13 @@ function HeroSection() {
           <Brain className="w-4 h-4" aria-hidden="true" />
           AI Expert
         </motion.div>
-      </motion.div>
+      </motion.div> */}
     </motion.div>
   );
 
   return (
     <motion.div
-      className="relative min-h-[840px] w-full xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100vh-56px)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
+      className="relative min-h-[840px] mt-[56px] w-full xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100vh-56px)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
       initial="hidden"
       animate="visible"
       variants={V.container}
@@ -269,7 +294,7 @@ function HeroSection() {
         <div className="z-10 relative">
           {/* Availability pill */}
           <motion.div
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300 mb-8"
+            className="inline-flex absolute -top-10 items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300 mb-8"
             variants={V.fadeUp}
           >
             <span className="relative flex h-2 w-2">
@@ -297,12 +322,12 @@ function HeroSection() {
 
           {/* Portrait (wrap + img both controlled at top via variants) */}
           <motion.div
-            className="lg:absolute relative flex pb-10 lg:pb-0 lg:mt-16 items-center justify-center bottom-0 z-0 right-0"
+            className="lg:absolute relative top-0 flex pb-10 lg:pb-0 lg:mt-16  bottom-0 z-0 right-0"
             variants={V.portraitWrap}
           >
             <motion.img
               src={portraitGrayNoBg}
-              className="lg:h-[470px] px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
+              className="lg:h-[470px]  px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
               alt="Portrait"
               variants={V.portraitImg}
             />

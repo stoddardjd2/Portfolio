@@ -69,6 +69,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         highlightsOn={highlightsOn}
         setHighlightsOn={setHighlightsOn}
         images={[
+          { type: 'iframe', src: 'https://splitify.io', title: 'Splitify Live Demo' },
           splitifyHomePageImg,
           splitifyPayPageImg,
           splitifyHomePageImg2,
@@ -78,6 +79,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         ]}
         showAllImages={false}
         enableSlideshow={true}
+        slideshowAutoplay={false}
         integrations={[
           { name: "Plaid", logo: plaidIcon, rounded: false },
           {
@@ -186,7 +188,9 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           "Framer Motion",
           "Google Analytics",
         ]}
+        slideshowAutoplay={false}
         images={[
+          { type: 'iframe', src: 'https://the85ers.org', title: 'The 85ers Live Demo' },
           the85ersHomePageImg,
           the85erContactUsPageImg,
           the85erOurStoryPageImg,

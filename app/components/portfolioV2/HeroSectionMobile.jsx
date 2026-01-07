@@ -2,6 +2,8 @@ import React, { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import portraitGrayNoBg from "@/assets/heavily-edited-fotor-glasses-white-cropped.png";
 import downloadResume from "./resumeDownloadHelper.js";
+import CompanyBanner from "./CompanyBanner.jsx";
+import { ArrowRight, Download, MapPin, Layers, Flame, Brain } from "lucide-react";
 
 /**
  * ✅ SINGLE SOURCE OF TRUTH for all motion timing/easing (including image).
@@ -166,7 +168,19 @@ function HeroSectionMobile() {
       animate="visible"
       variants={V.container}
     >
+      
       <div className="relative h-full w-full">
+      
+        {/* Availability pill */}
+        <motion.div className=" mb-4" variants={V.fadeUp}>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+            </span>
+            Open to Full-Time &amp; Contract Work
+          </div>
+        </motion.div>
         {/* Headline */}
         <motion.h1
           variants={V.fadeUp}
@@ -210,7 +224,7 @@ function HeroSectionMobile() {
 
         {/* CTA buttons */}
         <motion.div
-          className="flex flex-col sm:flex-row justify-center gap-4 mb-10"
+          className="flex flex-col lg:flex-row justify-center gap-4 mb-10"
           variants={V.container}
         >
           <motion.a
@@ -220,7 +234,7 @@ function HeroSectionMobile() {
             className="inline-flex items-center justify-center gap-2 h-10 px-6 rounded-md bg-white text-neutral-950 text-sm font-medium hover:bg-neutral-200 transition-colors"
           >
             View My Projects
-            <span className="iconify w-4 h-4" data-icon="lucide:arrow-right" />
+            <ArrowRight className="w-4 h-4" />
           </motion.a>
 
           <motion.button
@@ -230,13 +244,18 @@ function HeroSectionMobile() {
             {...V.hoverLift}
             className="inline-flex items-center justify-center gap-2 h-10 px-6 rounded-md border border-neutral-800 text-neutral-300 text-sm font-medium hover:border-neutral-600 hover:text-white transition-colors bg-[#0E0E0E]"
           >
-            <span className="iconify w-4 h-4" data-icon="lucide:download" />
+            <Download className="w-4 h-4" />
             Download Resume
           </motion.button>
         </motion.div>
 
+        {/* Company Banner */}
+        <div className="">
+          <CompanyBanner centerOnMobile={true} />
+        </div>
+
         {/* Badges */}
-        <motion.div
+        {/* <motion.div
           className="flex items-center justify-center flex-wrap gap-x-6 gap-y-4 text-xs font-medium uppercase tracking-wide text-neutral-500"
           variants={V.container}
         >
@@ -244,7 +263,7 @@ function HeroSectionMobile() {
             className="flex items-center gap-2"
             variants={V.badgeItem}
           >
-            <span className="iconify w-4 h-4" data-icon="lucide:map-pin" />
+            <MapPin className="w-4 h-4" />
             US-Based
           </motion.div>
 
@@ -252,7 +271,7 @@ function HeroSectionMobile() {
             className="flex items-center gap-2"
             variants={V.badgeItem}
           >
-            <span className="iconify w-4 h-4" data-icon="lucide:layers" />
+            <Layers className="w-4 h-4" />
             Full-Stack
           </motion.div>
 
@@ -260,7 +279,7 @@ function HeroSectionMobile() {
             className="flex items-center gap-2"
             variants={V.badgeItem}
           >
-            <span className="iconify w-4 h-4" data-icon="lucide:flame" />
+            <Flame className="w-4 h-4" />
             Builder &amp; Founder
           </motion.div>
 
@@ -268,21 +287,11 @@ function HeroSectionMobile() {
             className="flex items-center gap-2"
             variants={V.badgeItem}
           >
-            <span className="iconify w-4 h-4" data-icon="lucide:brain" />
+            <Brain className="w-4 h-4" />
             AI Expert
           </motion.div>
-        </motion.div>
+        </motion.div> */}
 
-        {/* Availability pill */}
-        <motion.div className="flex justify-center mt-8" variants={V.fadeUp}>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
-            </span>
-            Open to Full-Time &amp; Contract Work
-          </div>
-        </motion.div>
       </div>
     </motion.div>
   );

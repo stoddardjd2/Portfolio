@@ -156,7 +156,7 @@ export default function ProjectCard({
                   <div
                     className={
                       tag.className ||
-                      "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-semibold uppercase tracking-wider border border-blue-500/20"
+                      "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-500/10 text-slate-400 text-[10px] font-semibold uppercase tracking-wider border border-slate-500/20"
                     }
                   >
                     {tag.text}
@@ -415,7 +415,7 @@ function FeatureItem({
   return (
     <li className="flex items-start gap-3 text-sm text-neutral-400">
       <span
-        className={`iconify text-blue-400 inline-block align-middle leading-none text-[16px] mt-0.5 flex-shrink-0 `}
+        className={`iconify text-slate-400 inline-block align-middle leading-none text-[16px] mt-0.5 flex-shrink-0 `}
         data-icon={icon}
         aria-hidden="true"
       />

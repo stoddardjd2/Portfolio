@@ -1,6 +1,59 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
+import { ScaledIframe } from "./ScaledIframe.jsx";
+
+// Fullscreen iframe portal component
+function IframeFullscreenPortal({ src, onClose }) {
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  return createPortal(
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black z-[99999] flex items-center justify-center cursor-pointer"
+      onClick={onClose}
+    >
+      {/* Close button */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+        className="absolute top-5 right-5 cursor-pointer w-10 h-10 bg-black/70 hover:bg-black/90 text-white rounded-full flex items-center justify-center text-xl font-bold transition-colors z-[100000]"
+        aria-label="Close fullscreen"
+      >
+        ×
+      </button>
+
+      {/* Fullscreen iframe container */}
+      <div className="w-full h-full max-w-full max-h-full">
+        <iframe
+          src={src}
+          className="w-full h-full border-0"
+          style={{ background: "white" }}
+          title="Fullscreen iframe"
+        />
+      </div>
+    </motion.div>,
+    document.body
+  );
+}
 
 function useInView(ref, { threshold = 0.35, rootMargin = "0px" } = {}) {
   const [inView, setInView] = useState(false);
@@ -52,6 +105,25 @@ function useLockHtmlScroll(locked) {
     };
   }, [locked]);
 }
+
+// Helper to reload iframe content
+function reloadIframe(src) {
+  const iframes = document.querySelectorAll(`iframe[src="${src}"]`);
+  iframes.forEach((iframe) => {
+    try {
+      // Add cache-busting parameter to force reload
+      const separator = iframe.src.includes("?") ? "&" : "?";
+      iframe.src = iframe.src + separator + "_t=" + Date.now();
+    } catch (e) {
+      console.log("Reload failed:", e);
+    }
+  });
+}
+
+// Helper to create iframe fullscreen portal
+function createIframeFullscreen(src, onClose) {
+  return <IframeFullscreenPortal src={src} onClose={onClose} />;
+}
 // Reusable inner slideshow renderer (so modal = exact same UI/logic)
 function SlideshowInner({
   list,
@@ -68,6 +140,7 @@ function SlideshowInner({
   showArrows,
   showDots,
   showCounter,
+  setIframeFullscreen,
   showPlayPause,
   enableKeyboard,
   enableSwipe,
@@ -81,7 +154,17 @@ function SlideshowInner({
   initialIndex,
   isModal = false,
   onRequestClose,
+  // isMobile = false,
 }) {
+  const [isMobile, setIsMobile] = useState(false);
+  const breakpointPx = 454;
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < breakpointPx);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [breakpointPx]);
+
   const count = list.length;
   const canSlide = count > 1;
 
@@ -89,6 +172,15 @@ function SlideshowInner({
   const [idx, setIdx] = useState(safeInit);
   const [hover, setHover] = useState(false);
   const [playing, setPlaying] = useState(autoplay);
+
+  // Assign h and w to the current screen width and height, update on resize, with useState.
+
+  // in-view gating (disabled in modal)
+  const rootRef = useRef(null);
+  const inView = useInView(rootRef, {
+    threshold: inViewThreshold,
+    rootMargin: inViewRootMargin,
+  });
 
   useEffect(() => {
     if (!canSlide) return;
@@ -156,13 +248,6 @@ function SlideshowInner({
   const prev = () => goTo((i) => i - 1);
   const next = () => goTo((i) => i + 1);
 
-  // in-view gating (disabled in modal)
-  const rootRef = useRef(null);
-  const inView = useInView(rootRef, {
-    threshold: inViewThreshold,
-    rootMargin: inViewRootMargin,
-  });
-
   // autoplay
   useEffect(() => {
     if (!canSlide) return;
@@ -225,39 +310,173 @@ function SlideshowInner({
   const { xPct, yPct } = getSlideFocus(idx);
   const objectPosition = `${xPct}% ${yPct}%`;
 
+  // Check if current slide is an iframe
+  const currentItem = list[idx];
+  const isCurrentSlideIframe =
+    currentItem &&
+    typeof currentItem === "object" &&
+    currentItem.type === "iframe";
+
+  // Calculate container style for mobile iframe slides
+  const getContainerStyle = () => {
+    if (isMobile && isCurrentSlideIframe) {
+      // Mobile phone dimensions: 375x667 (iPhone) + padding
+      return {
+        ...containerStyle,
+        height: "590px", // 667 + 40 for padding
+        margin: "0 auto", // Center on page
+      };
+    }
+    return containerStyle;
+  };
+
   return (
     <div
       ref={rootRef}
-      className={
-        "relative w-full overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900" +
-        className
-      }
-      style={containerStyle}
+      className={`relative w-full overflow-hidden ${
+        isMobile && isCurrentSlideIframe ? "flex justify-center" : ""
+      } ${className}`}
+      style={getContainerStyle()}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
       <AnimatePresence mode="popLayout" initial={false}>
-        <motion.img
-          key={list[idx] || idx}
-          src={list[idx]}
-          alt={`${title} preview ${idx + 1}`}
-          loading="eager"
-          className={
-            "absolute inset-0 h-full w-full object-cover select-none " +
-            (enableClickToOpen ? "cursor-pointer " : "") +
-            imgClassName
+        {(() => {
+          const currentItem = list[idx];
+          const isIframe =
+            currentItem &&
+            typeof currentItem === "object" &&
+            currentItem.type === "iframe";
+
+          if (isIframe) {
+            return (
+              <motion.div
+                key={currentItem.src || idx}
+                className={
+                  "absolute inset-0 flex items-center justify-center  select-none " +
+                  (enableClickToOpen ? "cursor-pointer " : "")
+                }
+                initial={{ opacity: 0, scale: 1.002 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.002 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                onClick={() => {
+                  if (!enableClickToOpen) return;
+                  onOpenModal?.(idx);
+                }}
+                {...dragProps}
+              >
+                {/* Browser-like container - full width */}
+                <div className="w-full flex flex-col h-full">
+                  {/* Browser chrome */}
+                  <div className="w-full bg-slate-800 rounded-t-lg border border-slate-600 p-2 shrink-0">
+                    <div className="flex items-center gap-2">
+                      <div className="flex gap-1">
+                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      </div>
+                      {/* Control buttons */}
+                      <div className="flex gap-1">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            reloadIframe(currentItem.src);
+                          }}
+                          className="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded flex items-center justify-center text-slate-400 cursor-pointer hover:text-slate-300 transition-colors"
+                          aria-label="Refresh iframe"
+                        >
+                          <svg
+                            className="w-3 h-3"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                            />
+                          </svg>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setIframeFullscreen(currentItem.src);
+                          }}
+                          className="w-6 h-6 cursor-pointer bg-slate-700 hover:bg-slate-600 rounded flex items-center justify-center text-slate-400 hover:text-slate-300 transition-colors"
+                          aria-label="Toggle fullscreen"
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <div className="flex-1 bg-slate-700 rounded px-3 py-1 text-xs text-slate-300 font-mono">
+                        {(() => {
+                          try {
+                            return currentItem.src
+                              ? new URL(currentItem.src).hostname
+                              : "localhost";
+                          } catch (e) {
+                            console.log("URL parse error:", currentItem.src, e);
+                            return "localhost";
+                          }
+                        })()}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Iframe with desktop scaling - properly sized */}
+                  <div className="flex-1 w-full bg-white rounded-b-lg border border-slate-600 overflow-hidden shadow-2xl">
+                    <ScaledIframe
+                      src={currentItem.src}
+                      designWidth={isMobile ? 375 : 1400}
+                      designHeight={isMobile ? 667 : 800}
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            );
           }
-          style={{ objectPosition }}
-          initial={{ opacity: 0, scale: 1.002 }}
-          animate={{ opacity: 1, scale: 1, objectPosition }}
-          exit={{ opacity: 0, scale: 1.002 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          onClick={() => {
-            if (!enableClickToOpen) return;
-            onOpenModal?.(idx);
-          }}
-          {...dragProps}
-        />
+
+          return (
+            <motion.img
+              key={currentItem || idx}
+              src={currentItem}
+              alt={`${title} preview ${idx + 1}`}
+              loading="eager"
+              className={
+                "absolute inset-0 h-full w-full object-cover select-none " +
+                (enableClickToOpen ? "cursor-pointer " : "") +
+                imgClassName
+              }
+              style={{ objectPosition }}
+              initial={{ opacity: 0, scale: 1.002 }}
+              animate={{ opacity: 1, scale: 1, objectPosition }}
+              exit={{ opacity: 0, scale: 1.002 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              onClick={() => {
+                if (!enableClickToOpen) return;
+                onOpenModal?.(idx);
+              }}
+              {...dragProps}
+            />
+          );
+        })()}
       </AnimatePresence>
 
       {(showCounter || showPlayPause) && canSlide && (
@@ -287,30 +506,40 @@ function SlideshowInner({
         <>
           <button
             type="button"
-            onClick={prev}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log("Previous button clicked");
+              prev();
+            }}
             aria-label="Previous image"
-            className="group absolute left-3 top-1/2 -translate-y-1/2
-              h-9 w-9 rounded-full bg-neutral-950/80 
+            className="group absolute left-3 top-1/2 -translate-y-1/2 z-10
+              h-12 w-12 md:h-9 md:w-9 rounded-full bg-neutral-950/80
               border border-white/10 text-white/85
               shadow-lg shadow-black/20 transition-all
-              hover:bg-neutral-900 hover:scale-105 active:scale-95"
+              hover:bg-neutral-900 hover:scale-105 active:scale-95
+              touch-manipulation"
           >
-            <span className="block text-lg leading-none transition-transform group-hover:-translate-x-0.5">
+            <span className="block text-lg md:text-lg leading-none transition-transform group-hover:-translate-x-0.5">
               ‹
             </span>
           </button>
 
           <button
             type="button"
-            onClick={next}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log("Next button clicked");
+              next();
+            }}
             aria-label="Next image"
-            className="group absolute right-3 top-1/2 -translate-y-1/2
-              h-9 w-9 rounded-full bg-neutral-950/80
+            className="group absolute right-3 top-1/2 -translate-y-1/2 z-10
+              h-12 w-12 md:h-9 md:w-9 rounded-full bg-neutral-950/80
               border border-white/10 text-white/85
               shadow-lg shadow-black/20 transition-all
-              hover:bg-neutral-900 hover:scale-105 active:scale-95"
+              hover:bg-neutral-900 hover:scale-105 active:scale-95
+              touch-manipulation"
           >
-            <span className="block text-lg leading-none transition-transform group-hover:translate-x-0.5">
+            <span className="block text-lg md:text-lg leading-none transition-transform group-hover:translate-x-0.5">
               ›
             </span>
           </button>
@@ -382,8 +611,22 @@ export default function ProjectSlideshow({
   const list = useMemo(() => (images?.length ? images : []), [images]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalStartIdx, setModalStartIdx] = useState(initialIndex);
+  const [iframeFullscreen, setIframeFullscreen] = useState(null); // Store iframe element for fullscreen
+  const [isMobile, setIsMobile] = useState(false);
 
   useLockHtmlScroll(modalOpen);
+
+  // Detect mobile view
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 40);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const openModal = (startIdx) => {
     setModalStartIdx(startIdx ?? 0);
@@ -431,6 +674,8 @@ export default function ProjectSlideshow({
         onIndexChange={onIndexChange}
         enableClickToOpen={openModalOnClick}
         onOpenModal={openModal}
+        setIframeFullscreen={setIframeFullscreen}
+        isMobile={isMobile}
       />
 
       {/* Fullscreen modal */}
@@ -491,6 +736,8 @@ export default function ProjectSlideshow({
                     enableClickToOpen={false}
                     isModal
                     onRequestClose={closeModal}
+                    setIframeFullscreen={setIframeFullscreen}
+                    isMobile={isMobile}
                   />
                 </div>
               </motion.div>
@@ -498,6 +745,14 @@ export default function ProjectSlideshow({
           </AnimatePresence>,
           portalEl
         )}
+
+      {/* Iframe Fullscreen Portal */}
+      <AnimatePresence>
+        {iframeFullscreen &&
+          createIframeFullscreen(iframeFullscreen, () =>
+            setIframeFullscreen(null)
+          )}
+      </AnimatePresence>
     </>
   );
 }
