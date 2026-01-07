@@ -334,7 +334,7 @@ function SlideshowInner({
     <div
       ref={rootRef}
       className={`relative w-full overflow-hidden ${
-        isMobile && isCurrentSlideIframe ? "flex justify-center" : ""
+        isMobile && isCurrentSlideIframe ? "flex  justify-center" : ""
       } ${className}`}
       style={getContainerStyle()}
       onMouseEnter={() => setHover(true)}
@@ -441,11 +441,11 @@ function SlideshowInner({
                   </div>
 
                   {/* Iframe with desktop scaling - properly sized */}
-                  <div className="flex-1 w-full bg-white rounded-b-lg border border-slate-600 overflow-hidden shadow-2xl">
+                  <div className=" w-full bg-white rounded-b-lg border border-slate-600 overflow-hidden shadow-2xl">
                     <ScaledIframe
                       src={currentItem.src}
                       designWidth={isMobile ? 375 : 1400}
-                      designHeight={isMobile ? 667 : 800}
+                      designHeight={isMobile ? 900 : 800}
                     />
                   </div>
                 </div>

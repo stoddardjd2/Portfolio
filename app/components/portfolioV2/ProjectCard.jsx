@@ -209,7 +209,7 @@ export default function ProjectCard({
                                     ? "rounded-[60px]"
                                     : ""
                                 } ${brand.className || ""}`}
-                                style={{ height: `${brand.heigt || 20}px` }}
+                                style={{ height: `${brand.height || 20}px` }}
                               />
                             )}
                             {brand?.name && <span>{brand.name}</span>}{" "}
@@ -294,7 +294,7 @@ export default function ProjectCard({
             <>
               {hasImages && (
                 <div
-                  className="mt-8 overflow-hidden rounded-lg border border-neutral-800 bg-neutral-950"
+                  className="mt-8 overflow-hidden rounded-lg border border-neutral-800 bg-neutral-950 "
                   onMouseEnter={() => setIsHovering(true)}
                   onMouseLeave={() => setIsHovering(false)}
                 >
