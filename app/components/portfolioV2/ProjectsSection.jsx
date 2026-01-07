@@ -179,7 +179,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         ]}
         highlightsOn={highlightsOn}
         setHighlightsOn={setHighlightsOn}
-        description="A cinematic storytelling platform for the U.S. Women’s National Soccer Team built in partnership with adidas featuring motion-driven layouts and editorial visuals."
+        description="A cinematic storytelling platform for the U.S. Women’s National Soccer Team built in partnership with adidas featuring motion-driven layouts and editorial visuals. Designed by Storied Sports, developed and deployed by me."
         badges={[
           "React 19",
           "React Router",
