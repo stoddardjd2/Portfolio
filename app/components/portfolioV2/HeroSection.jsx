@@ -1,65 +1,172 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
-// import portraitGrayNoBg from "@/assets/heavily-edited-ultra-white-cropped.png";
-import portraitGrayNoBg from "@/assets/heavily-edited-fotor-glasses-white-cropped.png";
-import MotionSection from "./MotionSection.jsx";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { TypewriterSections } from "./TypeWriterSections.jsx";
+import portraitGrayNoBg from "@/assets/heavily-edited-fotor-glasses-white-cropped.png";
 import downloadResume from "./resumeDownloadHelper.js";
+import { ArrowRight, Download, MapPin, Layers, Flame, Brain } from "lucide-react";
 
-const badgeVariants = {
-  hidden: { opacity: 0, y: 10, filter: "blur(3px)" },
-  visible: { opacity: 1, y: 0, filter: "blur(0px)" },
-};
-
-const baseDelay = 10.2;
 /**
- * One place to control ALL timings, in the order they appear.
- * - Keep units consistent (ms for typewriter, seconds for MotionSection delays/durations)
- * - Labels match the exact animated elements below
+ * ✅ SINGLE SOURCE OF TRUTH (all timings/easing/offsets here)
+ * Update these values and EVERYTHING (including portrait + scroll indicator) stays consistent.
  */
+const MOTION = {
+  // feel
+  easeEnter: [0.4, 0, 0.2, 1], // smooth "silky" in-out
+  easeHover: [0.2, 0.9, 0.2, 1],
 
-const TIMING = {
-  // 1) Hero wrapper
-  heroContainerDelayS: 0.05,
+  // shared offsets/blur
+  yEnter: 10,
+  ySmall: 8,
+  blurEnter: 4,
 
-  // 3) H1 Typewriter (headline)
-  h1TypewriterInitialDelayMs: 100,
-  h1TypewriterSpeedMs: 30,
-  h1TypewriterEraseSpeedMs: 15,
-  h1TypewriterPauseAfterMs: 100,
+  // orchestration
+  staggerChildren: 0.08,
+  delayChildren: 0.06,
 
-  // 4) Paragraph wrapper motion (fade/slide in)
-  paragraphMotionDelayS: 0,
-  paragraphMotionDurationS: 1.5,
+  // base durations
+  durFadeUp: 0.75,
+  durFadeIn: 0.8,
+  durBadge: 0.65,
 
-  // 5) Paragraph Typewriter
-  paragraphTypewriterInitialDelayMs: 800,
-  paragraphTypewriterSpeedMs: 20,
-  paragraphTypewriterPauseAfterMs: 300,
+  // portrait sequencing
+  portraitWrapDelay: 0.12,
+  portraitWrapDur: 1.85,
+  portraitImgDelay: 0.16,
+  portraitImgDur: 0.95,
+  portraitImgExtraBlur: 4, // blurEnter + this
 
-  // 8) Portrait motion
-  // portraitDelayS: baseDelay + 0.1,
-  // portraitDurationS: 2,
+  // interactions
+  hoverLift: -1,
+  tapScale: 0.99,
+  hoverDur: 0.25,
+  tapDur: 0.15,
 
-  // 6) CTA buttons motion group
-  ctasMotionDelayS: 0,
-  ctasMotionDurationS: 0.7,
-  ctasMotionStaggerChildrenS: 0.2,
-  ctasMotionDelayChildrenS: 0.3,
-
-  // 7) Badges row motion group
-  badgesMotionDelayS: 0.1,
-  badgesMotionDurationS: 0.6,
-  badgesMotionStaggerChildrenS: 0.1,
-  badgesMotionDelayChildrenS: 0.6,
-
-  // 2) Availability pill
-  availabilityPillDelayS: 0.9,
-
-  // 9) Scroll indicator motion
-  scrollIndicatorDelayS: 2.2,
-  scrollIndicatorDurationS: 1.4,
+  // scroll indicator
+  scrollDelay: 0.7,
+  scrollDur: 0.7,
 };
+
+function makeVariants(m) {
+  const blur = (px) => `blur(${px}px)`;
+
+  const container = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: m.staggerChildren,
+        delayChildren: m.delayChildren,
+      },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: m.yEnter, filter: blur(m.blurEnter) },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: blur(0),
+      transition: { duration: m.durFadeUp, ease: m.easeEnter },
+    },
+  };
+
+  const fadeIn = {
+    hidden: { opacity: 0, filter: blur(m.blurEnter) },
+    visible: {
+      opacity: 1,
+      filter: blur(0),
+      transition: { duration: m.durFadeIn, ease: m.easeEnter },
+    },
+  };
+
+  const badgeItem = {
+    hidden: { opacity: 0, y: m.ySmall, filter: blur(m.blurEnter) },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: blur(0),
+      transition: { duration: m.durBadge, ease: m.easeEnter },
+    },
+  };
+
+  const paragraph = {
+    hidden: { opacity: 0, y: m.yEnter, filter: blur(m.blurEnter) },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: blur(0),
+      transition: { duration:0.75, ease: m.easeEnter, delay: 0.2 },
+    },
+  };
+
+
+  // portrait wrap + img as variants (so no inline transition needed)
+  const portraitWrap = {
+    hidden: { opacity: 0, filter: blur(m.blurEnter) },
+    visible: {
+      opacity: 1,
+      filter: blur(0),
+      transition: {
+        duration: m.portraitWrapDur,
+        ease: m.easeEnter,
+        delay: m.portraitWrapDelay,
+      },
+    },
+  };
+
+  const portraitImg = {
+    hidden: {
+      opacity: 0,
+      y: m.yEnter,
+      filter: blur(m.blurEnter + m.portraitImgExtraBlur),
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: blur(0),
+      transition: {
+        duration: m.portraitImgDur,
+        ease: m.easeEnter,
+        delay: m.portraitImgDelay,
+      },
+    },
+  };
+
+  // scroll indicator as variants (controlled at top)
+  const scrollIndicator = {
+    hidden: { opacity: 0, y: m.yEnter },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: m.scrollDur,
+        ease: m.easeEnter,
+        delay: m.scrollDelay,
+      },
+    },
+  };
+
+  const hoverLift = {
+    whileHover: {
+      y: m.hoverLift,
+      transition: { duration: m.hoverDur, ease: m.easeHover },
+    },
+    whileTap: {
+      scale: m.tapScale,
+      transition: { duration: m.tapDur, ease: m.easeEnter },
+    },
+  };
+
+  return {
+    container,
+    fadeUp,
+    fadeIn,
+    badgeItem,
+    portraitWrap,
+    portraitImg,
+    scrollIndicator,
+    hoverLift,
+    paragraph,
+  };
+}
 
 function useIsMobile(breakpointPx = 1024) {
   const [isMobile, setIsMobile] = useState(false);
@@ -77,283 +184,148 @@ function useIsMobile(breakpointPx = 1024) {
 function HeroSection() {
   const isMobile = useIsMobile();
 
-  const Wrapper = isMobile ? MotionSection : "div";
-
-  const [heroIsFinished, setHeroIsFinished] = useState(false);
-  const [heroParagraphIsFinished, setheroParagraphIsFinished] = useState(false);
-
-  const paragraphSections = useMemo(
-    () => [
-      {
-        text: "Full-stack engineer & founder experienced in production systems and AI-powered workflows.",
-        mode: "letter",
-        pauseAfter: TIMING.paragraphTypewriterPauseAfterMs,
-      },
-      {
-        text: " I use AI effectively, understand its limitations, and know when manual engineering delivers better precision.",
-        mode: "letter",
-        pauseAfter: TIMING.paragraphTypewriterPauseAfterMs,
-      },
-      {
-        text: " I have shipped real full-stack products end-to-end, building scalable frontends, APIs, and production systems.",
-        mode: "letter",
-        pauseAfter: TIMING.paragraphTypewriterPauseAfterMs,
-      },
-      {
-        text: " Scroll down to see how.",
-        mode: "letter",
-        pauseAfter: TIMING.paragraphTypewriterPauseAfterMs,
-      },
-    ],
-    [
-      // include only what can change
-      TIMING.paragraphTypewriterPauseAfterMs,
-    ]
-  );
+  // stable variants object
+  const V = useMemo(() => makeVariants(MOTION), []);
 
   const HeroContent = (
-    <MotionSection
-      className="absolute lg:static top-0 bg-neutral-950/90 h-full w-full lg:bg-transparent lg:height-fit"
-      delay={TIMING.paragraphMotionDelayS}
-      duration={TIMING.paragraphMotionDurationS}
-      autoTrigger={false}
-      active={heroIsFinished}
-      defaultVariants={{
-        hidden: { opacity: 0, y: 0 },
-        visible: { opacity: 1, y: 0 },
-      }}
+    <motion.div
+      className="absolute lg:static top-0 bg-neutral-950/90 h-full w-full lg:bg-transparent lg:h-fit"
+      variants={V.container}
+      initial="hidden"
+      animate="visible"
     >
-      <p className=" text-md sm:text-lg   min-h-[165px] md:text-xl text-white/75 lg:text-neutral-400 max-w-2xl mb-8 leading-relaxed font-light">
-        {/* 5) Paragraph typewriter */}
-        <TypewriterSections
-          className=""
-          initialDelayMs={TIMING.paragraphTypewriterInitialDelayMs}
-          defaultSpeed={TIMING.paragraphTypewriterSpeedMs}
-          showCursor={true}
-          runKey={1} // never restarts
-          start={heroIsFinished} // manual trigger (only used when autoTrigger=true)
-          onFinish={() => {
-            setheroParagraphIsFinished(true);
-          }}
-          sections={paragraphSections}
-        />
-      </p>
-      {/* 6) CTA buttons motion group */}
-      <MotionSection
-        delay={TIMING.ctasMotionDelayS}
-        duration={TIMING.ctasMotionDurationS}
-        staggerChildren={TIMING.ctasMotionStaggerChildrenS}
-        delayChildren={TIMING.ctasMotionDelayChildrenS}
-        autoTrigger={false}
-        active={heroParagraphIsFinished}
-        // defaultVariants={{
-        //   hidden: { opacity: 0 },
-        //   visible: { opacity: 1 },
-        // }}
+      <motion.p
+        className="text-md sm:text-lg min-h-[165px] md:text-xl text-white/75 lg:text-neutral-400 max-w-2xl mb-8 leading-relaxed font-light"
+        variants={V.paragraph}
       >
-        <div className="flex flex-col sm:flex-row gap-4 mb-12">
-          <motion.a
-            variants={{
-              hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
-              visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
-            }}
-            href="#projects"
-            className="inline-flex items-center justify-center gap-2 h-10 px-6 rounded-md bg-white text-neutral-950 text-sm font-medium hover:bg-neutral-200 transition-colors"
-          >
-            View My Projects
-            <span
-              className="iconify w-4 h-4"
-              data-icon="lucide:arrow-right"
-            ></span>
-          </motion.a>
+        Full-stack engineer &amp; founder experienced in production systems and
+        AI-powered workflows. I use AI effectively, understand its limitations,
+        and know when manual engineering delivers better precision. I have shipped
+        real full-stack products end-to-end, building scalable frontends, APIs,
+        and production systems.{" "}
+        <span className="text-white/80">Scroll down to see how.</span>
+      </motion.p>
 
-          <motion.button
-            type="button"
-            onClick={downloadResume}
-            variants={{
-              hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
-              visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
-            }}
-            className="inline-flex cursor-pointer items-center justify-center gap-2 h-10 px-6 rounded-md border border-neutral-800 text-neutral-300 text-sm font-medium hover:border-neutral-600 hover:text-white transition-colors bg-[#0E0E0E]"
-          >
-            <span
-              className="iconify w-4 h-4"
-              data-icon="lucide:download"
-            ></span>
-            Download Resume
-          </motion.button>
-        </div>
-      </MotionSection>
+      {/* CTA buttons */}
+      <motion.div className="flex flex-col sm:flex-row gap-4 mb-12" variants={V.container}>
+        <motion.a
+          href="#projects"
+          variants={V.fadeUp}
+          {...V.hoverLift}
+          className="inline-flex items-center justify-center gap-2 h-10 px-6 rounded-md bg-white text-neutral-950 text-sm font-medium hover:bg-neutral-200 transition-colors"
+        >
+          View My Projects
+          <ArrowRight className="w-4 h-4" aria-hidden="true" />
+        </motion.a>
 
-      {/* 7) Badges row motion group */}
-      <MotionSection
-        delay={TIMING.badgesMotionDelayS}
-        duration={TIMING.badgesMotionDurationS}
-        staggerChildren={TIMING.badgesMotionStaggerChildrenS}
-        delayChildren={TIMING.badgesMotionDelayChildrenS}
-        autoTrigger={false}
-        active={heroParagraphIsFinished}
+        <motion.button
+          type="button"
+          onClick={downloadResume}
+          variants={V.fadeUp}
+          {...V.hoverLift}
+          className="inline-flex cursor-pointer items-center justify-center gap-2 h-10 px-6 rounded-md border border-neutral-800 text-neutral-300 text-sm font-medium hover:border-neutral-600 hover:text-white transition-colors bg-[#0E0E0E]"
+        >
+          <Download className="w-4 h-4" aria-hidden="true" />
+          Download Resume
+        </motion.button>
+      </motion.div>
+
+      {/* Badges */}
+      <motion.div
+        className="flex items-center text-white/75 w-fit justify-center flex-wrap gap-x-6 gap-y-4 text-xs font-medium lg:text-neutral-500 uppercase tracking-wide"
+        variants={V.container}
       >
-        <div className="flex items-center text-white/75 lg w-fit justify-center flex-wrap gap-x-6 gap-y-4 text-xs font-medium lg:text-neutral-500 uppercase tracking-wide">
-          <motion.div
-            className="flex items-center whitespace-nowrap gap-2"
-            variants={badgeVariants}
-          >
-            <span
-              className="iconify w-4 h-4 "
-              data-icon="lucide:map-pin"
-            ></span>{" "}
-            US-Based
-          </motion.div>
+        <motion.div className="flex items-center whitespace-nowrap gap-2" variants={V.badgeItem}>
+          <MapPin className="w-4 h-4" aria-hidden="true" />
+          US-Based
+        </motion.div>
 
-          <motion.div
-            className="flex items-center  whitespace-nowrap gap-2"
-            variants={badgeVariants}
-          >
-            <span className="iconify w-4 h-4" data-icon="lucide:layers"></span>{" "}
-            Full-Stack
-          </motion.div>
+        <motion.div className="flex items-center whitespace-nowrap gap-2" variants={V.badgeItem}>
+          <Layers className="w-4 h-4" aria-hidden="true" />
+          Full-Stack
+        </motion.div>
 
-          <motion.div
-            className="flex items-center  whitespace-nowrap gap-2"
-            variants={badgeVariants}
-          >
-            <span className="iconify w-4 h-4" data-icon="lucide:flame"></span>{" "}
-            Builder &amp; Founder
-          </motion.div>
+        <motion.div className="flex items-center whitespace-nowrap gap-2" variants={V.badgeItem}>
+          <Flame className="w-4 h-4" aria-hidden="true" />
+          Builder &amp; Founder
+        </motion.div>
 
-          <motion.div
-            className="flex items-center  whitespace-nowrap gap-2"
-            variants={badgeVariants}
-          >
-            <span className="iconify w-4 h-4" data-icon="lucide:brain"></span>{" "}
-            AI Expert
-          </motion.div>
-        </div>
-      </MotionSection>
-    </MotionSection>
+        <motion.div className="flex items-center whitespace-nowrap gap-2" variants={V.badgeItem}>
+          <Brain className="w-4 h-4" aria-hidden="true" />
+          AI Expert
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 
   return (
-    <MotionSection
-      className="relative min-h-[840px] xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100vh-56px)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
-      delay={TIMING.heroContainerDelayS}
+    <motion.div
+      className="relative min-h-[840px] w-full xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100vh-56px)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
+      initial="hidden"
+      animate="visible"
+      variants={V.container}
     >
-      <div className="relative h-full w-full ">
-        {/* 2) Availability pill */}
+      <div className="relative h-full w-full">
         <div className="z-10 relative">
-          <MotionSection
-            autoTrigger={false}
-            active={heroParagraphIsFinished}
-            delay={TIMING.availabilityPillDelayS}
+          {/* Availability pill */}
+          <motion.div
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300 mb-8"
+            variants={V.fadeUp}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300 mb-8">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-              </span>
-              Open to Full-Time &amp; Contract Work
-            </div>
-          </MotionSection>
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+            </span>
+            Open to Full-Time &amp; Contract Work
+          </motion.div>
 
-          {/* 3) Headline typewriter */}
-          <h1
-            className={`
-  text-[clamp(1.3075rem,7.6vw,3.75rem)]
-  leading-[1.1]
-  font-semibold tracking-tighter text-white
-  mb-4 lg:mb-4
-  min-h-[calc(2*1.2em)]
-`}
+          {/* Headline */}
+          <motion.h1
+            className="
+              text-[clamp(1.3075rem,7.6vw,3.75rem)]
+              leading-[1.1]
+              font-semibold tracking-tighter text-white
+              mb-4 lg:mb-4
+              min-h-[calc(2*1.2em)]
+            "
+            variants={V.fadeUp}
           >
-            {" "}
-            <TypewriterSections
-              className=""
-              initialDelayMs={TIMING.h1TypewriterInitialDelayMs}
-              defaultSpeed={TIMING.h1TypewriterSpeedMs}
-              defaultEraseSpeed={TIMING.h1TypewriterEraseSpeedMs}
-              // showCursor={true}
-              onFinish={() => {
-                setHeroIsFinished(true);
-                console.log("FINSIHED");
-              }}
-              runKey={0} // never restarts
-              sections={[
-                {
-                  // text: "I am a full-stack engineer.",
-                  text: "I am more than just a full-stack engineer.",
-                  skipTypingMain: true,
-                  mode: "letter",
-                  // retypeText: "I am more than just a full-stack engineer.",
-                  pauseAfter: TIMING.h1TypewriterPauseAfterMs,
-                  pauseBeforeErase: 1000,
-                  breakAfterRetype: [5],
-                  breakAfterMain:[5],
-                  highlights: {
-                    "full-stack": "text-neutral-500",
-                    // stack: "text-neutral-500",
-                  },
-                },
-              ]}
-              //    sections={[
-              //   {
-              //     text: "I Am a Full Stack Developer.",
-              //     // text: "I Am More Than Just a Full Stack Developer.",
-              //     skipTypingMain: true,
-              //     mode: "letter",
-              //     retypeText: "I Am More Than Just a Full Stack Developer.",
-              //     pauseAfter: TIMING.h1TypewriterPauseAfterMs,
-              //     pauseBeforeErase: 1000,
-              //     breakAfterRetype: [5],
-              //     highlights: {
-              //       Full: "text-neutral-500",
-              //       Stack: "text-neutral-500",
-              //     },
-              //   },
-              // ]}
-            />
-          </h1>
+            I am more than just a
+            <br />
+            <span className="text-neutral-500">full-stack</span> engineer.
+          </motion.h1>
 
-          {/* 8) Portrait motion */}
-          <Wrapper
-            {...(isMobile && {
-              delay: TIMING.portraitDelayS,
-              viewPortTrigger: 0.2,
-              duration: TIMING.portraitDurationS,
-            })}
-            className="lg:absolute  relative  flex pb-10 lg:pb-0 lg:mt-16 items-center justify-center bottom-0 z-0 right-0"
+          {/* Portrait (wrap + img both controlled at top via variants) */}
+          <motion.div
+            className="lg:absolute relative flex pb-10 lg:pb-0 lg:mt-16 items-center justify-center bottom-0 z-0 right-0"
+            variants={V.portraitWrap}
           >
-            <img
+            <motion.img
               src={portraitGrayNoBg}
               className="lg:h-[470px] px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
               alt="Portrait"
+              variants={V.portraitImg}
             />
 
-            {/* 4) Paragraph wrapper motion */}
-
             {isMobile && HeroContent}
-          </Wrapper>
+          </motion.div>
+
           {!isMobile && HeroContent}
         </div>
       </div>
 
-      {/* 9) Scroll indicator motion */}
-      <MotionSection
+      {/* Scroll indicator (also controlled at top) */}
+      <motion.div
         className="flex lg:inline hidden justify-center absolute bottom-10 left-1/2 -translate-x-1/2 mx-auto"
-        delay={TIMING.scrollIndicatorDelayS}
-        duration={TIMING.scrollIndicatorDurationS}
-        autoTrigger={false}
-        active={heroParagraphIsFinished}
-        defaultVariants={{
-          hidden: { opacity: 0, y: 20 },
-          visible: { opacity: 1, y: 0 },
-        }}
+        variants={V.scrollIndicator}
+        initial="hidden"
+        animate="visible"
       >
         <div className="w-6 h-10 rounded-full border border-neutral-600/50 flex justify-center py-2">
-          <div className="w-1 h-2 bg-neutral-400 rounded-full animate-scroll-wheel"></div>
+          <div className="w-1 h-2 bg-neutral-400 rounded-full animate-scroll-wheel" />
         </div>
-      </MotionSection>
-    </MotionSection>
+      </motion.div>
+    </motion.div>
   );
 }
 

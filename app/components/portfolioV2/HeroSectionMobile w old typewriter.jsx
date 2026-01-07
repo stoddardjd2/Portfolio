@@ -7,7 +7,7 @@ import { TypewriterSections } from "./TypeWriterSections.jsx";
 import downloadResume from "./resumeDownloadHelper.js";
 
 const badgeVariants = {
-  hidden: { opacity: 0, y: 10, filter: "blur(3px)" },
+  hidden: { opacity: 0, y: 10, filter: "blur(6px)" },
   visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
@@ -34,7 +34,6 @@ const TIMING = {
 
   // 5) Paragraph Typewriter
   paragraphTypewriterInitialDelayMs: 800,
-  paragraphTypewriterSpeedMs: 12,
   paragraphTypewriterPauseAfterMs: 300,
 
   // 8) Portrait motion
@@ -74,13 +73,14 @@ function useIsMobile(breakpointPx = 1024) {
   return isMobile;
 }
 
-function HeroSection() {
+function HeroSectionMobile() {
   const isMobile = useIsMobile();
 
   const Wrapper = isMobile ? MotionSection : "div";
 
   const [heroIsFinished, setHeroIsFinished] = useState(false);
   const [heroParagraphIsFinished, setheroParagraphIsFinished] = useState(false);
+  const [paragraphIsInView, setParagraphIsInView] = useState(false);
 
   const paragraphSections = useMemo(
     () => [
@@ -113,11 +113,15 @@ function HeroSection() {
 
   const HeroContent = (
     <MotionSection
-      className="absolute lg:static top-0 bg-neutral-950/90 h-full w-full lg:bg-transparent lg:height-fit"
+      className=" bg-neutral-950/90 mt-10 h-full w-full lg:bg-transparent lg:height-fit"
       delay={TIMING.paragraphMotionDelayS}
       duration={TIMING.paragraphMotionDurationS}
-      autoTrigger={false}
-      active={heroIsFinished}
+      // autoTrigger={false}
+      // active={heroIsFinished}
+      onEnter={() => {
+        setParagraphIsInView(true);
+      }}
+      rootMargin="0px 0px -120px 0px"
       defaultVariants={{
         hidden: { opacity: 0, y: 0 },
         visible: { opacity: 1, y: 0 },
@@ -128,10 +132,10 @@ function HeroSection() {
         <TypewriterSections
           className=""
           initialDelayMs={TIMING.paragraphTypewriterInitialDelayMs}
-          defaultSpeed={TIMING.paragraphTypewriterSpeedMs}
+          defaultSpeed={15}
           showCursor={true}
           runKey={1} // never restarts
-          start={heroIsFinished} // manual trigger (only used when autoTrigger=true)
+          start={paragraphIsInView} // manual trigger (only used when autoTrigger=true)
           onFinish={() => {
             setheroParagraphIsFinished(true);
           }}
@@ -151,10 +155,10 @@ function HeroSection() {
         //   visible: { opacity: 1 },
         // }}
       >
-        <div className="flex flex-col sm:flex-row gap-4 mb-12">
+        <div className="flex flex-col justify-center sm:flex-row gap-4 mb-12">
           <motion.a
             variants={{
-              hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
+              hidden: { opacity: 0, x: 0, y: 40, filter: "blur(6px)" },
               visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
             }}
             href="#projects"
@@ -171,7 +175,7 @@ function HeroSection() {
             type="button"
             onClick={downloadResume}
             variants={{
-              hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
+              hidden: { opacity: 0, x: 0, y: 40, filter: "blur(6px)" },
               visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
             }}
             className="inline-flex cursor-pointer items-center justify-center gap-2 h-10 px-6 rounded-md border border-neutral-800 text-neutral-300 text-sm font-medium hover:border-neutral-600 hover:text-white transition-colors bg-[#0E0E0E]"
@@ -194,7 +198,7 @@ function HeroSection() {
         autoTrigger={false}
         active={heroParagraphIsFinished}
       >
-        <div className="flex items-center text-white/75 lg w-fit justify-center flex-wrap gap-x-6 gap-y-4 text-xs font-medium lg:text-neutral-500 uppercase tracking-wide">
+        <div className="flex items-center w-full text-white/75 lg justify-center flex-wrap gap-x-6 gap-y-4 text-xs font-medium lg:text-neutral-500 uppercase tracking-wide">
           <motion.div
             className="flex items-center whitespace-nowrap gap-2"
             variants={badgeVariants}
@@ -236,26 +240,12 @@ function HeroSection() {
 
   return (
     <div
-      className="relative min-h-[840px] w-full xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100vh-56px)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
+      className="relative min-h-[840px]  xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100vh-56px)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
       delay={TIMING.heroContainerDelayS}
     >
       <div className="relative h-full w-full ">
         {/* 2) Availability pill */}
         <div className="z-10 relative">
-          <MotionSection
-            autoTrigger={false}
-            active={heroParagraphIsFinished}
-            delay={TIMING.availabilityPillDelayS}
-          >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300 mb-8">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-              </span>
-              Open to Full-Time &amp; Contract Work
-            </div>
-          </MotionSection>
-
           <MotionSection
             defaultVariants={{
               hidden: { opacity: 0, y: -42, filter: "blur(6px)" },
@@ -322,45 +312,31 @@ function HeroSection() {
           </MotionSection>
 
           {/* 8) Portrait motion */}
-          <MotionSection
-            defaultVariants={{
-              hidden: { opacity: 0, y: -42, filter: "blur(6px)" },
-              visible: { opacity: 1, y: 0, filter: "blur(0px)" },
-            }}
-            className="lg:absolute  relative  flex pb-10 lg:pb-0 lg:mt-16 items-center justify-center bottom-0 z-0 right-0"
-          >
+          <MotionSection>
             <img
               src={portraitGrayNoBg}
               className="lg:h-[470px] px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
               alt="Portrait"
             />
-
-            {/* 4) Paragraph wrapper motion */}
-
-            {isMobile && HeroContent}
           </MotionSection>
-          {!isMobile && HeroContent}
-        </div>
-      </div>
 
-      {/* 9) Scroll indicator motion */}
-      <MotionSection
-        className="flex lg:inline hidden justify-center absolute bottom-10 left-1/2 -translate-x-1/2 mx-auto"
-        delay={TIMING.scrollIndicatorDelayS}
-        duration={TIMING.scrollIndicatorDurationS}
-        autoTrigger={false}
-        active={heroParagraphIsFinished}
-        defaultVariants={{
-          hidden: { opacity: 0, y: 20 },
-          visible: { opacity: 1, y: 0 },
-        }}
-      >
-        <div className="w-6 h-10 rounded-full border border-neutral-600/50 flex justify-center py-2">
-          <div className="w-1 h-2 bg-neutral-400 rounded-full animate-scroll-wheel"></div>
+          {/* 4) Paragraph wrapper motion */}
         </div>
-      </MotionSection>
+
+        {HeroContent}
+        <MotionSection
+          autoTrigger={false}
+          active={heroParagraphIsFinished}
+          delay={TIMING.availabilityPillDelayS}
+          className="flex items-center justify-center h-fit mt-8"
+        >
+          <div className="inline-flex h-fit items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300">
+            Open to Full-Time &amp; Contract Work
+          </div>
+        </MotionSection>
+      </div>
     </div>
   );
 }
 
-export default HeroSection;
+export default HeroSectionMobile;

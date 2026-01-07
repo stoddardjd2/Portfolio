@@ -11,7 +11,7 @@ function ContactSection({ setOpen }) {
       <MotionSection
         as="footer"
         id="contact"
-        className="border-t border-neutral-800 pt-16"
+        className="border-t scroll-mt-4 border-neutral-800 pt-16"
         delay={0.22}
       >
         <div className="flex flex-col md:flex-row justify-between md:items-end gap-8">

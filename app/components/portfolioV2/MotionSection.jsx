@@ -1,138 +1,110 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 
-/**
- * Triggers true when at least `px` vertical pixels of the element
- * are visible in the viewport.
- */
-function usePxInView(
-  ref,
-  px = 120,
-  { root = null, rootMargin = "0px", once = true } = {}
-) {
-  const [inView, setInView] = useState(false);
+const DEFAULT_VARIANTS = {
+  hidden: { opacity: 0, y: 24, filter: "blur(4px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+};
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || (once && inView)) return;
+const EASE_OUT = [0.22, 1, 0.36, 1];
 
-    // Immediate sync check (helps "already visible on load" cases)
-    const syncCheck = () => {
-      const r = el.getBoundingClientRect();
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-
-      const visible = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
-      const required = Math.min(px, r.height || px);
-
-      return visible >= required;
-    };
-
-    if (syncCheck()) {
-      setInView(true);
-      return;
-    }
-
-    const thresholds = Array.from({ length: 101 }, (_, i) => i / 100);
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const elH = entry.boundingClientRect.height;
-        const requiredPx = Math.min(px, elH || px);
-
-        const visiblePx = Math.max(
-          0,
-          Math.min(elH, entry.intersectionRect.height)
-        );
-
-        if (visiblePx >= requiredPx) {
-          setInView(true);
-          if (once) observer.disconnect();
-        } else if (!once) {
-          setInView(false);
-        }
-      },
-      { root, rootMargin, threshold: thresholds }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [px, root, rootMargin, once, inView]);
-
-  return inView;
-}
-
-function MotionSection({
+export default function MotionSection({
   as: Element = "section",
 
-  // animation
   delay = 0,
   duration = 1.2,
 
-  // ✅ manual trigger (set true when your function fires)
   active = false,
-
-  // ✅ pixel trigger options (keep these)
-  triggerPx = 200,
+  autoTrigger = true,
   triggerOnce = true,
+
   rootMargin = "0px",
-  autoTrigger = true, // set false if you want ONLY manual
 
   staggerChildren,
   delayChildren,
 
+  // ✅ callback props
+  onEnter,           // called when it enters viewport
+  onEnterOnce = true, // prevents repeated calls if once=false
+
   className = "",
   children,
-
-  defaultVariants = {
-    hidden: { opacity: 0, y: 42, filter: "blur(2px)" },
-    visible: { opacity: 1, y: 0, filter: "blur(0px)" },
-  },
-
+  defaultVariants = DEFAULT_VARIANTS,
+  style,
   ...rest
 }) {
-  const ref = useRef(null);
+  const transition = {
+    duration,
+    delay,
+    ease: EASE_OUT,
+    ...(staggerChildren != null ? { staggerChildren } : {}),
+    ...(delayChildren != null ? { delayChildren } : {}),
+  };
 
-  const pxVisible = usePxInView(ref, triggerPx, {
-    once: triggerOnce,
-    rootMargin,
-  });
+  const content = children;
+  // For active mode, call onEnter once when it becomes active
+  const prevActiveRef = React.useRef(active);
+  React.useEffect(() => {
+    if (!prevActiveRef.current && active) onEnter?.();
+    prevActiveRef.current = active;
+  }, [active, onEnter]);
 
-  // ✅ Final gate:
-  // - manual active always wins
-  // - otherwise fall back to px trigger if enabled
-  const isVisible = active || (autoTrigger ? pxVisible : false);
+  const didEnterRef = React.useRef(false);
+  const handleEnter = React.useCallback(() => {
+    if (!onEnter) return;
+    if (onEnterOnce && didEnterRef.current) return;
+    didEnterRef.current = true;
+    onEnter();
+  }, [onEnter, onEnterOnce]);
 
-  const MotionTag = useMemo(() => {
-    // Keep it safe and simple: strings only (your usage doesn’t need `as`)
-    // If you do want `as="div"` etc, you can expand later.
-    return typeof Element === "string" ? motion[Element] || motion.section : motion.section;
-  }, [Element]);
+  if (active) {
+    return (
+      <motion.div
+        as={Element}
+        initial="hidden"
+        animate="visible"
+        variants={defaultVariants}
+        transition={transition}
+        className={className}
+        style={style}
+        {...rest}
+      >
+        {content}
+      </motion.div>
+    );
+  }
 
-  const transition = useMemo(
-    () => ({
-      duration,
-      delay,
-      ease: [0.22, 1, 0.36, 1],
-      ...(staggerChildren || delayChildren
-        ? { staggerChildren, delayChildren }
-        : {}),
-    }),
-    [duration, delay, staggerChildren, delayChildren]
-  );
+  if (!autoTrigger) {
+    return (
+      <motion.div
+        as={Element}
+        initial="hidden"
+        animate="hidden"
+        variants={defaultVariants}
+        transition={transition}
+        className={className}
+        style={style}
+        {...rest}
+      >
+        {content}
+      </motion.div>
+    );
+  }
 
   return (
-    <MotionTag
-      ref={ref}
+    <motion.div
+      as={Element}
       initial="hidden"
-      animate={isVisible ? "visible" : "hidden"}
+      whileInView="visible"
+      viewport={{ once: triggerOnce, margin: rootMargin }}
       variants={defaultVariants}
       transition={transition}
+      onViewportEnter={handleEnter}   // ✅ fires when it comes into view
       className={className}
+      style={style}
       {...rest}
     >
-      {children}
-    </MotionTag>
+      {content}
+    </motion.div>
   );
 }
-
-export default MotionSection;

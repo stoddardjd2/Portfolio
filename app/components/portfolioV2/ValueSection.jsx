@@ -19,7 +19,7 @@ function ValueSection() {
       title: "End-to-End Product Engineering",
       description:
         "From idea + UX + frontend + backend + deployment. I handle the entire lifecycle efficiently.",
-    },
+  },
     {
       icon: "lucide:shield-check",
       title: "Highly Reliable System Design",

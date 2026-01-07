@@ -5,6 +5,7 @@ import MotionSection from "./MotionSection.jsx";
 import { motion } from "framer-motion";
 import { TypewriterSections } from "./TypeWriterSections.jsx";
 import downloadResume from "./resumeDownloadHelper.js";
+import TypewriterV2 from "./TypeWriterV2.jsx";
 
 const badgeVariants = {
   hidden: { opacity: 0, y: 10, filter: "blur(3px)" },
@@ -125,17 +126,12 @@ function HeroSection() {
     >
       <p className=" text-md sm:text-lg   min-h-[165px] md:text-xl text-white/75 lg:text-neutral-400 max-w-2xl mb-8 leading-relaxed font-light">
         {/* 5) Paragraph typewriter */}
-        <TypewriterSections
-          className=""
-          initialDelayMs={TIMING.paragraphTypewriterInitialDelayMs}
-          defaultSpeed={TIMING.paragraphTypewriterSpeedMs}
-          showCursor={true}
-          runKey={1} // never restarts
-          start={heroIsFinished} // manual trigger (only used when autoTrigger=true)
-          onFinish={() => {
-            setheroParagraphIsFinished(true);
-          }}
-          sections={paragraphSections}
+        <TypewriterV2
+          startDelayMs={300}
+          text={
+            "Full-stack engineer & founder experienced in production systems and AI-powered workflows. I use AI effectively, understand its limitations, and know when manual engineering delivers better precision. I have shipped real full-stack products end-to-end, building scalable frontends, APIs, and production systems. Scroll down to see how."
+          }
+          onDone= {() => setheroParagraphIsFinished(true)}
         />
       </p>
       {/* 6) CTA buttons motion group */}
