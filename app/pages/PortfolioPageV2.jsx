@@ -12,6 +12,7 @@ import ContactSection from "../components/portfolioV2/ContactSection.jsx";
 import { useState } from "react";
 import ContactModal from "../components/portfolioV2/ContactModal.jsx";
 import HeroSectionMobile from "../components/portfolioV2/HeroSectionMobile.jsx";
+import { motion, AnimatePresence } from "framer-motion";
 function PortfolioPageV2() {
   const [open, setOpen] = useState(false);
   const [highlightsOn, setHighlightsOn] = useState(false);
@@ -49,7 +50,8 @@ function PortfolioPageV2() {
 
         <ContactSection setOpen={setOpen} />
       </main>
-      <ContactModal open={open} onClose={() => setOpen(false)} />
+
+      {open && <ContactModal open={open} onClose={() => setOpen(false)} />}
     </div>
   );
 }
