@@ -20,12 +20,12 @@ function ValueSection() {
       description:
         "From idea + UX + frontend + backend + deployment. I handle the entire lifecycle efficiently.",
   },
-    {
-      icon: "lucide:shield-check",
-      title: "Highly Reliable System Design",
-      description:
-        "Reliable background workers for scheduling, payments, SMS messaging, and webhook automation.",
-    },
+    // {
+    //   icon: "lucide:shield-check",
+    //   title: "Highly Reliable System Design",
+    //   description:
+    //     "Reliable background workers for scheduling, payments, SMS messaging, and webhook automation.",
+    // },
     {
       icon: "lucide:message-square",
       title: "Clear Communication",
@@ -42,21 +42,21 @@ function ValueSection() {
 
   return (
     <MotionSection
-      className="border-t border-dashed border-neutral-800 pt-16"
-      delay={0.1}
+    // className="border-t border-dashed border-neutral-800 pt-16"
+    // className="border-t border-dashed border-neutral-800 pt-16"
+    delay={0.1}
       duration={1}
       // staggerChildren={0.05}
       // delayChildren={0.1}
     >
       {/* Title */}
-      <motion.h3
+      {/* <motion.h3
         variants={itemVariants}
         className="text-2xl font-medium text-white tracking-tight"
       >
         Full-Stack Execution + Founder-Level Ownership
       </motion.h3>
 
-      {/* Paragraph */}
       <motion.p
         variants={itemVariants}
         className="mt-4 max-w-2xl text-neutral-400 font-light mb-12"
@@ -64,9 +64,9 @@ function ValueSection() {
         I am not just a developer, I have built and shipped entire SaaS products
         from zero to paying users. I understand engineering, UX, business
         constraints, and real-world reliability.
-      </motion.p>
+      </motion.p> */}
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-1 gap-6">
         {cards.map((c) => (
           <MotionSection
             key={c.title}
@@ -90,8 +90,8 @@ function ValueCard({ icon, title, description }) {
       className="group p-6 h-full rounded-xl border border-neutral-800 bg-neutral-900/20 hover:border-neutral-700 transition-all duration-300"
       style={{ willChange: "transform, opacity, filter" }}
     >
-      <div className="h-10 w-10 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center mb-4 text-white group-hover:scale-110 transition-transform">
-        <span className="iconify w-5 h-5" data-icon={icon}></span>
+      <div className="h-8 w-8 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center mb-4 text-white group-hover:scale-110 transition-transform">
+        <span className="iconify w-4 h-4" data-icon={icon}></span>
       </div>
       <h4 className="text-white font-medium mb-2">{title}</h4>
       <p className="text-sm text-neutral-500 leading-relaxed">{description}</p>

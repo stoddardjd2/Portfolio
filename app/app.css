@@ -82,11 +82,13 @@
 }
 
 #root {
-  overflow: hidden;
+  overflow:clip;
   background-color: #0a0a0a;
+  margin: 0;
+
 }
 html {
-  overflow-y: scroll;
+  margin: 0;
   background-color: #0a0a0a;
 }
 

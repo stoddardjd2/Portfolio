@@ -84,6 +84,12 @@ function CompanyBanner({ centerOnMobile = false }) {
           },
         }}
       >
+
+        <div className="w-full mb-4">
+          <h2 className="text-center md:text-start text-base lg:text-md font-light tracking-wide text-neutral-300 uppercase">
+            Select Clients &amp; Partners
+          </h2>
+        </div>
         {companies.map((company) => (
           <motion.div
             key={company.name}

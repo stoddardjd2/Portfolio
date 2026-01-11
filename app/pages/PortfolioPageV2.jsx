@@ -18,7 +18,7 @@ function PortfolioPageV2() {
   const [highlightsOn, setHighlightsOn] = useState(false);
 
   return (
-    <div className="bg-neutral-950 text-neutral-400 antialiased selection:bg-neutral-800 selection:text-white min-h-screen">
+    <div className="bg-neutral-950 overflow-clip text-neutral-400 antialiased selection:bg-neutral-800 selection:text-white min-h-screen">
       <NavBar />
       <main
         id="top"
@@ -32,7 +32,6 @@ function PortfolioPageV2() {
           <HeroSectionMobile />
         </div>
 
-        <ValueSection />
         <ProjectsSection
           highlightsOn={highlightsOn}
           setHighlightsOn={setHighlightsOn}
@@ -44,7 +43,10 @@ function PortfolioPageV2() {
         {/* <CaseStudySection /> */}
         <div className="grid lg:grid-cols-2 gap-16">
           <AboutSection />
-          <TestimonialsSection />
+          
+        <ValueSection />
+
+          {/* <TestimonialsSection /> */}
         </div>
         <SkillsSection />
 
