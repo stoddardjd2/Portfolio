@@ -250,9 +250,11 @@ function HeroSection() {
         </motion.button>
       </motion.div>
 
-      <div className="mb-8 lg:hidden ">
+      {/* Company Banner */}
+      <div className="mb-8  max-w-[60%]">
         <CompanyBanner />
       </div>
+
       {/* Badges */}
       {/* <motion.div
         className="flex items-center text-white/75 w-fit justify-center flex-wrap gap-x-6 gap-y-4 text-xs font-medium lg:text-neutral-500 uppercase tracking-wide"
@@ -283,7 +285,7 @@ function HeroSection() {
 
   return (
     <motion.div
-      className="relative min-h-[840px] mt-[100px] lg:mt-[0px] w-full xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100dvh)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
+      className="relative min-h-[840px] mt-[106px] w-full xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100dvh-56px)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
       initial="hidden"
       animate="visible"
       variants={V.container}
@@ -320,16 +322,16 @@ function HeroSection() {
 
           {/* Portrait (wrap + img both controlled at top via variants) */}
           <motion.div
-            className="lg:absolute relative flex pb-10 lg:pb-0 lg:mt-0 lg:translate-y-1/2 bottom-0  lg:bottom-1/2 z-0 right-0"
+            className="lg:absolute relative top-0 flex pb-10 lg:pb-0 lg:mt-16  bottom-0 z-0 right-0"
             variants={V.portraitWrap}
           >
             <motion.img
               src={portraitGrayNoBg}
-              className="lg:h-[470px] px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
+              className="lg:h-[470px]   px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
               alt="Portrait"
               variants={V.portraitImg}
               whileHover={{
-                opacity: 0.8,
+                opacity:0.8,
                 transition: { duration: 0.15, ease: MOTION.easeHover },
               }}
             />
@@ -339,23 +341,18 @@ function HeroSection() {
 
           {!isMobile && HeroContent}
         </div>
-
-        {/* Company Banner */}
-        <div className="mb-8 hidden lg:inline absolute left-0 right-0 top-full">
-          <CompanyBanner />
-        </div>
       </div>
 
       {/* Scroll indicator (also controlled at top) */}
       <motion.div
-        className="flex lg:inline hidden justify-center absolute bottom-4 left-1/2 -translate-x-1/2 mx-auto"
+        className="flex lg:inline hidden justify-center absolute bottom-20 left-1/2 -translate-x-1/2 mx-auto"
         variants={V.scrollIndicator}
         initial="hidden"
         animate="visible"
       >
-        {/* <div className="w-6 h-10 rounded-full border border-neutral-600/50 flex justify-center py-2">
+        <div className="w-6 h-10 rounded-full border border-neutral-600/50 flex justify-center py-2">
           <div className="w-1 h-2 bg-neutral-400 rounded-full animate-scroll-wheel" />
-        </div> */}
+        </div>
       </motion.div>
     </motion.div>
   );

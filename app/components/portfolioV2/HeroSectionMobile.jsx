@@ -98,7 +98,7 @@ function makeVariants(m) {
   const portraitImg = {
     hidden: { opacity: 0, y: m.yEnterPx, filter: blur(m.blurEnterPx) },
     visible: {
-      opacity: 1,
+      opacity: 0.7,
       y: 0,
       filter: blur(0),
       transition: {
@@ -201,12 +201,16 @@ function HeroSectionMobile() {
           className="flex justify-center mb-8"
           variants={V.portraitWrap}
         >
-          <motion.img
-            src={portraitGrayNoBg}
-            className="lg:h-[470px] px-[clamp(.1rem,5vw,12.5rem)] scale-x-[-1]"
-            alt="Portrait"
-            variants={V.portraitImg}
-          />
+            <motion.img
+              src={portraitGrayNoBg}
+              className="lg:h-[470px]   px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
+              alt="Portrait"
+              variants={V.portraitImg}
+              whileHover={{
+                opacity:0.8,
+                transition: { duration: 0.15, ease: MOTION.easeHover },
+              }}
+            />
         </motion.div>
 
         {/* Paragraph */}

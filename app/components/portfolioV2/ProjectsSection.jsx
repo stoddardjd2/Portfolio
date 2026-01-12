@@ -60,6 +60,108 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       <h3 className="text-sm font-medium text-white mb-8 uppercase tracking-widest">
         Production Applications
       </h3>
+
+      <ProjectCard
+        title="AI Business Website Generator - Multi-Tenant SaaS Platform"
+        description="AI-powered SaaS platform that generates, deploys, and hosts complete business websites using advanced web scraping, structured data enrichment, and aggregation from Google Places and Search APIs. Includes a custom CMS for users to make changes."
+        highlightsOn={highlightsOn}
+        setHighlightsOn={setHighlightsOn}
+        badges={[
+          "Next.js 16",
+          "React 19",
+          "Node.js",
+          "MongoDB",
+          "Mongoose",
+          "WebSockets",
+          "OpenAI GPT-4",
+          "Fireworks FLUX",
+          "Cloudflare R2",
+          "Google Places API",
+          "TailwindCSS",
+          "Framer Motion",
+          "JWT Auth",
+          "SendGrid",
+        ]}
+        features={[
+          "Architected a multi-stage AI pipeline that uses web scraping and Google Places/Search APIs to enrich business data, detect industry verticals, generate site content, optimize SEO, and deploy websites automatically.",
+          "Multi-tenant SaaS architecture with custom domains, subdomains, tenant isolation, and white-label support.",
+          "Designed a real-time visual CMS with live preview, enabling no-code customization of pages, routes, themes, fonts, images, domains and more.",
+          "Automated wildcard SSL provisioning with DNS-based validation, secure tenant ownership verification, and access control.",
+          "Content-aware AI image generation pipeline using Fireworks FLUX and Pexels fallback for 100% image availability.",
+          "Production-grade security with rate limiting, fingerprint-based abuse prevention, input sanitization, and schema validation.",
+          "SEO-optimized SSR with structured JSON-LD data, dynamic meta tags, and CDN-optimized asset delivery achieving sub-1s page loads.",
+          "Automated setup of per-tenant contact form emails via wildcard platform domains with automated SPF/DKIM signing.",
+        ]}
+        featureHighlights={[
+          "AI orchestration",
+          "web scraping",
+          "Google Places API",
+          "Google Search API",
+          "business data enrichment",
+          "automated content generation",
+          "business vertical analysis",
+          "SEO optimization",
+          "Multi-tenant",
+          "automated SPF/DKIM",
+          "Per-tenant contact form",
+          "SaaS",
+          "custom domains",
+          "subdomains",
+          "tenant isolation",
+          "white-label",
+          "custom CMS",
+          "live preview",
+          "no-code customization",
+          "wildcard SSL",
+          "DNS-based validation",
+          "ownership verification",
+          "access control",
+          "Content-aware",
+          "AI image generation",
+          "FLUX",
+          "Places/Search APIs",
+          "Fireworks",
+          "Pexels fallback",
+          "100% availability",
+          "rate limiting",
+          "fingerprint-based",
+          "abuse prevention",
+          "input sanitization",
+          "schema validation",
+          "SEO-optimized",
+          "SSR",
+          "JSON-LD",
+          "dynamic meta tags",
+          "CDN-optimized",
+          "sub-1s",
+        ]}
+        images={[
+          {
+            type: "iframe",
+            src: "https://www.fixmyoldwebsite.app/?hideBubble=true",
+            title: "AI Business Website Generator Live Demo",
+          },
+          splitifyHomePageImg,
+          splitifyPayPageImg,
+          splitifyHomePageImg2,
+          splitifyDashboardPageImg,
+          splitifyPremiumPage,
+          splitifyOnboardingPage,
+        ]}
+        showAllImages={false}
+        enableSlideshow={true}
+        slideshowAutoplay={false}
+        showDots
+        slideFocus={[
+          { xPct: 0, yPct: 0 },
+          { xPct: 0, yPct: 0 },
+          { xPct: 0, yPct: 0 },
+          { xPct: 0, yPct: 0 },
+          { xPct: 0, yPct: 0 },
+          { xPct: 0, yPct: 0 },
+        ]}
+      />
+
       <ProjectCard
         className=""
         title="Splitify - AI Shared Expense Manager "
@@ -69,7 +171,11 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         highlightsOn={highlightsOn}
         setHighlightsOn={setHighlightsOn}
         images={[
-          { type: 'iframe', src: 'https://splitify.io', title: 'Splitify Live Demo' },
+          {
+            type: "iframe",
+            src: "https://splitify.io",
+            title: "Splitify Live Demo",
+          },
           splitifyHomePageImg,
           splitifyPayPageImg,
           splitifyHomePageImg2,
@@ -190,7 +296,11 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         ]}
         slideshowAutoplay={false}
         images={[
-          { type: 'iframe', src: 'https://the85ers.org', title: 'The 85ers Live Demo' },
+          {
+            type: "iframe",
+            src: "https://the85ers.org",
+            title: "The 85ers Live Demo",
+          },
           the85ersHomePageImg,
           the85erContactUsPageImg,
           the85erOurStoryPageImg,
@@ -343,6 +453,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           ]}
         />
       </div>
+
       <ProjectCard
         title="Scrollos - Internal Catalog Platform"
         actions={[
