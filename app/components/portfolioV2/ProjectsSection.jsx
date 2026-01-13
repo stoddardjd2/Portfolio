@@ -199,8 +199,9 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         images={[
           {
             type: "iframe",
-            src: "https://www.fixmyoldwebsite.app",
+            src: "https://www.fixmyoldwebsite.app/?disableTextFocus=true",
             title: "AI Business Website Generator Live Demo",
+            delayLoad: true, // Prevent immediate loading to avoid scroll flash
           },
           ...autoWebsiteGenreratorProjectImageList,
         ]}
@@ -219,7 +220,6 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       />
 
       <ProjectCard
-        className=""
         title="Splitify - AI Shared Expense Manager "
         description="Created a production SaaS adopted by real users that simplifies group finances through automated expense tracking, reminders, and SMS pay-by-text links."
         icon={splitifyLogoImg}

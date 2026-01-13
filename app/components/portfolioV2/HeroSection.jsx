@@ -292,7 +292,7 @@ function HeroSection() {
         <div className="z-10 relative">
           {/* Availability pill */}
           <motion.div
-            className="inline-flex absolute -top-10 items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300 mb-8"
+            className="inline-flex absolute -top-14 items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300 mb-8"
             variants={V.fadeUp}
           >
             <span className="relative flex h-2 w-2">

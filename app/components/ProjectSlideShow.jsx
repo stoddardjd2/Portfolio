@@ -490,6 +490,7 @@ function SlideshowInner({
                       src={currentItem.src}
                       designWidth={isMobile ? 375 : 1400}
                       designHeight={isMobile ? 900 : 815}
+                      delayLoad={currentItem.delayLoad}
                     />
                   </div>
                 </div>
