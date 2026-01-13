@@ -23,8 +23,9 @@ import analyticsDashboard from "../../assets/project-logos/analyticsDashboard.pn
 import scrollosLogo from "../../assets/project-logos/scrollosLogo.png?format=png&quality=80&as=src";
 import tiktokLogo from "../../assets/project-logos/tiktokLogo.png?format=png&quality=80&as=src";
 import mealPlannerLogo from "../../assets/project-logos/mealPlannerLogo.png?format=png&quality=80&as=src";
-
+import autoWebsiteGeneratorLogo from "../../assets/project-logos/autoWebsiteGeneratorLogo.png?format=png&quality=80&as=src";
 import ViewMore from "./ViewMore.jsx";
+
 // eager = import immediately (recommended for small sets)
 const scrollosProjectImageList = Object.entries(
   import.meta.glob("/app/assets/projects/scrollos/*.{png,jpg,jpeg,webp}", {
@@ -36,10 +37,24 @@ const scrollosProjectImageList = Object.entries(
   .sort(([a], [b]) => a.localeCompare(b))
   .map(([, v]) => v);
 
+const autoWebsiteGenreratorProjectImageList = Object.entries(
+  import.meta.glob(
+    "/app/assets/projects/auto-website-generator/*.{png,jpg,jpeg,webp}",
+    {
+      eager: true,
+      import: "default",
+      query: "?format=png&quality=80&as=src",
+    }
+  )
+)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([, v]) => v);
+
 import plaidIcon from "../../assets/project-integration-icons/plaid.png";
 // import plaidIcon from "../../assets/project-integration-icons/plaid-full.png";
 // import telnyxIcon from "../../assets/project-integration-icons/telnyx.png";
 import telnyxIcon from "../../assets/project-integration-icons/telnyx-icon.png?format=png&quality=80&as=src";
+import telnyxColoredIcon from "../../assets/project-integration-icons/telnyxColored.png?format=png&quality=80&as=src";
 import stripeIcon from "../../assets/project-integration-icons/Stripe.svg?format=png&quality=80&as=src";
 import chatGptIcon from "../../assets/project-integration-icons/chatGpt.png?format=png&quality=80&as=src";
 import venmoIcon from "../../assets/project-integration-icons/venmo.svg?format=jpg&quality=80&as=src";
@@ -48,6 +63,15 @@ import adidasIcon from "../../assets/project-integration-icons/adidas.svg?format
 import theRealestIcon from "../../assets/project-integration-icons/theRealest.png?format=jpg&quality=80&as=src";
 import seattleReignFcIcon from "../../assets/project-integration-icons/seattleReignFc.png?format=jpg&quality=80&as=src";
 import uswntIcon from "../../assets/project-integration-icons/uswnt.png?format=jpg&quality=80&as=src";
+import googleSearchIcon from "../../assets/project-integration-icons/googleSearch.svg?format=jpg&quality=80&as=src";
+import googlePlacesIcon from "../../assets/project-integration-icons/googlePlaces.svg?format=jpg&quality=80&as=src";
+import fireworksAiIcon from "../../assets/project-integration-icons/fireworksAi.png?format=png&quality=80&as=src";
+import pexelsIcon from "../../assets/project-integration-icons/pexels.png?format=png&quality=80&as=src";
+import cloudflareIcon from "../../assets/project-integration-icons/cloudflare.svg?format=png&quality=80&as=src";
+import twilioIcon from "../../assets/project-integration-icons/twilio.svg?format=png&quality=80&as=src";
+import twilioColoredIcon from "../../assets/project-integration-icons/twilioColored.svg?format=png&quality=80&as=src";
+import serpapiIcon from "../../assets/project-integration-icons/serpapi.png?format=png&quality=80&as=src";
+import googleLightHouseIcon from "../../assets/project-integration-icons/googleLightHouse.png?format=png&quality=80&as=src";
 
 function ProjectsSection({ highlightsOn, setHighlightsOn }) {
   return (
@@ -64,8 +88,11 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       <ProjectCard
         title="AI Business Website Generator - Multi-Tenant SaaS Platform"
         description="AI-powered SaaS platform that generates, deploys, and hosts complete business websites using advanced web scraping, structured data enrichment, and aggregation from Google Places and Search APIs. Includes a custom CMS for users to make changes."
+        // descriptionClassname = "!max-w-full"
         highlightsOn={highlightsOn}
         setHighlightsOn={setHighlightsOn}
+        icon={autoWebsiteGeneratorLogo}
+        iconDisableRounding={true}
         badges={[
           "Next.js 16",
           "React 19",
@@ -82,12 +109,46 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           "JWT Auth",
           "SendGrid",
         ]}
+        integrations={[
+          { name: "ChatGPT", logo: chatGptIcon, className: "invert" },
+          {
+            name: "Google Search",
+            logo: googleSearchIcon,
+            className: "",
+          },
+          {
+            name: "Google Places",
+            logo: googlePlacesIcon,
+            className: "",
+          },
+          {
+            name: "Fireworks AI",
+            logo: fireworksAiIcon,
+            className: "bg-white p-[2px]",
+          },
+          {
+            name: "Pexels",
+            logo: pexelsIcon,
+            className: "grayscale brightness-[8.4]",
+          },
+          { name: "Cloudflare", logo: cloudflareIcon, className: "" },
+          { name: "SendGrid", logo: twilioColoredIcon, className: "" },
+          { name: "Serpapi", logo: serpapiIcon, className: " " },
+        ]}
+        actions={[
+          {
+            href: "https://fixMyOldWebsite.app",
+            target: "_blank",
+            label: "Live Demo",
+            icon: "lucide:external-link",
+          },
+        ]}
         features={[
           "Architected a multi-stage AI pipeline that uses web scraping and Google Places/Search APIs to enrich business data, detect industry verticals, generate site content, optimize SEO, and deploy websites automatically.",
           "Multi-tenant SaaS architecture with custom domains, subdomains, tenant isolation, and white-label support.",
-          "Designed a real-time visual CMS with live preview, enabling no-code customization of pages, routes, themes, fonts, images, domains and more.",
+          "Designed a real-time visual CMS with live preview, enabling no-code customization of pages, routes, themes, fonts, images, domains.",
           "Automated wildcard SSL provisioning with DNS-based validation, secure tenant ownership verification, and access control.",
-          "Content-aware AI image generation pipeline using Fireworks FLUX and Pexels fallback for 100% image availability.",
+          "Content-aware AI image generation pipeline using Fireworks FLUX and Pexels fallback for 100% image availability with R2 storage.",
           "Production-grade security with rate limiting, fingerprint-based abuse prevention, input sanitization, and schema validation.",
           "SEO-optimized SSR with structured JSON-LD data, dynamic meta tags, and CDN-optimized asset delivery achieving sub-1s page loads.",
           "Automated setup of per-tenant contact form emails via wildcard platform domains with automated SPF/DKIM signing.",
@@ -138,15 +199,10 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         images={[
           {
             type: "iframe",
-            src: "https://www.fixmyoldwebsite.app/?hideBubble=true",
+            src: "https://www.fixmyoldwebsite.app",
             title: "AI Business Website Generator Live Demo",
           },
-          splitifyHomePageImg,
-          splitifyPayPageImg,
-          splitifyHomePageImg2,
-          splitifyDashboardPageImg,
-          splitifyPremiumPage,
-          splitifyOnboardingPage,
+          ...autoWebsiteGenreratorProjectImageList,
         ]}
         showAllImages={false}
         enableSlideshow={true}
@@ -165,7 +221,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       <ProjectCard
         className=""
         title="Splitify - AI Shared Expense Manager "
-        description="Designed, built, and shipped a production SaaS, iterating with early users to streamline shared expense automation, payment collection, and reminder workflows."
+        description="Created a production SaaS adopted by real users that simplifies group finances through automated expense tracking, reminders, and SMS pay-by-text links."
         icon={splitifyLogoImg}
         iconDisableRounding={true}
         highlightsOn={highlightsOn}
@@ -190,9 +246,9 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           { name: "Plaid", logo: plaidIcon, rounded: false },
           {
             name: "Telynx",
-            logo: telnyxIcon,
+            logo: telnyxColoredIcon,
             rounded: false,
-            className: "invert",
+            className: "",
           },
           { name: "Stripe", logo: stripeIcon },
           { name: "ChatGPT", logo: chatGptIcon, className: "invert" },
@@ -348,6 +404,141 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
             icon: "lucide:external-link",
           },
         ]}
+      />
+
+      <ProjectCard
+        title="Website Lead Finder - Lead Generation & Outreach Automation Platform"
+        description="A Full-stack CRM and lead intelligence system for discovering businesses that need new websites and driving data-powered email/SMS outreach with real-time analytics.
+"
+        highlightsOn={highlightsOn}
+        setHighlightsOn={setHighlightsOn}
+        icon={autoWebsiteGeneratorLogo}
+        iconDisableRounding={true}
+        badges={[
+          "Node.js",
+          "React",
+          "MongoDB",
+          "Mongoose",
+          "Puppeteer",
+          "Google Lighthouse",
+          "WebSockets",
+          "Leaflet",
+          "p-limit",
+          "Express.js",
+          "Google Places API",
+          "SendGrid",
+          "Telnyx",
+          "TailwindCSS",
+        ]}
+        integrations={[
+          {
+            name: "Google Places",
+            logo: googlePlacesIcon,
+            className: "",
+          },
+          {
+            name: "Google Lighthouse",
+            logo: googleLightHouseIcon,
+            rounded: true,
+            className: "",
+          },
+          { name: "SendGrid", logo: twilioColoredIcon, className: "", rounded: true },
+          {
+            name: "Telnyx",
+            logo: telnyxColoredIcon,
+            rounded: false,
+            className: "",
+          },
+        ]}
+        features={[
+          "Distributed job system with atomic MongoDB claiming ensures exactly-once processing across parallel workers.",
+          "Concurrency-controlled Lighthouse + Puppeteer audits (50+ workers) using p-limit to prevent CPU spikes and resource exhaustion.",
+          "CRM-style lead dashboard with search, filters, sorting, bulk actions, saved views, and customizable lead profiles.",
+          "Dual-worker architecture separates heavy scanning/audits from outreach to maximize throughput and system stability.",
+          "Chrome process registry & lifecycle manager prevents orphaned browsers and memory leaks during massive audit runs.",
+          "Deterministic tile-based geo scanner guarantees full regional coverage, zero duplicates, and crash-safe resume support.",
+          "Automated multi-step email campaigns with dynamic templating, score-based logic, A/B testing, and timezone-aware delivery.",
+          "Interactive analytics dashboard with real-time metrics for scan progress, audit scores, outreach performance, worker health, and system throughput.",
+        ]}
+        featureHighlights={[
+          "outdated websites detection",
+          "technical scoring engine",
+          "website quality analysis",
+          "lead qualification",
+          "CRM",
+          "bulk actions",
+          "stability",
+          "analytics dashboard",
+          "real-time metrics",
+          "campaign performance tracking",
+          "conversion analytics",
+          "worker health monitoring",
+          "system throughput analytics",
+
+          "distributed job system",
+          "atomic MongoDB",
+          "exactly-once processing",
+          "concurrency control",
+          "p-limit",
+          "50+ parallel workers",
+          "Lighthouse",
+          "Puppeteer",
+          "dual-worker architecture",
+          "Chrome process registry",
+          "lifecycle manager",
+          "memory leaks",
+          "deterministic",
+          "tile-based",
+          "geographic scanning",
+          "full regional coverage",
+          "zero duplicates",
+          "crash-safe",
+          "persistent state",
+          "Google Places API",
+          "category filtering",
+          "scoring-based gating",
+          "dual audit system",
+          "performance",
+          "SEO",
+          "accessibility",
+          "custom HTML analysis",
+          "outdated stacks",
+          "technical debt",
+          "exponential backoff",
+          "fallback audit modes",
+          "configurable timeouts",
+          "WebSocket",
+          "live dashboard",
+          "job queues",
+          "throughput",
+          "active workers",
+          "concurrency levels",
+          "system health",
+          "Leaflet",
+          "geographic visualization",
+          "MongoDB schemas",
+          "millions of records",
+          "cursor-based pagination",
+          "aggregation pipelines",
+          "geospatial queries",
+          "distance-based sorting",
+          "multi-step",
+          "email + SMS",
+          "campaign engine",
+          "variable templating",
+          "score-based",
+          "conditional sections",
+          "timezone-aware",
+          "business-hours scheduling",
+          "daily send limits",
+          "duplicate-contact prevention",
+          "unique constraints",
+          "A/B testing",
+          "analytics",
+        ]}
+        images={[]}
+        showAllImages={false}
+        enableSlideshow={false}
       />
       <div className="grid md:grid-cols-2 gap-x-6">
         <ProjectCard

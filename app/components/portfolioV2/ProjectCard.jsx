@@ -8,7 +8,7 @@ export default function ProjectCard({
   description,
   features = [],
   featureHighlights = [], // NEW (array of phrases/regex)
-
+  descriptionClassname = "",
   badges = [],
   imageUrl,
   images,
@@ -41,7 +41,6 @@ export default function ProjectCard({
 
   const [activeIdx, setActiveIdx] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
-
 
   const effectiveHighlights =
     highlightsOn && featureHighlights?.length ? featureHighlights : [];
@@ -96,7 +95,7 @@ export default function ProjectCard({
         <ProjectSlideshow
           images={imageList}
           title={title}
-          aspectRatio="16 / 9" // or "1 / 1" for square
+          aspectRatio="16 / 10" // or "1 / 1" for square
           autoplay={slideshowAutoplay}
           intervalMs={slideshowIntervalMs}
           pauseOnHover={slideshowPauseOnHover}
@@ -180,7 +179,7 @@ export default function ProjectCard({
                 </div>
               </div>
               {description && (
-                <p className="text-neutral-400 max-w-xl">{description}</p>
+                <p className={`text-neutral-400 max-w-2xl ${descriptionClassname}`}>{description}</p>
               )}
               {hasIntegrations && (
                 <div className="mt-3 mb-0 ">
@@ -281,7 +280,7 @@ export default function ProjectCard({
               <div>
                 {hasImages && (
                   <div
-                    className="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-950"
+                    className={`${enableSlideshow ? "overflow-visible" : "overflow-hidden"} rounded-lg border border-neutral-800 bg-neutral-950`}
                     onMouseEnter={() => setIsHovering(true)}
                     onMouseLeave={() => setIsHovering(false)}
                   >
@@ -294,7 +293,7 @@ export default function ProjectCard({
             <>
               {hasImages && (
                 <div
-                  className="mt-8 overflow-hidden rounded-lg border border-neutral-800 bg-neutral-950 "
+                  className={`mt-8 ${enableSlideshow ? "overflow-visible" : "overflow-hidden"} rounded-lg border border-neutral-800 bg-neutral-950`}
                   onMouseEnter={() => setIsHovering(true)}
                   onMouseLeave={() => setIsHovering(false)}
                 >
@@ -303,13 +302,13 @@ export default function ProjectCard({
               )}
 
               {hasFeatures && (
-                <div className={`${(imageList.length > 0) ?  "mt-6" : ""}`}>
+                <div className={`${imageList.length > 0 ? "mt-6" : ""}`}>
                   <div className="flex items-baseline justify-between mb-4 border-b border-neutral-800 pb-2">
                     <h4 className="text-xs font-medium text-white uppercase tracking-wider ">
                       Key Features Built
                     </h4>
 
-                    {(featureHighlights?.length) && (
+                    {featureHighlights?.length && (
                       <div className="flex items-center gap-3">
                         {featureHighlights?.length > 0 && (
                           <button
@@ -335,7 +334,6 @@ export default function ProjectCard({
                             {highlightsOn ? "Highlights On" : "Highlights Off"}
                           </button>
                         )}
-
                       </div>
                     )}
                   </div>

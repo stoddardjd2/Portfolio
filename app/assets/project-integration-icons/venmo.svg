@@ -1,5 +1,1 @@
-<svg width="448" height="448" viewBox="0 0 448 448" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-        d="M412.17 0H38.28C17.85 0 0 14.7 0 34.89V409.6C0 429.91 17.85 448 38.28 448H412.06C432.6 448 448 429.8 448 409.61V34.89C448.12 14.7 432.6 0 412.17 0ZM246 355H142.32L100.75 106.44L191.5 97.82L213.5 274.69C234.03 241.24 259.38 188.69 259.38 152.82C259.38 133.2 256.02 119.82 250.77 108.82L333.4 92.1C342.96 107.88 347.26 124.1 347.26 144.67C347.25 210.17 291.34 295.26 246 355Z"
-        fill="white" />
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" aria-label="Venmo" role="img" viewBox="0 0 512 512" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect width="512" height="512" rx="15%" fill="#3396cd"></rect><path d="m381.4 105.3c11 18.1 15.9 36.7 15.9 60.3 0 75.1-64.1 172.7-116.2 241.2h-118.8l-47.6-285 104.1-9.9 25.3 202.8c23.5-38.4 52.6-98.7 52.6-139.7 0-22.5-3.9-37.8-9.9-50.4z" fill="#ffffff"></path></g></svg>

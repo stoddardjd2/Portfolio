@@ -283,7 +283,7 @@ function HeroSection() {
 
   return (
     <motion.div
-      className="relative min-h-[840px] mt-[100px] lg:mt-[0px] w-full xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100dvh)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
+      className="relative min-h-[840px] mt-[100px] lg:mt-[0px] w-full xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[100vh] xs:min-h-[calc(100dvh)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
       initial="hidden"
       animate="visible"
       variants={V.container}

@@ -18,7 +18,7 @@ function PortfolioPageV2() {
   const [highlightsOn, setHighlightsOn] = useState(false);
 
   return (
-    <div className="bg-neutral-950 overflow-clip text-neutral-400 antialiased selection:bg-neutral-800 selection:text-white min-h-screen">
+    <div className="bg-neutral-950 overflow-clip min-h-screen bg-neutral-950 bg-gradient-to-br from-neutral-950 via-white/3 to-neutral-950 bg-center bg-fixed text-neutral-400 antialiased selection:bg-neutral-800 selection:text-white">
       <NavBar />
       <main
         id="top"

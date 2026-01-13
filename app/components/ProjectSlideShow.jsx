@@ -172,6 +172,7 @@ function SlideshowInner({
   const [idx, setIdx] = useState(safeInit);
   const [hover, setHover] = useState(false);
   const [playing, setPlaying] = useState(autoplay);
+  const [iframeOverlayVisible, setIframeOverlayVisible] = useState(true);
 
   // Assign h and w to the current screen width and height, update on resize, with useState.
 
@@ -327,18 +328,35 @@ function SlideshowInner({
         margin: "0 auto", // Center on page
       };
     }
+    if (isCurrentSlideIframe) {
+      // Add top padding for the badge
+      return {
+        ...containerStyle,
+        paddingTop: "12px",
+      };
+    }
     return containerStyle;
   };
 
   return (
     <div
       ref={rootRef}
-      className={`relative w-full overflow-hidden ${
+      className={`relative w-full ${
         isMobile && isCurrentSlideIframe ? "flex  justify-center" : ""
-      } ${className}`}
+      } ${isCurrentSlideIframe ? "overflow-visible" : "overflow-hidden"} ${className}`}
       style={getContainerStyle()}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onMouseEnter={() => {
+        setHover(true);
+        if (isCurrentSlideIframe) {
+          setIframeOverlayVisible(false);
+        }
+      }}
+      onMouseLeave={() => {
+        setHover(false);
+        if (isCurrentSlideIframe) {
+          setIframeOverlayVisible(true);
+        }
+      }}
     >
       <AnimatePresence mode="popLayout" initial={false}>
         {(() => {
@@ -353,7 +371,7 @@ function SlideshowInner({
               <motion.div
                 key={currentItem.src || idx}
                 className={
-                  "absolute inset-0 flex items-center justify-center  select-none " +
+                  "absolute inset-0 flex h-full items-center justify-center  select-none " +
                   (enableClickToOpen ? "cursor-pointer " : "")
                 }
                 initial={{ opacity: 0, scale: 1.002 }}
@@ -366,8 +384,35 @@ function SlideshowInner({
                 }}
                 {...dragProps}
               >
+                {/* Full overlay with centered badge */}
+                <motion.div
+                  className="hidden sm:flex absolute inset-0 z-20 items-center justify-center bg-black/40 backdrop-blur-[2px]"
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: iframeOverlayVisible ? 1 : 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  style={{ pointerEvents: iframeOverlayVisible ? "auto" : "none" }}
+                >
+                  <div className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200/50 shadow-lg">
+                    <svg
+                      className="w-4 h-4 text-slate-700"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+                      />
+                    </svg>
+                    <span className="text-sm font-medium text-slate-700">
+                      Interactive Demo
+                    </span>
+                  </div>
+                </motion.div>
                 {/* Browser-like container - full width */}
-                <div className="w-full flex flex-col h-full">
+                <div className="relative w-full flex flex-col h-full">
                   {/* Browser chrome */}
                   <div className="w-full bg-slate-800 rounded-t-lg border border-slate-600 p-2 shrink-0">
                     <div className="flex items-center gap-2">
@@ -439,13 +484,12 @@ function SlideshowInner({
                       </div>
                     </div>
                   </div>
-
                   {/* Iframe with desktop scaling - properly sized */}
-                  <div className=" w-full bg-white rounded-b-lg border border-slate-600 overflow-hidden shadow-2xl">
+                  <div className="relative w-full bg-white rounded-b-lg border border-slate-600 overflow-hidden shadow-2xl">
                     <ScaledIframe
                       src={currentItem.src}
                       designWidth={isMobile ? 375 : 1400}
-                      designHeight={isMobile ? 900 : 800}
+                      designHeight={isMobile ? 900 : 815}
                     />
                   </div>
                 </div>
@@ -578,7 +622,7 @@ export default function ProjectSlideshow({
   initialIndex = 0,
 
   // sizing
-  aspectRatio = "16 / 9",
+  aspectRatio = "16 / 10",
   maxHeightPx,
 
   // behavior
@@ -606,7 +650,7 @@ export default function ProjectSlideshow({
   imgClassName = "",
   onIndexChange,
   // NEW
-  openModalOnClick = true,
+  openModalOnClick = false,
 }) {
   const list = useMemo(() => (images?.length ? images : []), [images]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -679,7 +723,7 @@ export default function ProjectSlideshow({
       />
 
       {/* Fullscreen modal */}
-      {portalEl &&
+      {openModalOnClick && portalEl &&
         createPortal(
           <AnimatePresence>
             {modalOpen && (
@@ -709,7 +753,7 @@ export default function ProjectSlideshow({
                 </button>
 
                 {/* Centered stage */}
-                <div className="w-full max-w-6xl">
+                <div className="w-full max-w-6xl max-h-[85vh] overflow-hidden">
                   <SlideshowInner
                     list={list}
                     title={title}
@@ -730,7 +774,7 @@ export default function ProjectSlideshow({
                     enableKeyboard={enableKeyboard}
                     enableSwipe={enableSwipe}
                     slideFocus={slideFocus}
-                    className={"w-full max-h-[85vh]"}
+                    className="w-full"
                     imgClassName={imgClassName}
                     onIndexChange={onIndexChange}
                     enableClickToOpen={false}
