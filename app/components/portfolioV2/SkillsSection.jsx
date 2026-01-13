@@ -99,7 +99,7 @@ function SkillsSection() {
           icon="lucide:layout"
           title="Frontend"
           items={[
-            "React 19, Vite",
+            "React 19 / Next.js / Vite",
             "TailwindCSS",
             "Framer Motion",
             "Responsive UI",

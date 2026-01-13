@@ -221,7 +221,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
 
       <ProjectCard
         title="Splitify - AI Shared Expense Manager "
-        description="Created a production SaaS adopted by real users that simplifies group finances through automated expense tracking, reminders, and SMS pay-by-text links."
+        description="Created a production SaaS adopted by real users that simplifies group finances through automated expense tracking, requests and reminders. Uses pay-by-link texts that require no account to make it as easy as possible to get paid back."
         icon={splitifyLogoImg}
         iconDisableRounding={true}
         highlightsOn={highlightsOn}
