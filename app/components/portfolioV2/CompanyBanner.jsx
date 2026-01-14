@@ -49,11 +49,11 @@ const companies = [
     logo: theRealestIcon,
     rounded: true,
   },
-  {
-    name: "Splitify",
-    logo: splitifyLogo,
-    rounded: false,
-  },
+  // {
+  //   name: "Splitify",
+  //   logo: splitifyLogo,
+  //   rounded: false,
+  // },
   {
     name: "2351 Labs",
     logo: <LabsTextLogo />, // Text logo component

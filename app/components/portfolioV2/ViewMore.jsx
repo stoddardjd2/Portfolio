@@ -12,9 +12,9 @@ export default function ViewMore({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className={`mt-20 ${className}`}>
+    <div className={`mt-20 ${className} bg-transparent`}>
       {/* Centered focus control */}
-      <div className="flex flex-col items-center justify-center mb-10 text-center">
+      <div className="flex flex-col items-center justify-center bg-transparent mb-10 text-center">
         {/* <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-4">
           {title}
         </p> */}
@@ -73,8 +73,6 @@ export default function ViewMore({
           >
             {/* slight backdrop to increase focus */}
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/60 to-transparent pointer-events-none" />
-
               {items.map((node, idx) => (
                 <div key={idx}>{node}</div>
               ))}
