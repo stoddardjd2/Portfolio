@@ -232,7 +232,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
             src: "https://splitify.io",
             title: "Splitify Live Demo",
           },
-          splitifyHomePageImg,
+          // splitifyHomePageImg,
           splitifyPayPageImg,
           splitifyHomePageImg2,
           splitifyDashboardPageImg,
@@ -256,7 +256,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         ]}
         showDots
         slideFocus={[
-          { xPct: 0, yPct: 0 },
+          // { xPct: 0, yPct: 0 },
           { xPct: 0, yPct: 0 },
           { xPct: 0, yPct: 0 },
           { xPct: 0, yPct: 0 },
