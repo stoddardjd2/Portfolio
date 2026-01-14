@@ -65,7 +65,7 @@ import seattleReignFcIcon from "../../assets/project-integration-icons/seattleRe
 import uswntIcon from "../../assets/project-integration-icons/uswnt.png?format=jpg&quality=80&as=src";
 import googleSearchIcon from "../../assets/project-integration-icons/googleSearch.svg?format=jpg&quality=80&as=src";
 import googlePlacesIcon from "../../assets/project-integration-icons/googlePlaces.svg?format=jpg&quality=80&as=src";
-import fireworksAiIcon from "../../assets/project-integration-icons/fireworksAi.png?format=png&quality=80&as=src";
+import fireworksAiIcon from "../../assets/project-integration-icons/fireworksAI.png?format=png&quality=80&as=src";
 import pexelsIcon from "../../assets/project-integration-icons/pexels.png?format=png&quality=80&as=src";
 import cloudflareIcon from "../../assets/project-integration-icons/cloudflare.svg?format=png&quality=80&as=src";
 import twilioIcon from "../../assets/project-integration-icons/twilio.svg?format=png&quality=80&as=src";
