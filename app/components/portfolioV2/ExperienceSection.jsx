@@ -35,6 +35,46 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
       </div>
       <div className="space-y-4">
         <ExperienceEntry
+          role="Full-Stack Engineer / Founding Engineer"
+          company="FixMyOldWebsite"
+          timeframe="Dec 2025 – Present"
+          highlights={[
+            "Next.js 16",
+            "React 19",
+            "AI orchestration",
+            "multi-tenant SaaS",
+            "custom domains",
+            "Cheerio",
+            "Puppeteer",
+            "GPT-4",
+            "live preview",
+            "inline editing",
+            "real-time visual CMS",
+            "SEO-ready sites in under 30 seconds",
+            "distributed job system",
+            "thousands of audits",
+            "AI pipeline",
+            "cut memory usage by over 50%",
+            "automation at scale",
+            "60–80% lower API cost",
+            "tile-based Google Places scanning engine",
+            "email and SMS automation",
+            "templates, scoring logic, scheduling, rate limits, A/B testing"
+          ]}
+          description="Built an AI SaaS that finds businesses with outdated sites, generates modern replacements, and automates outreach to owners."
+          highlightsOn={highlightsOn}
+          bullets={[
+            "Architected a multi-tenant platform with Next.js, React 19, Node, and MongoDB supporting custom domains and SSL automation.",
+            "Built an AI pipeline using GPT-4, Google Places, Cheerio, and Puppeteer to generate SEO-ready sites in under 30 seconds.",
+            "Developed a real-time visual CMS with live preview, inline editing, and versioned content for AI-generated sites.",
+            "Designed a distributed job system with atomic MongoDB claiming and 50+ workers running thousands of audits daily.",
+            "Engineered a Chrome lifecycle manager that eliminated orphaned processes and cut memory usage by over 50%.",
+            "Created a tile-based Google Places scanning engine with full coverage, zero duplicates, crash recovery, and 60–80% lower API cost.",
+            "Implemented email and SMS automation with dynamic templates, scoring logic, scheduling, rate limits, A/B testing, and analytics.",
+            "Built MongoDB schemas and indexes for millions of leads with sub-200ms filtered queries and geospatial sorting.",
+          ]}
+        />
+        <ExperienceEntry
           role="Founder / Full-Stack Engineer"
           company="Splitify"
           timeframe="July 2025 – Present"
@@ -58,9 +98,9 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
             "onboarding",
             "automate social media",
           ]}
+          description="Founded and built a platform automating shared expenses, payments, and SMS reminders for live users and real-money transactions."
           highlightsOn={highlightsOn}
           bullets={[
-            "Founded and built a platform automating shared expenses, payments, and SMS reminders for live users and real-money transactions.",
             "Shipped an MVP to live users in under one month, balancing rapid iteration with reliability, security, and financial constraints.",
             "Owned the full product lifecycle end-to-end across strategy, UX, frontend, backend APIs, infrastructure, analytics, and growth.",
             "Designed backend systems for recurring billing, timezone-aware scheduling, payment tracking, and reliable message delivery.",
@@ -89,6 +129,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
           role="Full-Stack Engineer"
           company="the85ers"
           timeframe="Feb 2025  – Present"
+          description="Built a cinematic, motion-driven website for the U.S. Women's National Soccer Team in partnership with Adidas and professional sports brands."
           highlights={[
             "Framer Motion",
             "motion-driven",
@@ -96,13 +137,19 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
             "lazy loading",
             "responsive assets",
             "brand-safe",
+            "production-ready UI",
+            "rapid iteration",
+            "reusable, modular components",
+            "Partnered with designers, creative directors, and brand teams"
           ]}
           highlightsOn={highlightsOn}
           bullets={[
-            "Collaborated with designers, creative directors, and brand partners, including Adidas, to ship cinematic, motion-driven experiences.",
-            "Translated brand and editorial direction into production-ready UI with dynamic heroes, image sequencing, and narrative flow.",
+            "Partnered with designers, creative directors, and brand teams to deliver cinematic, motion-driven digital experiences.",
+            "Provided continuous UI/UX feedback and rapid iteration to align builds with evolving brand and editorial direction.",
+            "Translated brand and editorial vision into production-ready UI with dynamic heroes, image sequencing, and narrative flow.",
+            "Architected the site using reusable, modular components and flexible section systems, making it easy to add new content.",
             "Built an image pipeline with responsive assets, lazy loading, and modern formats to meet professional publishing standards.",
-            "Implemented custom Framer Motion animation systems for scroll-based reveals and transitions, balancing impact with performance.",
+            "Implemented custom Framer Motion systems for scroll-based reveals and transitions, balancing visual impact with performance.",
             "Delivered mobile-first, brand-safe implementations meeting quality and consistency standards for professional sports partners.",
           ]}
         />
@@ -111,6 +158,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
           role="Full-Stack Engineer"
           company="2351 Labs"
           timeframe="Jul 2024 - Feb 2025"
+          description="Designed and built a production-grade internal catalog platform to centralize services, libraries, and tooling with white-label support and role-based access."
           highlights={[
             "OAuth 2.0",
             "JWT",
@@ -124,10 +172,10 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
             "internal catalog platform",
             "documentation standards",
             "responsive layouts",
+            "information architecture"
           ]}
           highlightsOn={highlightsOn}
           bullets={[
-            "Designed and built a production-grade internal catalog platform to centralize services, libraries, and tooling across teams.",
             "Delivered a white-labeled, themeable UI adaptable to multiple clients and internal brands while maintaining a consistent core system.",
             "Collaborated with product and design partners to define information architecture, discovery flows, and documentation standards.",
             "Implemented server-side pagination, advanced filtering, and URL-driven state to support scalable, shareable dataset views.",
@@ -141,6 +189,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
           role="Department Manager"
           company="Safeway & Kroger"
           timeframe="Apr 2018 - Dec 2023"
+          description="Led end-to-end department operations, improving profitability by 50% and reducing inventory waste by 30% through process optimization and data-driven management."
           highlights={[
             "department operations",
             "operational efficiency",
@@ -217,16 +266,25 @@ function ExperienceEntry({
   bullets,
   highlights = [],
   highlightsOn = true,
+  description = "",
 }) {
   return (
     <MotionSection id="projects" className="scroll-mt-30" delay={0.12}>
       <div className="rounded-xl border border-neutral-800 bg-neutral-900/20 p-4 sm:p-5 md:p-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-3">
-          <div>
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 mb-3">
+          <div className="flex flex-col gap-0.5">
             <p className="text-sm font-semibold text-white">{role}</p>
-            <p className="text-sm text-neutral-500">{company}</p>
+            <p className="text-sm text-neutral-500 md:mb-2">{company}</p>
+            <p className="text-xs md:hidden flex mb-2 text-neutral-500 whitespace-nowrap">
+              {timeframe}
+            </p>
+            <p className="text-sm text-neutral-500 italic max-w-xl">
+              {description}
+            </p>
           </div>
-          <p className="text-xs text-neutral-500">{timeframe}</p>
+          <p className="text-xs hidden md:inline text-neutral-500 whitespace-nowrap">
+            {timeframe}
+          </p>
         </div>
 
         <ul className="space-y-2 text-sm text-neutral-400">
