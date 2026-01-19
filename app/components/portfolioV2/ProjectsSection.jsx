@@ -199,7 +199,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         images={[
           {
             type: "iframe",
-            src: "https://www.fixmyoldwebsite.app/?disableTextFocus=true",
+            src: "https://www.fixmyoldwebsite.app/?disableTextFocus=true&hideBubble=true",
             title: "AI Business Website Generator Live Demo",
             delayLoad: true, // Prevent immediate loading to avoid scroll flash
           },

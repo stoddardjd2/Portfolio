@@ -143,7 +143,7 @@ export default function ProjectCard({
     <MotionSection delay={0.12} viewPortTrigger={0.15} className="mb-8 ">
       <div
         className={
-          "rounded-2xl border h-full   border-neutral-800 bg-neutral-900/40 overflow-hidden"
+          "rounded-2xl border h-full   border-neutral-800 bg-neutral-900/40"
         }
       >
         <div className="p-4 sm:p-5 md:p-6 relative">

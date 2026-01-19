@@ -178,6 +178,7 @@ function SlideshowInner({
 
   // in-view gating (disabled in modal)
   const rootRef = useRef(null);
+  const [iframeHeightPx, setIframeHeightPx] = useState(null);
   const inView = useInView(rootRef, {
     threshold: inViewThreshold,
     rootMargin: inViewRootMargin,
@@ -318,20 +319,40 @@ function SlideshowInner({
     typeof currentItem === "object" &&
     currentItem.type === "iframe";
 
+  useEffect(() => {
+    if (!isCurrentSlideIframe) return;
+    if (!rootRef.current) return;
+
+    const update = () => {
+      if (!rootRef.current) return;
+      const containerWidth = rootRef.current.offsetWidth;
+      const designWidth = isMobile ? 375 : 1400;
+      const designHeight = isMobile ? 900 : 815;
+      const scale = containerWidth / designWidth;
+      setIframeHeightPx(designHeight * scale);
+    };
+
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [isCurrentSlideIframe, isMobile, currentItem?.src]);
+
   // Calculate container style for mobile iframe slides
   const getContainerStyle = () => {
     if (isMobile && isCurrentSlideIframe) {
       // Mobile phone dimensions: 375x667 (iPhone) + padding
       return {
         ...containerStyle,
-        height: "590px", // 667 + 40 for padding
+        height: iframeHeightPx ? `${iframeHeightPx}px` : "590px",
         margin: "0 auto", // Center on page
+        paddingTop: "12px",
       };
     }
     if (isCurrentSlideIframe) {
       // Add top padding for the badge
       return {
         ...containerStyle,
+        height: iframeHeightPx ? `${iframeHeightPx}px` : undefined,
         paddingTop: "12px",
       };
     }
@@ -343,7 +364,7 @@ function SlideshowInner({
       ref={rootRef}
       className={`relative w-full ${
         isMobile && isCurrentSlideIframe ? "flex  justify-center" : ""
-      } ${isCurrentSlideIframe ? "overflow-visible" : "overflow-hidden"} ${className}`}
+      } ${isCurrentSlideIframe ? "overflow-visible" : "overflow-visible"} ${className}`}
       style={getContainerStyle()}
       onMouseEnter={() => {
         setHover(true);
@@ -484,7 +505,7 @@ function SlideshowInner({
                       </div>
                     </div>
                   </div>
-                  {/* Iframe with desktop scaling - properly sized */}
+                  {/* Iframe scaled to container width with proportional height */}
                   <div className="relative w-full bg-white rounded-b-lg border border-slate-600 overflow-hidden shadow-2xl">
                     <ScaledIframe
                       src={currentItem.src}
@@ -557,7 +578,7 @@ function SlideshowInner({
               prev();
             }}
             aria-label="Previous image"
-            className="group absolute left-3 top-1/2 -translate-y-1/2 z-10
+            className="group absolute -left-3 md:left-3 top-1/2 -translate-y-1/2 z-10
               h-12 w-12 md:h-9 md:w-9 rounded-full bg-neutral-950/80
               border border-white/10 text-white/85
               shadow-lg shadow-black/20 transition-all
@@ -577,7 +598,7 @@ function SlideshowInner({
               next();
             }}
             aria-label="Next image"
-            className="group absolute right-3 top-1/2 -translate-y-1/2 z-10
+            className="group absolute -right-3 md:right-3 top-1/2 -translate-y-1/2 z-10
               h-12 w-12 md:h-9 md:w-9 rounded-full bg-neutral-950/80
               border border-white/10 text-white/85
               shadow-lg shadow-black/20 transition-all
