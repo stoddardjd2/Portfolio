@@ -196,7 +196,7 @@ function HeroSection() {
 
   const HeroContent = (
     <motion.div
-      className="absolute lg:static top-0 bg-neutral-950/90 h-full w-full lg:bg-transparent lg:h-fit"
+      className="absolute lg:static top-0  h-full w-full lg:bg-transparent lg:h-fit"
       variants={V.container}
       initial="hidden"
       animate="visible"
@@ -325,7 +325,7 @@ function HeroSection() {
           >
             <motion.img
               src={portraitGrayNoBg}
-              className="lg:h-[470px] px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
+              className="lg:h-[470px] md:!opacity-20 lg:!opacity-60 px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
               alt="Portrait"
               variants={V.portraitImg}
               whileHover={{

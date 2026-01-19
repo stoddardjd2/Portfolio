@@ -470,7 +470,7 @@ function SlideshowInner({
                           </svg>
                         </button>
                       </div>
-                      <div className="flex-1 bg-slate-700 rounded px-3 py-1 text-xs text-slate-300 font-mono">
+                      <div className="flex-1 bg-slate-700 rounded px-3 truncate py-1 text-xs text-slate-300 font-mono">
                         {(() => {
                           try {
                             return currentItem.src
