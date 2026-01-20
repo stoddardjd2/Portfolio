@@ -672,6 +672,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           "JWT Auth",
           "Vanilla CSS",
         ]}
+        slideshowAutoplay={false}
         enableSlideshow={true}
         images={[...scrollosProjectImageList]}
         slideFocus={[

@@ -26,29 +26,83 @@ function IframeFullscreenPortal({ src, onClose }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black z-[99999] flex items-center justify-center cursor-pointer"
+      className="fixed inset-0 bg-black z-[99999] flex items-center justify-center"
       onClick={onClose}
     >
-      {/* Close button */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onClose();
-        }}
-        className="absolute top-5 right-5 cursor-pointer w-10 h-10 bg-black/70 hover:bg-black/90 text-white rounded-full flex items-center justify-center text-xl font-bold transition-colors z-[100000]"
-        aria-label="Close fullscreen"
-      >
-        ×
-      </button>
-
       {/* Fullscreen iframe container */}
-      <div className="w-full h-full max-w-full max-h-full">
-        <iframe
-          src={src}
-          className="w-full h-full border-0"
-          style={{ background: "white" }}
-          title="Fullscreen iframe"
-        />
+      <div
+        className="w-full h-full max-w-full max-h-full flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Top bar keeps close button outside iframe layer (mobile safe) */}
+        <div
+          className="w-full bg-slate-800 border-b border-slate-600 p-2 shrink-0"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center gap-2">
+            <div className="flex gap-1">
+              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+              <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            </div>
+            <div className="flex gap-1">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  reloadIframe(src);
+                }}
+                className="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded flex items-center justify-center text-slate-300 cursor-pointer hover:text-slate-100 transition-colors"
+                aria-label="Refresh iframe"
+              >
+                <svg
+                  className="w-3 h-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+              </button>
+         
+            </div>
+            <div className="flex-1 bg-slate-700 rounded px-3 truncate py-1 text-xs text-slate-300 font-mono">
+              {(() => {
+                try {
+                  return src ? new URL(src).hostname : "localhost";
+                } catch (e) {
+                  console.log("URL parse error:", src, e);
+                  return "localhost";
+                }
+              })()}
+            </div>
+            <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClose();
+                }}
+                className="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded flex items-center justify-center text-slate-300 cursor-pointer hover:text-slate-100 transition-colors"
+                aria-label="Close fullscreen"
+              >
+                ×
+              </button>
+          </div>
+        </div>
+
+        <div className="flex-1 w-full" onClick={(e) => e.stopPropagation()}>
+          <iframe
+            src={src}
+            className="w-full h-full border-0"
+            style={{ background: "white" }}
+            title="Fullscreen iframe"
+          />
+        </div>
       </div>
     </motion.div>,
     document.body
@@ -178,6 +232,7 @@ function SlideshowInner({
 
   // in-view gating (disabled in modal)
   const rootRef = useRef(null);
+  const [scrollOnSlideChange, setScrollOnSlideChange] = useState(false);
   const [iframeHeightPx, setIframeHeightPx] = useState(null);
   const inView = useInView(rootRef, {
     threshold: inViewThreshold,
@@ -319,6 +374,46 @@ function SlideshowInner({
     typeof currentItem === "object" &&
     currentItem.type === "iframe";
 
+  const scrollToSlideshow = () => {
+    if (!rootRef.current) return;
+    rootRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
+  };
+
+  useEffect(() => {
+    if (!scrollOnSlideChange) return;
+
+    // Wait for render + layout before centering
+    const raf1 = requestAnimationFrame(() => {
+      const raf2 = requestAnimationFrame(() => {
+        scrollToSlideshow();
+        setScrollOnSlideChange(false);
+      });
+      return () => cancelAnimationFrame(raf2);
+    });
+
+    // Fallback in case layout settles late (iframe/image)
+    const timeoutId = setTimeout(() => {
+      scrollToSlideshow();
+      setScrollOnSlideChange(false);
+    }, 120);
+
+    return () => {
+      cancelAnimationFrame(raf1);
+      clearTimeout(timeoutId);
+    };
+  }, [idx, scrollOnSlideChange]);
+
+  // Ensure overlay shows when an iframe slide becomes active
+  useEffect(() => {
+    if (isCurrentSlideIframe) {
+      setIframeOverlayVisible(true);
+    }
+  }, [isCurrentSlideIframe, idx]);
+
   useEffect(() => {
     if (!isCurrentSlideIframe) return;
     if (!rootRef.current) return;
@@ -327,7 +422,7 @@ function SlideshowInner({
       if (!rootRef.current) return;
       const containerWidth = rootRef.current.offsetWidth;
       const designWidth = isMobile ? 375 : 1400;
-      const designHeight = isMobile ? 900 : 815;
+      const designHeight = isMobile ? 800 : 815;
       const scale = containerWidth / designWidth;
       setIframeHeightPx(designHeight * scale);
     };
@@ -407,11 +502,15 @@ function SlideshowInner({
               >
                 {/* Full overlay with centered badge */}
                 <motion.div
-                  className="hidden sm:flex absolute inset-0 z-20 items-center justify-center bg-black/40 backdrop-blur-[2px]"
+                  className="flex absolute inset-0 z-10 items-center justify-center bg-black/40 backdrop-blur-[2px]"
                   initial={{ opacity: 1 }}
                   animate={{ opacity: iframeOverlayVisible ? 1 : 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                   style={{ pointerEvents: iframeOverlayVisible ? "auto" : "none" }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIframeFullscreen(currentItem.src);
+                  }}
                 >
                   <div className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200/50 shadow-lg">
                     <svg
@@ -467,7 +566,21 @@ function SlideshowInner({
                             />
                           </svg>
                         </button>
-                        <button
+                   
+                      </div>
+                      <div className="flex-1 bg-slate-700 rounded px-3 truncate py-1 text-xs text-slate-300 font-mono">
+                        {(() => {
+                          try {
+                            return currentItem.src
+                              ? new URL(currentItem.src).hostname
+                              : "localhost";
+                          } catch (e) {
+                            console.log("URL parse error:", currentItem.src, e);
+                            return "localhost";
+                          }
+                        })()}
+                      </div>
+                      <button
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -490,19 +603,6 @@ function SlideshowInner({
                             />
                           </svg>
                         </button>
-                      </div>
-                      <div className="flex-1 bg-slate-700 rounded px-3 truncate py-1 text-xs text-slate-300 font-mono">
-                        {(() => {
-                          try {
-                            return currentItem.src
-                              ? new URL(currentItem.src).hostname
-                              : "localhost";
-                          } catch (e) {
-                            console.log("URL parse error:", currentItem.src, e);
-                            return "localhost";
-                          }
-                        })()}
-                      </div>
                     </div>
                   </div>
                   {/* Iframe scaled to container width with proportional height */}
@@ -576,6 +676,7 @@ function SlideshowInner({
               e.stopPropagation();
               console.log("Previous button clicked");
               prev();
+              setScrollOnSlideChange(true);
             }}
             aria-label="Previous image"
             className="group absolute -left-3 md:left-3 top-1/2 -translate-y-1/2 z-10
@@ -596,6 +697,7 @@ function SlideshowInner({
               e.stopPropagation();
               console.log("Next button clicked");
               next();
+              setScrollOnSlideChange(true);
             }}
             aria-label="Next image"
             className="group absolute -right-3 md:right-3 top-1/2 -translate-y-1/2 z-10

@@ -325,7 +325,7 @@ function HeroSection() {
           >
             <motion.img
               src={portraitGrayNoBg}
-              className="lg:h-[470px] md:!opacity-20 lg:!opacity-60 px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
+              className="lg:h-[470px] md:!opacity-20 lg:!opacity-80 px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
               alt="Portrait"
               variants={V.portraitImg}
               whileHover={{
@@ -348,7 +348,7 @@ function HeroSection() {
 
       {/* Scroll indicator (also controlled at top) */}
       <motion.div
-        className="flex lg:inline hidden justify-center absolute bottom-4 left-1/2 -translate-x-1/2 mx-auto"
+        className="flex lg:inline hidden justify-center absolute -bottom-6 left-1/2 -translate-x-1/2 mx-auto"
         variants={V.scrollIndicator}
         initial="hidden"
         animate="visible"

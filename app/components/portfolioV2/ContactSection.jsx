@@ -11,7 +11,7 @@ function ContactSection({ setOpen }) {
       <MotionSection
         as="footer"
         id="contact"
-        className="border-t scroll-mt-4 border-neutral-800 pt-16"
+        className="border-t scroll-mt-6 border-neutral-800 pt-16"
         delay={0.22}
       >
         <div className="flex flex-col md:flex-row justify-between md:items-end gap-8">
@@ -82,11 +82,11 @@ function ContactSection({ setOpen }) {
             />
           </div>
         </div>
-        <div className="text-right mt-10">
+        {/* <div className="text-right mt-10">
           <p className="text-xs text-neutral-600">
             (c) {now.getFullYear()} Jared. All rights reserved.
           </p>
-        </div>
+        </div> */}
       </MotionSection>
 
       {/* Modal rendered outside footer styling */}
