@@ -77,7 +77,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
         <ExperienceEntry
           role="Founder / Full-Stack Engineer"
           company="Splitify"
-          timeframe="July 2025 – Present"
+          timeframe="Jul 2025 – Present"
           highlights={[
             "production SaaS",
             "SMS reminders",
@@ -128,7 +128,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
         <ExperienceEntry
           role="Full-Stack Engineer"
           company="the85ers"
-          timeframe="Feb 2025  – Present"
+          timeframe="Feb 2025  – Jul 2025"
           description="Built a cinematic, motion-driven website for the U.S. Women's National Soccer Team in partnership with Adidas and professional sports brands."
           highlights={[
             "Framer Motion",
