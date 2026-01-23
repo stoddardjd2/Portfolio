@@ -203,7 +203,7 @@ function HeroSectionMobile() {
         >
             <motion.img
               src={portraitGrayNoBg}
-              className="lg:h-[470px]   px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
+              className="lg:h-[470px] !opacity-80  px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
               alt="Portrait"
               variants={V.portraitImg}
               whileHover={{
