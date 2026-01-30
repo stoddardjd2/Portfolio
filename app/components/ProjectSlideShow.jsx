@@ -46,7 +46,7 @@ function IframeFullscreenPortal({ src, onClose }) {
               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
             </div>
             <div className="flex gap-1">
-              <button
+      <button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -83,25 +83,25 @@ function IframeFullscreenPortal({ src, onClose }) {
             </div>
             <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onClose();
-                }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
                 className="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded flex items-center justify-center text-slate-300 cursor-pointer hover:text-slate-100 transition-colors"
-                aria-label="Close fullscreen"
-              >
-                ×
-              </button>
+        aria-label="Close fullscreen"
+      >
+        ×
+      </button>
           </div>
         </div>
 
         <div className="flex-1 w-full" onClick={(e) => e.stopPropagation()}>
-          <iframe
-            src={src}
-            className="w-full h-full border-0"
-            style={{ background: "white" }}
-            title="Fullscreen iframe"
-          />
+        <iframe
+          src={src}
+          className="w-full h-full border-0"
+          style={{ background: "white" }}
+          title="Fullscreen iframe"
+        />
         </div>
       </div>
     </motion.div>,
@@ -422,7 +422,7 @@ function SlideshowInner({
       if (!rootRef.current) return;
       const containerWidth = rootRef.current.offsetWidth;
       const designWidth = isMobile ? 375 : 1400;
-      const designHeight = isMobile ? 800 : 815;
+      const designHeight = isMobile ? 800 : 880;
       const scale = containerWidth / designWidth;
       setIframeHeightPx(designHeight * scale);
     };
@@ -580,7 +580,7 @@ function SlideshowInner({
                           }
                         })()}
                       </div>
-                      <button
+                        <button
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -603,8 +603,8 @@ function SlideshowInner({
                             />
                           </svg>
                         </button>
-                    </div>
-                  </div>
+                      </div>
+                      </div>
                   {/* Iframe scaled to container width with proportional height */}
                   <div className="relative w-full bg-white rounded-b-lg border border-slate-600 overflow-hidden shadow-2xl">
                     <ScaledIframe

@@ -1,0 +1,1 @@
+# figure out what this project does and technologies used. create a readme highlighting key achievements/technical acomplishments and any metrics. For resume/portfolio use.

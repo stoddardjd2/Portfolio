@@ -16,7 +16,7 @@ import splitifyPremiumPage from "../../assets/projects/splitifyPremiumPage.png?f
 import splitifyOnboardingPage from "../../assets/projects/splitifyOnboardingPage.png?format=jpg&quality=80&as=src";
 import ProjectCard from "./ProjectCard.jsx";
 
-import splitifyLogoImg from "../../assets/project-logos/splitifyLogo.png?format=jpg&quality=80&as=src";
+import splitifyLogoImg from "../../assets/project-logos/splitifyLogo.png?format=png&quality=80&as=src";
 import the85ersLogo from "../../assets/project-logos/85ersLogo.png?format=jpg&quality=80&as=src";
 import videoPromptGeneratorLogo from "../../assets/project-logos/videoPromptGenerator.png?format=png&quality=80&as=src";
 import analyticsDashboard from "../../assets/project-logos/analyticsDashboard.png?format=png&quality=80&as=src";
@@ -24,8 +24,10 @@ import scrollosLogo from "../../assets/project-logos/scrollosLogo.png?format=png
 import tiktokLogo from "../../assets/project-logos/tiktokLogo.png?format=png&quality=80&as=src";
 import mealPlannerLogo from "../../assets/project-logos/mealPlannerLogo.png?format=png&quality=80&as=src";
 import autoWebsiteGeneratorLogo from "../../assets/project-logos/autoWebsiteGeneratorLogo.png?format=png&quality=80&as=src";
+import smartPlatterLogo from "../../assets/project-logos/smartPlatter.svg?format=png&quality=80&as=src";
+import photoMaxLogo from "../../assets/project-logos/photoMaxLogo.png?format=png&quality=80&as=src";
 import ViewMore from "./ViewMore.jsx";
-
+import aiResumeOptimzerLogo from '../../assets/project-logos/ai-resume-optimizer.svg?format=png&quality=80&as=src';
 // eager = import immediately (recommended for small sets)
 const scrollosProjectImageList = Object.entries(
   import.meta.glob("/app/assets/projects/scrollos/*.{png,jpg,jpeg,webp}", {
@@ -72,7 +74,6 @@ import twilioIcon from "../../assets/project-integration-icons/twilio.svg?format
 import twilioColoredIcon from "../../assets/project-integration-icons/twilioColored.svg?format=png&quality=80&as=src";
 import serpapiIcon from "../../assets/project-integration-icons/serpapi.png?format=png&quality=80&as=src";
 import googleLightHouseIcon from "../../assets/project-integration-icons/googleLightHouse.png?format=png&quality=80&as=src";
-
 function ProjectsSection({ highlightsOn, setHighlightsOn }) {
   return (
     <MotionSection
@@ -86,6 +87,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       </h3>
 
       <ProjectCard
+        collapsedByDefault={false}
         title="AI Business Website Generator - Multi-Tenant SaaS Platform"
         description="AI-powered SaaS platform that generates, deploys, and hosts complete business websites using advanced web scraping, structured data enrichment, and aggregation from Google Places and Search APIs. Includes a custom CMS for users to make changes."
         // descriptionClassname = "!max-w-full"
@@ -220,6 +222,8 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       />
 
       <ProjectCard
+        collapsedByDefault={false}
+
         title="Splitify - AI Shared Expense Manager "
         description="Created a production SaaS adopted by real users that simplifies group finances through automated expense tracking, requests and reminders. Uses pay-by-link texts that require no account to make it as easy as possible to get paid back."
         icon={splitifyLogoImg}
@@ -329,6 +333,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       />
 
       <ProjectCard
+        collapsedByDefault={false}
         title="The 85ers - Cinematic Storytelling Platform"
         icon={the85ersLogo}
         integrationText={"Collaborated With"}
@@ -405,6 +410,159 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           },
         ]}
       />
+
+      <ProjectCard
+        collapsedByDefault={false}
+        title="PhotoMax - AI Dating Photo Generator"
+        icon={photoMaxLogo}
+        actions={[{
+          href: "https://www.photomax.me/",
+          target: "_blank",
+          label: "Live Demo",
+          icon: "lucide:external-link",
+        },]}
+        description="Production web app that converts user selfies into high-quality dating profile photos using the most advanced image generation models. Ran 100s of tests with multiple models and prompt variations to find the best results. Application includes a full checkout, generation, and delivery workflow. Users can make iterative prompt-based edits, and operational telemetry for cost and reliability."
+        badges={[
+          "Next.js (App Router)",
+          "React 19",
+          "Tailwind CSS",
+          "Node.js",
+          "OpenAI Images API",
+          "MongoDB",
+          "Cloudflare R2 (AWS SDK)",
+          "Stripe Checkout",
+          "Stripe Webhooks",
+          "Google Pixel",
+          "Reddit Pixel"
+        ]}
+        enableSlideshow={true}
+        slideshowAutoplay={false}
+        images={[{
+          type: "iframe",
+          src: "https://www.photomax.me",
+          title: "PhotoMax Live Demo",
+        }]}
+        slideFocus={[{ xPct: 0, yPct: 0 }]}
+        features={[
+          "Built an end-to-end checkout → generation → delivery pipeline using Stripe Checkout + webhooks, MongoDB persistence, and OpenAI image generation.",
+          "Implemented a resilient generation workflow with retry logic, error logging, and automated refunds on failures via Stripe.",
+          "Designed a multi-step UX (upload → style selection → generation → results) with client-side progress polling and a results gallery.",
+          "Integrated conversion tracking using Google and Reddit pixel/conversion tracking for paid acquisition measurement.",
+          "Added usage limits and basic account management to protect API costs and support repeat customers.",
+          "Stored user uploads and generated outputs in Cloudflare R2 via the AWS SDK, backing the results gallery and edit flow.",
+          "Logged generation metadata, token usage, and cost estimates in MongoDB for operational insight and debugging."
+        ]}
+        featureHighlights={[
+          "checkout → generation → delivery pipeline",
+          "Stripe Checkout + webhooks",
+          "MongoDB persistence",
+          "OpenAI image generation",
+          "retry logic",
+          "error logging",
+          "automated refunds",
+          "Stripe",
+          "multi-step UX (upload → style selection → generation → results)",
+          "client-side progress polling",
+          "results gallery",
+          "Google and Reddit pixel/conversion tracking",
+          "usage limits",
+          "account management",
+          "Cloudflare R2 via the AWS SDK",
+          "token usage",
+          "cost estimates",
+          "operational insight"
+        ]}
+      />
+
+
+      <ProjectCard
+        title="SmartPlatter - AI Meal Planner"
+        highlightsOn={highlightsOn}
+        setHighlightsOn={setHighlightsOn}
+        icon={smartPlatterLogo}
+        actions={[
+          {
+            href: "",
+            target: "_blank",
+            label: "Demo",
+            icon: "lucide:external-link"
+          }
+        ]}
+        description="Full-stack meal planning app that imports recipes from URLs, pasted text, or photos, generates a weekly plan and categorized shopping list. Generates images for all recipes and ingredients, calculates macros and costs for each meal and week."
+        badges={[
+          "React 19",
+          "Vite",
+          "Tailwind CSS",
+          "Framer Motion",
+          "@dnd-kit",
+          "Axios",
+          "Node.js",
+          "Express",
+          "MongoDB",
+          "Mongoose",
+          "JWT Auth",
+          "Google OAuth",
+          "OpenAI (gpt-4o-mini)",
+          "Fireworks AI",
+          "Spoonacular",
+          "Cloudflare R2",
+          "SSE"
+        ]}
+        enableSlideshow={true}
+        slideshowAutoplay={false}
+        images={[]}
+        slideFocus={[{ xPct: 0, yPct: 0 }]}
+        features={[
+          "Weekly drag-and-drop meal planner with calendar grouping, meal grouping, serving scaling, day-range planning, and automatic macro and cost calculations for each meal.",
+          "Multi-input recipe ingestion via Spoonacular URL extraction, paste-in text parsing using OpenAI models, and image-to-recipe extraction using OpenAI (gpt-4o-mini).",
+          "Ingredient normalization with unit conversion to a canonical base, enabling accurate list aggregation and computation of both macro nutrients and total cost per meal.",
+          "Auto-generated shopping lists grouped by grocery category across customizable date ranges with deduped ingredients, usage counts per recipe, detailed macro breakdowns, and total cost math per week and per meal.",
+          "AI image generation using Fireworks AI with Cloudflare R2 storage and Server-Sent Events updates for real-time image status.",
+          "Server-Sent Events streams long-running image generation status to the client with a 15s heartbeat interval to keep connections alive.",
+          "End-to-end auth using JWT + Google OAuth with protected routes and user-scoped data access.",
+          "AI usage tracking logs response time, tokens, and estimated cost for text parsing and image-to-recipe extraction flows.",
+          "PWA-ready frontend with manifest and service worker integration for an installable experience.",
+          "Created a way to explore and share recipes with friends on the app and save them to your own collection."
+        ]}
+        featureHighlights={[
+          "Weekly drag-and-drop meal planner",
+          "calendar grouping",
+          "serving scaling",
+          "day-range planning",
+          "Multi-input recipe ingestion",
+          "Spoonacular URL extraction",
+          "paste-in text parsing",
+          "image-to-recipe extraction",
+          "Ingredient normalization",
+          "unit conversion to a canonical base",
+          "Auto-generated shopping lists",
+          "grouped by grocery category",
+          "7-day ranges",
+          "deduped ingredients",
+          "usage counts per recipe",
+          "total cost math",
+          "AI image generation",
+          "Fireworks AI",
+          "Cloudflare R2 storage",
+          "Server-Sent Events updates",
+          "15s heartbeat interval",
+          "JWT + Google OAuth",
+          "protected routes",
+          "user-scoped data access",
+          "AI usage tracking",
+          "response time",
+          "tokens",
+          "estimated cost",
+          "capped at 100 items per request",
+          "up to 3 images per request",
+          "8MB per image",
+          "2 uploads per user",
+          "PWA-ready frontend",
+          "manifest",
+          "service worker integration"
+        ]}
+      />
+
 
       <ProjectCard
         title="Website Lead Finder - Lead Generation & Outreach Automation Platform"
@@ -540,110 +698,166 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         showAllImages={false}
         enableSlideshow={false}
       />
-      <div className="grid md:grid-cols-2 gap-x-6">
-        <ProjectCard
-          title="Analytics Dashboard"
-          icon={analyticsDashboard}
-          iconDisableRounding={true}
-          highlightsOn={highlightsOn}
-          setHighlightsOn={setHighlightsOn}
-          description="Internal analytics system for measuring Splitify's revenue health. Features metrics for churn, engagement, and server-side pagination with aggregation pipeline optimizations."
-          badges={[
-            "React 19",
-            "React Router",
-            "Node.js",
-            "Express.js",
-            "MongoDB",
-            "Mongoose",
-            "Tailwind",
-            "OAuth 2.0",
-            "RBAC",
-            "JWT Auth",
-            "Google Analytics",
-          ]}
-          integrations={[
-            { name: "Splitify", logo: splitifyLogoImg, rounded: false },
-          ]}
-          features={[
-            "Advanced user search and filtering by name, email, plan, role, activity status, and lifecycle stage.",
-            "Messaging analytics with per-user, per-plan, and time-window breakdowns for texts and emails.",
-            "Cost tracking and forecasting system for SMS usage with daily, weekly, and monthly projections.",
-            "Top sender and cost attribution tables to identify high-usage users and potential abuse.",
-            "Plan-level cost analysis to evaluate free vs paid user impact on infrastructure spend.",
-            "Live request and message inspection for operational debugging and customer support.",
-            "Server-enforced RBAC ensuring sensitive analytics and operational data are accessible only to authorized roles.",
-          ]}
-          featureHighlights={[
-            "search",
-            "filtering",
-            "lifecycle stage",
-            "Messaging analytics",
-            "Cost tracking",
-            "forecasting",
-            "projections",
-            "cost attribution",
-            "abuse",
-            "RBAC",
-            "authorized roles",
-            "operational debugging",
-            "customer support",
-          ]}
-        />
-        <ProjectCard
-          title="Video Prompt Generator"
-          description="Built an internal automation tool that generates TikTok-ready scripts and AI video prompts using structured product context, pain-point libraries, hook templates, and strict scene guardrails."
-          icon={videoPromptGeneratorLogo}
-          iconDisableRounding={true}
-          images={[]} // optional: add screenshots later
-          showAllImages={false}
-          enableSlideshow={false}
-          highlightsOn={highlightsOn}
-          setHighlightsOn={setHighlightsOn}
-          integrations={[
-            { name: "ChatGPT", logo: chatGptIcon, className: "invert" },
-            { name: "TikTok", logo: tiktokLogo, rounded: false },
-          ]}
-          badges={[
-            "React 19",
-            "Tailwind",
-            "Node.js",
-            "Express.js",
-            "ChatGPT API",
-            "TikTok API",
-            "Prompt Engineering",
-            "AI Workflows",
-            "MongoDB",
-            "Mongoose",
-            "OAuth 2.0",
-            "RBAC",
-            "JWT Auth",
-          ]}
-          features={[
-            "Multi-step prompt engine that converts product context and pain points into TikTok-ready scripts.",
-            "Generates structured JSON prompts optimized for AI video tools like Sora, Veo, and Pika.",
-            "Built-in creative guardrails to ensure realistic, speakable, and policy-safe outputs.",
-            "Reusable libraries for hooks, pain points, characters, cameos, and scene framing.",
-            "Automatically produces captions, pacing notes, beat markers, and camera direction.",
-            "Designed for rapid experimentation across products, campaigns, and creators.",
-          ]}
-          featureHighlights={[
-            "Multi-step",
-            "prompt engine",
-            "TikTok-ready",
-            "structured JSON",
-            "Sora",
-            "Veo",
-            "Pika",
-            "guardrails",
-            "policy-safe",
-            "Reusable libraries",
-            "captions",
-            "beat markers",
-            "camera direction",
-            "experimentation",
-          ]}
-        />
-      </div>
+
+      <ProjectCard
+        title="AI Resume Optimizer & Job Tracker"
+        description="Built a full-stack tool that analyzes resumes against job descriptions to assess candidate fit, optimize ATS keywords, and generate tailored summaries. Enables selective improvements, polished PDF exports, and job application tracking with intelligent duplicate detection and analytics."
+        icon={aiResumeOptimzerLogo} // swap in when ready
+        iconDisableRounding={false}
+        highlightsOn={highlightsOn}
+        setHighlightsOn={setHighlightsOn}
+
+        integrations={[
+          { name: "OpenAI", logo: chatGptIcon, className: "invert" },
+        ]}
+        badges={[
+          "React 19",
+          "Next.js 16",
+          "Node.js",
+          "Express.js",
+          "MongoDB",
+          "Mongoose",
+          "Tailwind CSS",
+          "Framer Motion",
+          "OpenAI GPT-5.2",
+          "Puppeteer",
+          "cheerio",
+        ]}
+        features={[
+          "Built an AI-powered resume optimization system using GPT models to generate ATS-aligned summaries, keyword recommendations, and role-specific content from job descriptions.",
+          "Implemented job description ingestion from raw text and URLs using Axios + Cheerio, extracting structured metadata.",
+          "Designed a real-time resume editor with shared HTML templates powering both live preview and server-side PDF export via Puppeteer.",
+          "Developed a keyword scoring pipeline combining AI relevance scores with candidate-skill matching to surface missing keywords.",
+          "Built persistent job tracking with MongoDB, including URL-based duplicate prevention and day-based application filtering.",
+          "Implemented usage telemetry and cost tracking for AI calls, exposing token usage and estimated spend in analytics dashboards.",
+        ]}
+        featureHighlights={[
+          "AI-powered resume optimization system",
+          "GPT models",
+          "ATS-aligned summaries",
+          "keyword recommendations",
+          "job description ingestion",
+          "Axios + Cheerio",
+          "structured metadata",
+          "real-time resume editor",
+          "shared HTML templates",
+          "live preview",
+          "PDF export",
+          "Puppeteer",
+          "keyword scoring pipeline",
+          "candidate-skill matching",
+          "job tracking",
+          "MongoDB",
+          "URL-based duplicate prevention",
+          "usage telemetry",
+          "cost tracking",
+          "token usage",
+          "analytics dashboards",
+        ]}
+      />
+
+      <ProjectCard
+        title="Analytics Dashboard"
+        icon={analyticsDashboard}
+        iconDisableRounding={true}
+        highlightsOn={highlightsOn}
+        setHighlightsOn={setHighlightsOn}
+        description="Internal analytics system for measuring Splitify's revenue health. Features metrics for churn, engagement, and server-side pagination with aggregation pipeline optimizations."
+        badges={[
+          "React 19",
+          "React Router",
+          "Node.js",
+          "Express.js",
+          "MongoDB",
+          "Mongoose",
+          "Tailwind",
+          "OAuth 2.0",
+          "RBAC",
+          "JWT Auth",
+          "Google Analytics",
+        ]}
+        integrations={[
+          { name: "Splitify", logo: splitifyLogoImg, rounded: false },
+        ]}
+        features={[
+          "Advanced user search and filtering by name, email, plan, role, activity status, and lifecycle stage.",
+          "Messaging analytics with per-user, per-plan, and time-window breakdowns for texts and emails.",
+          "Cost tracking and forecasting system for SMS usage with daily, weekly, and monthly projections.",
+          "Top sender and cost attribution tables to identify high-usage users and potential abuse.",
+          "Plan-level cost analysis to evaluate free vs paid user impact on infrastructure spend.",
+          "Live request and message inspection for operational debugging and customer support.",
+          "Server-enforced RBAC ensuring sensitive analytics and operational data are accessible only to authorized roles.",
+        ]}
+        featureHighlights={[
+          "search",
+          "filtering",
+          "lifecycle stage",
+          "Messaging analytics",
+          "Cost tracking",
+          "forecasting",
+          "projections",
+          "cost attribution",
+          "abuse",
+          "RBAC",
+          "authorized roles",
+          "operational debugging",
+          "customer support",
+        ]}
+      />
+      <ProjectCard
+        title="Video Prompt Generator"
+        description="Built an internal automation tool that generates TikTok-ready scripts and AI video prompts using structured product context, pain-point libraries, hook templates, and strict scene guardrails."
+        icon={videoPromptGeneratorLogo}
+        iconDisableRounding={true}
+        images={[]} // optional: add screenshots later
+        showAllImages={false}
+        enableSlideshow={false}
+        highlightsOn={highlightsOn}
+        setHighlightsOn={setHighlightsOn}
+        integrations={[
+          { name: "ChatGPT", logo: chatGptIcon, className: "invert" },
+          { name: "TikTok", logo: tiktokLogo, rounded: false },
+        ]}
+        badges={[
+          "React 19",
+          "Tailwind",
+          "Node.js",
+          "Express.js",
+          "ChatGPT API",
+          "TikTok API",
+          "Prompt Engineering",
+          "AI Workflows",
+          "MongoDB",
+          "Mongoose",
+          "OAuth 2.0",
+          "RBAC",
+          "JWT Auth",
+        ]}
+        features={[
+          "Multi-step prompt engine that converts product context and pain points into TikTok-ready scripts.",
+          "Generates structured JSON prompts optimized for AI video tools like Sora, Veo, and Pika.",
+          "Built-in creative guardrails to ensure realistic, speakable, and policy-safe outputs.",
+          "Reusable libraries for hooks, pain points, characters, cameos, and scene framing.",
+          "Automatically produces captions, pacing notes, beat markers, and camera direction.",
+          "Designed for rapid experimentation across products, campaigns, and creators.",
+        ]}
+        featureHighlights={[
+          "Multi-step",
+          "prompt engine",
+          "TikTok-ready",
+          "structured JSON",
+          "Sora",
+          "Veo",
+          "Pika",
+          "guardrails",
+          "policy-safe",
+          "Reusable libraries",
+          "captions",
+          "beat markers",
+          "camera direction",
+          "experimentation",
+        ]}
+      />
 
       <ProjectCard
         title="Scrollos - Internal Catalog Platform"
@@ -655,6 +869,8 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
             icon: "lucide:external-link",
           },
         ]}
+        collapsible={true}
+        collapsedByDefault={true}
         highlightsOn={highlightsOn}
         setHighlightsOn={setHighlightsOn}
         icon={scrollosLogo} // replace with your Scrollos mark or generic catalog icon
@@ -716,8 +932,8 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       />
 
       <ViewMore
-        collapsedLabel={"View Older Projects"}
-        expandedLabel={"Hide Older Projects"}
+        collapsedLabel={"View Old Projects"}
+        expandedLabel={"Hide Old Projects"}
         items={[
           <ProjectCard
             title="Smart Meal Planner — Weekly Planning & Budgeting Tool"
@@ -763,7 +979,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
             ]}
           />,
 
-          <div className="grid md:grid-cols-2 gap-x-6">
+          <>
             <ProjectCard
               title="Collaborative To-Do List"
               description="A simple full-stack to-do list application with user authentication and a backend for persisting and retrieving notes across sessions."
@@ -884,7 +1100,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
                 "API responses",
               ]}
             />
-          </div>,
+          </>,
         ]}
       />
     </MotionSection>

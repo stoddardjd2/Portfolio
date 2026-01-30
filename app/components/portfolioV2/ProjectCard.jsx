@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import ProjectSlideshow from "../ProjectSlideShow";
 import MotionSection from "./MotionSection.jsx";
 
@@ -33,6 +34,8 @@ export default function ProjectCard({
   setHighlightsOn,
   highlightsOn,
   layout = "stack",
+  collapsible = true,
+  collapsedByDefault = true,
 }) {
   const imageList = useMemo(
     () => (images?.length ? images : imageUrl ? [imageUrl] : []),
@@ -41,6 +44,9 @@ export default function ProjectCard({
 
   const [activeIdx, setActiveIdx] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(
+    collapsible ? collapsedByDefault : false
+  );
 
   const effectiveHighlights =
     highlightsOn && featureHighlights?.length ? featureHighlights : [];
@@ -48,6 +54,14 @@ export default function ProjectCard({
   useEffect(() => {
     if (activeIdx >= imageList.length) setActiveIdx(0);
   }, [imageList.length, activeIdx]);
+
+  useEffect(() => {
+    if (!collapsible) {
+      setIsCollapsed(false);
+      return;
+    }
+    setIsCollapsed(collapsedByDefault);
+  }, [collapsible, collapsedByDefault]);
 
   useEffect(() => {
     if (!enableSlideshow) return;
@@ -81,6 +95,7 @@ export default function ProjectCard({
   const hasBadges = badges.length > 0;
   const hasActions = actions.length > 0;
   const hasIntegrations = integrations.length > 0;
+  const showCollapseToggle = collapsible;
 
   const canSlide = enableSlideshow && imageList.length > 1;
   const goPrev = () =>
@@ -148,7 +163,7 @@ export default function ProjectCard({
       >
         <div className="p-4 sm:p-5 md:p-6 relative">
           {/* Header row */}
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
+            <div className={`flex flex-col md:flex-row md:items-start justify-between gap-4 `}>
             <div className="">
               {tag?.text && (
                 <div className="mb-4">
@@ -221,8 +236,38 @@ export default function ProjectCard({
               )}
             </div>
 
-            {hasActions && (
+            {(showCollapseToggle) && (
               <div className="flex gap-3">
+                {showCollapseToggle && (
+                   <button
+                    type="button"
+                    onClick={() => setIsCollapsed((v) => !v)}
+                     className="group min-w-[121px] h-9 px-3 whitespace-nowrap rounded border border-neutral-700 text-neutral-300 text-xs font-medium flex items-center gap-2 transition-colors touch-manipulation select-none md:hover:border-neutral-500 md:hover:text-white active:border-neutral-500 active:text-white focus-visible:border-neutral-500 focus-visible:text-white"
+                    aria-expanded={!isCollapsed}
+                  >
+                     <motion.svg
+                       width="16"
+                       height="16"
+                       viewBox="0 0 24 24"
+                       fill="none"
+                       aria-hidden
+                       animate={{ rotate: isCollapsed ? 0 : 180 }}
+                       transition={{ duration: 0.3, ease: "easeOut" }}
+                       className="inline-block  align-middle leading-none text-[16px] text-neutral-400 group-hover:text-white"
+                     >
+                       <path
+                         d="M6 9l6 6 6-6"
+                         stroke="currentColor"
+                         strokeWidth="2"
+                         strokeLinecap="round"
+                         strokeLinejoin="round"
+                       />
+                     </motion.svg>
+                    <span className="w-full mx-auto">
+                    {isCollapsed ? "View Details" : "Collapse"}
+                    </span>
+                  </button>
+                )}
                 {actions.map((a, idx) => (
                   <a
                     key={a.href + idx}
@@ -234,7 +279,7 @@ export default function ProjectCard({
                     }
                     className={
                       a.className ||
-                      "h-9 px-4 whitespace-nowrap rounded border border-neutral-700 hover:border-neutral-500 text-neutral-300 hover:text-white text-xs font-medium flex items-center gap-2 transition-colors"
+                      "h-9 px-4 whitespace-nowrap rounded border border-neutral-700 text-neutral-300 text-xs font-medium flex items-center gap-2 transition-colors touch-manipulation select-none md:hover:border-neutral-500 md:hover:text-white active:border-neutral-500 active:text-white focus-visible:border-neutral-500 focus-visible:text-white"
                     }
                   >
                     {a.icon && (
@@ -252,121 +297,133 @@ export default function ProjectCard({
           </div>
 
           {/* Main content */}
-          {layout === "split" ? (
-            <div className="grid md:grid-cols-2 gap-8 lg:gap-12 mt-8">
-              <div>
-                {hasFeatures && (
-                  <>
-                    <h4 className="text-xs font-medium text-white uppercase tracking-wider mb-4 border-b border-neutral-800 pb-2">
-                      Key Features Built
-                    </h4>
+          <AnimatePresence initial={false}>
+            {!isCollapsed && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              style={{ overflow: "hidden" }}
+            >
+              {layout === "split" ? (
+                <div className="grid md:grid-cols-2 gap-8 lg:gap-12 mt-8">
+                  <div>
+                    {hasFeatures && (
+                      <>
+                        <h4 className="text-xs mt-6 font-medium text-white uppercase tracking-wider mb-4 border-b border-neutral-800 pb-2">
+                          Key Features Built
+                        </h4>
 
-                    <ul className="space-y-3">
-                      {features.map((f, idx) => {
-                        const props = typeof f === "string" ? { text: f } : f;
-                        return (
-                          <FeatureItem
-                            key={idx}
-                            {...props}
-                            highlights={effectiveHighlights}
-                          />
-                        );
-                      })}
-                    </ul>
-                  </>
-                )}
-              </div>
-
-              <div>
-                {hasImages && (
-                  <div
-                    className={`${enableSlideshow ? "overflow-visible" : "overflow-hidden"} rounded-lg border border-neutral-800 bg-neutral-950`}
-                    onMouseEnter={() => setIsHovering(true)}
-                    onMouseLeave={() => setIsHovering(false)}
-                  >
-                    {renderMedia()}
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : (
-            <>
-              {hasImages && (
-                <div
-                  className={`mt-8 ${enableSlideshow ? "overflow-visible" : "overflow-hidden"} rounded-lg border border-neutral-800 bg-neutral-950`}
-                  onMouseEnter={() => setIsHovering(true)}
-                  onMouseLeave={() => setIsHovering(false)}
-                >
-                  {renderMedia()}
-                </div>
-              )}
-
-              {hasFeatures && (
-                <div className={`${imageList.length > 0 ? "mt-6" : ""}`}>
-                  <div className="flex items-baseline justify-between mb-4 border-b border-neutral-800 pb-2">
-                    <h4 className="text-xs font-medium text-white uppercase tracking-wider ">
-                      Key Features Built
-                    </h4>
-
-                    {featureHighlights?.length && (
-                      <div className="flex items-center gap-3">
-                        {featureHighlights?.length > 0 && (
-                          <button
-                            type="button"
-                            onClick={() => setHighlightsOn((v) => !v)}
-                            className={
-                              "h-9 px-3 whitespace-nowrap rounded border text-xs font-medium flex items-center gap-2 transition-colors " +
-                              (highlightsOn
-                                ? "border-neutral-700 text-neutral-200 hover:border-neutral-500"
-                                : "border-neutral-800 text-neutral-400 hover:border-neutral-600")
-                            }
-                            aria-pressed={highlightsOn}
-                          >
-                            <span
-                              className="iconify inline-block align-middle leading-none text-[16px]"
-                              data-icon={
-                                highlightsOn
-                                  ? "lucide:highlighter"
-                                  : "lucide:highlighter"
-                              }
-                              aria-hidden="true"
-                            />
-                            {highlightsOn ? "Highlights On" : "Highlights Off"}
-                          </button>
-                        )}
-                      </div>
+                        <ul className="space-y-3">
+                          {features.map((f, idx) => {
+                            const props = typeof f === "string" ? { text: f } : f;
+                            return (
+                              <FeatureItem
+                                key={idx}
+                                {...props}
+                                highlights={effectiveHighlights}
+                              />
+                            );
+                          })}
+                        </ul>
+                      </>
                     )}
                   </div>
 
-                  <ul className="space-y-3">
-                    {features.map((f, idx) => {
-                      const props = typeof f === "string" ? { text: f } : f;
-                      return (
-                        <FeatureItem
-                          key={idx}
-                          {...props}
-                          highlights={effectiveHighlights}
-                        />
-                      );
-                    })}
-                  </ul>
+                  <div>
+                    {hasImages && (
+                      <div
+                        className={`${enableSlideshow ? "overflow-visible" : "overflow-hidden"} rounded-lg border border-neutral-800 bg-neutral-950`}
+                        onMouseEnter={() => setIsHovering(true)}
+                        onMouseLeave={() => setIsHovering(false)}
+                      >
+                        {renderMedia()}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {hasImages && (
+                    <div
+                      className={`mt-8 ${enableSlideshow ? "overflow-visible" : "overflow-hidden"} rounded-lg border border-neutral-800 bg-neutral-950`}
+                      onMouseEnter={() => setIsHovering(true)}
+                      onMouseLeave={() => setIsHovering(false)}
+                    >
+                      {renderMedia()}
+                    </div>
+                  )}
+
+                  {hasFeatures && (
+                    <div className={`${imageList.length > 0 ? "mt-6" : ""}`}>
+                      <div className="flex items-baseline justify-between mb-4 border-b border-neutral-800 pb-2">
+                        <h4 className="text-xs mt-6 font-medium text-white uppercase tracking-wider ">
+                          Key Features Built
+                        </h4>
+
+                        {featureHighlights?.length && (
+                          <div className="flex items-center gap-3">
+                            {featureHighlights?.length > 0 && (
+                              <button
+                                type="button"
+                                onClick={() => setHighlightsOn((v) => !v)}
+                                className={
+                                  "h-9 px-3 whitespace-nowrap rounded border text-xs font-medium flex items-center gap-2 transition-colors " +
+                                  (highlightsOn
+                                    ? "border-neutral-700 text-neutral-200 hover:border-neutral-500"
+                                    : "border-neutral-800 text-neutral-400 hover:border-neutral-600")
+                                }
+                                aria-pressed={highlightsOn}
+                              >
+                                <span
+                                  className="iconify inline-block align-middle leading-none text-[16px]"
+                                  data-icon={
+                                    highlightsOn
+                                      ? "lucide:highlighter"
+                                      : "lucide:highlighter"
+                                  }
+                                  aria-hidden="true"
+                                />
+                                {highlightsOn ? "Highlights On" : "Highlights Off"}
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      <ul className="space-y-3">
+                        {features.map((f, idx) => {
+                          const props = typeof f === "string" ? { text: f } : f;
+                          return (
+                            <FeatureItem
+                              key={idx}
+                              {...props}
+                              highlights={effectiveHighlights}
+                            />
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {hasBadges && (
+                <div className="flex flex-wrap gap-2 mt-6">
+                  {badges.map((badge) => (
+                    <span
+                      key={badge}
+                      className="px-2 py-0.5 text-[10px] text-neutral-500 border border-neutral-800 rounded"
+                    >
+                      {badge}
+                    </span>
+                  ))}
                 </div>
               )}
-            </>
-          )}
-
-          {hasBadges && (
-            <div className="flex flex-wrap gap-2 mt-6">
-              {badges.map((badge) => (
-                <span
-                  key={badge}
-                  className="px-2 py-0.5 text-[10px] text-neutral-500 border border-neutral-800 rounded"
-                >
-                  {badge}
-                </span>
-              ))}
-            </div>
-          )}
+            </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </MotionSection>
