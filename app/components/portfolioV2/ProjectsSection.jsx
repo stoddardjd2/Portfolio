@@ -421,7 +421,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           label: "Live Demo",
           icon: "lucide:external-link",
         },]}
-        description="Production web app that converts user selfies into high-quality dating profile photos using the most advanced image generation models. Ran 100s of tests with multiple models and prompt variations to find the best results. Application includes a full checkout, generation, and delivery workflow. Users can make iterative prompt-based edits, and operational telemetry for cost and reliability."
+        description="Production web app that converts user selfies into high-quality dating profile photos using the most advanced image generation models. Ran 100s of tests with multiple models and prompt variations to find the best results. Application includes a full checkout, generation, and delivery workflow. Users can make iterative prompt-based edits."
         badges={[
           "Next.js (App Router)",
           "React 19",
