@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import MotionSection from "./MotionSection.jsx";
-import portraitGrayNoBg from "@/assets/heavily-edited-fotor-glasses-white-cropped.png";
+import portraitGrayNoBg from "@/assets/portrait/professional-portrait-glasses-no-bg.png?format=png&quality=80&as=src";
 import downloadResume from "./resumeDownloadHelper.js";
 
 function ContactSection({ setOpen }) {
@@ -77,7 +77,7 @@ function ContactSection({ setOpen }) {
               </div>
             </div>
             <img
-              className="sm:h-[230px] mt-auto mx-auto scale-x-[-1]  px-[clamp(.1rem,5vw,12.5rem)] lg:px-0"
+              className="sm:h-[230px] mt-auto mx-auto opacity-80 !grayscale contrast-160 brightness-100  sm:px-[clamp(.1rem,5vw,12.5rem)] lg:px-0"
               src={portraitGrayNoBg}
             />
           </div>

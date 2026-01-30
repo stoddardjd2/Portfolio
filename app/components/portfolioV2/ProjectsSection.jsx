@@ -1,39 +1,39 @@
 import React, { lazy, useState } from "react";
 import MotionSection from "./MotionSection.jsx";
-import the85ersHomePageImg from "../../assets/projects/85ersHomePage.png?format=jpg&quality=80&as=src";
-import the85erContactUsPageImg from "../../assets/projects/85ersContactPage.png?format=jpg&quality=80&as=src";
+import the85ersHomePageImg from "../../assets/projects/85ersHomePage.png?format=webp&quality=70&as=src";
+import the85erContactUsPageImg from "../../assets/projects/85ersContactPage.png?format=webp&quality=70&as=src";
 
-import the85erEventsImg from "../../assets/projects/85ersEvents.png?format=jpg&quality=80&as=src";
-import the85erTeamImg from "../../assets/projects/85ersTeam.png?format=jpg&quality=80&as=src";
-import the85erOurStoryV2Img from "../../assets/projects/85ersOurStory2.png?format=jpg&quality=80&as=src";
+import the85erEventsImg from "../../assets/projects/85ersEvents.png?format=webp&quality=70&as=src";
+import the85erTeamImg from "../../assets/projects/85ersTeam.png?format=webp&quality=70&as=src";
+import the85erOurStoryV2Img from "../../assets/projects/85ersOurStory2.png?format=webp&quality=70&as=src";
 
-import the85erOurStoryPageImg from "../../assets/projects/85ersOurStoryPage.png?format=jpg&quality=80&as=src";
-import splitifyHomePageImg from "../../assets/projects/splitifyHomePage.png?format=jpg&quality=80&as=src";
-import splitifyPayPageImg from "../../assets/projects/splitifyPayPage.png?format=jpg&quality=80&as=src";
-import splitifyHomePageImg2 from "../../assets/projects/splitifyHomePage2.png?format=jpg&quality=80&as=src";
-import splitifyDashboardPageImg from "../../assets/projects/splitifyDashboardPage.png?format=jpg&quality=80&as=src";
-import splitifyPremiumPage from "../../assets/projects/splitifyPremiumPage.png?format=jpg&quality=80&as=src";
-import splitifyOnboardingPage from "../../assets/projects/splitifyOnboardingPage.png?format=jpg&quality=80&as=src";
+import the85erOurStoryPageImg from "../../assets/projects/85ersOurStoryPage.png?format=webp&quality=70&as=src";
+import splitifyHomePageImg from "../../assets/projects/splitifyHomePage.png?format=webp&quality=70&as=src";
+import splitifyPayPageImg from "../../assets/projects/splitifyPayPage.png?format=webp&quality=70&as=src";
+import splitifyHomePageImg2 from "../../assets/projects/splitifyHomePage2.png?format=webp&quality=70&as=src";
+import splitifyDashboardPageImg from "../../assets/projects/splitifyDashboardPage.png?format=webp&quality=70&as=src";
+import splitifyPremiumPage from "../../assets/projects/splitifyPremiumPage.png?format=webp&quality=70&as=src";
+import splitifyOnboardingPage from "../../assets/projects/splitifyOnboardingPage.png?format=webp&quality=70&as=src";
 import ProjectCard from "./ProjectCard.jsx";
 
-import splitifyLogoImg from "../../assets/project-logos/splitifyLogo.png?format=png&quality=80&as=src";
-import the85ersLogo from "../../assets/project-logos/85ersLogo.png?format=jpg&quality=80&as=src";
-import videoPromptGeneratorLogo from "../../assets/project-logos/videoPromptGenerator.png?format=png&quality=80&as=src";
-import analyticsDashboard from "../../assets/project-logos/analyticsDashboard.png?format=png&quality=80&as=src";
-import scrollosLogo from "../../assets/project-logos/scrollosLogo.png?format=png&quality=80&as=src";
-import tiktokLogo from "../../assets/project-logos/tiktokLogo.png?format=png&quality=80&as=src";
-import mealPlannerLogo from "../../assets/project-logos/mealPlannerLogo.png?format=png&quality=80&as=src";
-import autoWebsiteGeneratorLogo from "../../assets/project-logos/autoWebsiteGeneratorLogo.png?format=png&quality=80&as=src";
-import smartPlatterLogo from "../../assets/project-logos/smartPlatter.svg?format=png&quality=80&as=src";
-import photoMaxLogo from "../../assets/project-logos/photoMaxLogo.png?format=png&quality=80&as=src";
+import splitifyLogoImg from "../../assets/project-logos/splitifyLogo.png?format=webp&quality=70&as=src";
+import the85ersLogo from "../../assets/project-logos/85ersLogo.png?format=webp&quality=70&as=src";
+import videoPromptGeneratorLogo from "../../assets/project-logos/videoPromptGenerator.svg?format=webp&quality=70&as=src";
+import analyticsDashboard from "../../assets/project-logos/analyticsDashboard.svg?format=webp&quality=70&as=src";
+import scrollosLogo from "../../assets/project-logos/scrollosLogo.svg?format=webp&quality=70&as=src";
+import tiktokLogo from "../../assets/project-logos/tiktokLogo.png?format=webp&quality=70&as=src";
+import mealPlannerLogo from "../../assets/project-logos/mealPlannerLogo.png?format=webp&quality=70&as=src";
+import autoWebsiteGeneratorLogo from "../../assets/project-logos/autoWebsiteGeneratorLogo.png?format=webp&quality=70&as=src";
+import smartPlatterLogo from "../../assets/project-logos/smartPlatter.svg?format=webp&quality=70&as=src";
+import photoMaxLogo from "../../assets/project-logos/photoMaxLogo.png?format=webp&quality=70&as=src";
 import ViewMore from "./ViewMore.jsx";
-import aiResumeOptimzerLogo from '../../assets/project-logos/ai-resume-optimizer.svg?format=png&quality=80&as=src';
+import aiResumeOptimzerLogo from '../../assets/project-logos/ai-resume-optimizer.svg?format=webp&quality=70&as=src';
 // eager = import immediately (recommended for small sets)
 const scrollosProjectImageList = Object.entries(
   import.meta.glob("/app/assets/projects/scrollos/*.{png,jpg,jpeg,webp}", {
     eager: true,
     import: "default",
-    query: "?format=png&quality=80&as=src",
+    query: "?format=webp&quality=70&as=src",
   })
 )
   .sort(([a], [b]) => a.localeCompare(b))
@@ -45,7 +45,7 @@ const autoWebsiteGenreratorProjectImageList = Object.entries(
     {
       eager: true,
       import: "default",
-      query: "?format=png&quality=80&as=src",
+      query: "?format=webp&quality=70&as=src",
     }
   )
 )
@@ -55,25 +55,29 @@ const autoWebsiteGenreratorProjectImageList = Object.entries(
 import plaidIcon from "../../assets/project-integration-icons/plaid.png";
 // import plaidIcon from "../../assets/project-integration-icons/plaid-full.png";
 // import telnyxIcon from "../../assets/project-integration-icons/telnyx.png";
-import telnyxIcon from "../../assets/project-integration-icons/telnyx-icon.png?format=png&quality=80&as=src";
-import telnyxColoredIcon from "../../assets/project-integration-icons/telnyxColored.png?format=png&quality=80&as=src";
-import stripeIcon from "../../assets/project-integration-icons/Stripe.svg?format=png&quality=80&as=src";
-import chatGptIcon from "../../assets/project-integration-icons/chatGpt.png?format=png&quality=80&as=src";
-import venmoIcon from "../../assets/project-integration-icons/venmo.svg?format=jpg&quality=80&as=src";
-import storiedSportsIcon from "../../assets/project-integration-icons/storiedSports.png?format=png&quality=80&as=src";
-import adidasIcon from "../../assets/project-integration-icons/adidas.svg?format=jpg&quality=80&as=src";
-import theRealestIcon from "../../assets/project-integration-icons/theRealest.png?format=jpg&quality=80&as=src";
-import seattleReignFcIcon from "../../assets/project-integration-icons/seattleReignFc.png?format=jpg&quality=80&as=src";
-import uswntIcon from "../../assets/project-integration-icons/uswnt.png?format=jpg&quality=80&as=src";
-import googleSearchIcon from "../../assets/project-integration-icons/googleSearch.svg?format=jpg&quality=80&as=src";
-import googlePlacesIcon from "../../assets/project-integration-icons/googlePlaces.svg?format=jpg&quality=80&as=src";
-import fireworksAiIcon from "../../assets/project-integration-icons/fireworksAI.png?format=png&quality=80&as=src";
-import pexelsIcon from "../../assets/project-integration-icons/pexels.png?format=png&quality=80&as=src";
-import cloudflareIcon from "../../assets/project-integration-icons/cloudflare.svg?format=png&quality=80&as=src";
-import twilioIcon from "../../assets/project-integration-icons/twilio.svg?format=png&quality=80&as=src";
-import twilioColoredIcon from "../../assets/project-integration-icons/twilioColored.svg?format=png&quality=80&as=src";
-import serpapiIcon from "../../assets/project-integration-icons/serpapi.png?format=png&quality=80&as=src";
-import googleLightHouseIcon from "../../assets/project-integration-icons/googleLightHouse.png?format=png&quality=80&as=src";
+import telnyxIcon from "../../assets/project-integration-icons/telnyx-icon.png?format=webp&quality=70&as=src";
+import telnyxColoredIcon from "../../assets/project-integration-icons/telnyxColored.png?format=webp&quality=70&as=src";
+import stripeIcon from "../../assets/project-integration-icons/Stripe.svg?format=webp&quality=70&as=src";
+import chatGptIcon from "../../assets/project-integration-icons/chatGpt.png?format=webp&quality=70&as=src";
+import venmoIcon from "../../assets/project-integration-icons/venmo.svg?format=webp&quality=70&as=src";
+import storiedSportsIcon from "../../assets/project-integration-icons/storiedSports.png?format=webp&quality=70&as=src";
+import adidasIcon from "../../assets/project-integration-icons/adidas.svg?format=webp&quality=70&as=src";
+import theRealestIcon from "../../assets/project-integration-icons/theRealest.png?format=webp&quality=70&as=src";
+import seattleReignFcIcon from "../../assets/project-integration-icons/seattleReignFc.png?format=webp&quality=70&as=src";
+import uswntIcon from "../../assets/project-integration-icons/uswnt.png?format=webp&quality=70&as=src";
+import googleSearchIcon from "../../assets/project-integration-icons/googleSearch.svg?format=webp&quality=70&as=src";
+import googlePlacesIcon from "../../assets/project-integration-icons/googlePlaces.svg?format=webp&quality=70&as=src";
+import fireworksAiIcon from "../../assets/project-integration-icons/fireworksAI.png?format=webp&quality=70&as=src";
+import pexelsIcon from "../../assets/project-integration-icons/pexels.png?format=webp&quality=70&as=src";
+import cloudflareIcon from "../../assets/project-integration-icons/cloudflare.svg?format=webp&quality=70&as=src";
+import twilioIcon from "../../assets/project-integration-icons/twilio.svg?format=webp&quality=70&as=src";
+import twilioColoredIcon from "../../assets/project-integration-icons/twilioColored.svg?format=webp&quality=70&as=src";
+import serpapiIcon from "../../assets/project-integration-icons/serpapi.png?format=webp&quality=70&as=src";
+import googleLightHouseIcon from "../../assets/project-integration-icons/googleLightHouse.png?format=webp&quality=70&as=src";
+import googleAdsIcon from "../../assets/project-integration-icons/googleAds.svg?format=webp&quality=70&as=src";
+import redditIcon from "../../assets/project-integration-icons/reddit.svg?format=webp&quality=70&as=src";
+import googleAnalyticsIcon from "../../assets/project-integration-icons/googleAnalytics.svg?format=webp&quality=70&as=src";
+import spoontacularIcon from "../../assets/project-integration-icons/spoontacular.png?format=webp&quality=70&as=src";
 function ProjectsSection({ highlightsOn, setHighlightsOn }) {
   return (
     <MotionSection
@@ -83,12 +87,13 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       viewPortTrigger={0.1}
     >
       <h3 className="text-sm font-medium text-white mb-8 uppercase tracking-widest">
-        Production Applications
+        My Projects and Production Applications
       </h3>
 
       <ProjectCard
-        collapsedByDefault={false}
-        title="AI Business Website Generator - Multi-Tenant SaaS Platform"
+        // collapsedByDefault={false}
+        starProject
+        title="FixMyOldWebsite - AI Business Website Generator & CMS"
         description="AI-powered SaaS platform that generates, deploys, and hosts complete business websites using advanced web scraping, structured data enrichment, and aggregation from Google Places and Search APIs. Includes a custom CMS for users to make changes."
         // descriptionClassname = "!max-w-full"
         highlightsOn={highlightsOn}
@@ -136,6 +141,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           { name: "Cloudflare", logo: cloudflareIcon, className: "" },
           { name: "SendGrid", logo: twilioColoredIcon, className: "" },
           { name: "Serpapi", logo: serpapiIcon, className: " " },
+          { name: "Google Analytics", logo: googleAnalyticsIcon, rounded: false  },
         ]}
         actions={[
           {
@@ -222,8 +228,8 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       />
 
       <ProjectCard
-        collapsedByDefault={false}
-
+        // collapsedByDefault={false}
+        starProject
         title="Splitify - AI Shared Expense Manager "
         description="Created a production SaaS adopted by real users that simplifies group finances through automated expense tracking, requests and reminders. Uses pay-by-link texts that require no account to make it as easy as possible to get paid back."
         icon={splitifyLogoImg}
@@ -257,6 +263,8 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           { name: "Stripe", logo: stripeIcon },
           { name: "ChatGPT", logo: chatGptIcon, className: "invert" },
           { name: "Venmo", logo: venmoIcon },
+          { name: "Google Ads", logo: googleAdsIcon, rounded: false },
+          { name: "Google Analytics", logo: googleAnalyticsIcon, rounded: false  },
         ]}
         showDots
         slideFocus={[
@@ -333,7 +341,8 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       />
 
       <ProjectCard
-        collapsedByDefault={false}
+        // collapsedByDefault={false}
+        starProject
         title="The 85ers - Cinematic Storytelling Platform"
         icon={the85ersLogo}
         integrationText={"Collaborated With"}
@@ -412,8 +421,9 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       />
 
       <ProjectCard
-        collapsedByDefault={false}
-        title="PhotoMax - AI Dating Photo Generator"
+        // collapsedByDefault={false}
+        starProject
+        title="PhotoMax - AI Dating Photo Generator "
         icon={photoMaxLogo}
         actions={[{
           href: "https://www.photomax.me/",
@@ -421,7 +431,16 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           label: "Live Demo",
           icon: "lucide:external-link",
         },]}
-        description="Production web app that converts user selfies into high-quality dating profile photos using the most advanced image generation models. Ran 100s of tests with multiple models and prompt variations to find the best results. Application includes a full checkout, generation, and delivery workflow. Users can make iterative prompt-based edits."
+        integrations={[
+          { name: "OpenAI", logo: chatGptIcon, className: "invert" },
+          { name: "Stripe", logo: stripeIcon },
+          { name: "Cloudflare R2", logo: cloudflareIcon },
+          { name: "Reddit Ads", logo: redditIcon,  },
+          { name: "Google Ads", logo: googleAdsIcon, rounded: false },
+          { name: "Google Analytics", logo: googleAnalyticsIcon, rounded: false  },
+        ]}
+
+        description="Production web app that converts user selfies into high-quality dating profile photos using the most advanced image generation models. Ran 100s of tests with multiple models and prompt variations to find the best results. Application includes a full checkout, generation, and delivery workflow. Users can make iterative prompt-based edits. Intended for primarily mobile use."
         badges={[
           "Next.js (App Router)",
           "React 19",
@@ -477,6 +496,12 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
 
       <ProjectCard
         title="SmartPlatter - AI Meal Planner"
+        integrations={[
+          { name: "OpenAI", logo: chatGptIcon, className: "invert" },
+          { name: "Fireworks AI", logo: fireworksAiIcon, className: "bg-white p-[2px]" },
+          { name: "Spoonacular", logo: spoontacularIcon, className: "" },
+          { name: "Cloudflare R2", logo: cloudflareIcon, className: "" },
+        ]}
         highlightsOn={highlightsOn}
         setHighlightsOn={setHighlightsOn}
         icon={smartPlatterLogo}
@@ -565,8 +590,8 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
 
 
       <ProjectCard
-        title="Website Lead Finder - Lead Generation & Outreach Automation Platform"
-        description="A Full-stack CRM and lead intelligence system for discovering businesses that need new websites and driving data-powered email/SMS outreach with real-time analytics.
+        title="Lead Generation & Outreach Automation Platform"
+        description="A Full-stack CRM and lead intelligence system for discovering businesses that need new websites and driving data-powered email/SMS outreach with real-time analytics. Searches for businesses in a given geographic region and audits their website quality + SEO and collects business data for outreach.
 "
         highlightsOn={highlightsOn}
         setHighlightsOn={setHighlightsOn}
@@ -607,6 +632,12 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
             rounded: false,
             className: "",
           },
+          {
+            name: "FixMyOldWebsite",
+            logo: autoWebsiteGeneratorLogo,
+            className: "",
+            rounded: false,
+          }
         ]}
         features={[
           "Distributed job system with atomic MongoDB claiming ensures exactly-once processing across parallel workers.",
@@ -861,16 +892,8 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
 
       <ProjectCard
         title="Scrollos - Internal Catalog Platform"
-        actions={[
-          {
-            href: "https://github.com/2351Labs/the-ui/?tab=readme-ov-file",
-            target: "_blank",
-            label: "Demo",
-            icon: "lucide:external-link",
-          },
-        ]}
         collapsible={true}
-        collapsedByDefault={true}
+        // collapsedByDefault={true}
         highlightsOn={highlightsOn}
         setHighlightsOn={setHighlightsOn}
         icon={scrollosLogo} // replace with your Scrollos mark or generic catalog icon
@@ -936,7 +959,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         expandedLabel={"Hide Old Projects"}
         items={[
           <ProjectCard
-            title="Smart Meal Planner — Weekly Planning & Budgeting Tool"
+            title="Smart Meal Planner - Weekly Planning & Budgeting Tool"
             iconDisableRounding={true}
             description="A web-based meal planning application that helps users organize weekly meals, adjust serving sizes, and generate shopping lists, with smart recommendations to reduce cost and ingredient waste."
             highlightsOn={highlightsOn}
@@ -1072,7 +1095,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
               ]}
             />
             <ProjectCard
-              title="Weather Forecast — API-Driven Weather App"
+              title="Weather Forecast - API-Driven Weather App"
               description="A lightweight weather forecasting application that fetches and displays real-time weather data from a third-party API."
               badges={[
                 "JavaScript",

@@ -36,6 +36,7 @@ export default function ProjectCard({
   layout = "stack",
   collapsible = true,
   collapsedByDefault = true,
+  starProject = false,
 }) {
   const imageList = useMemo(
     () => (images?.length ? images : imageUrl ? [imageUrl] : []),
@@ -158,7 +159,8 @@ export default function ProjectCard({
     <MotionSection delay={0.12} viewPortTrigger={0.15} className="mb-8 ">
       <div
         className={
-          "rounded-2xl border h-full   border-neutral-800 bg-neutral-900/40"
+          "rounded-2xl border h-full border-neutral-800 bg-neutral-900/40 " +
+          (starProject ? "star-glow" : "")
         }
       >
         <div className="p-4 sm:p-5 md:p-6 relative">

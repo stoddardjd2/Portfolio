@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import portraitGrayNoBg from "@/assets/heavily-edited-fotor-glasses-white-cropped.png";
+import portraitGrayNoBg from "@/assets/portrait/professional-portrait-glasses-no-bg.png?format=webp&quality=70&as=src";
 import downloadResume from "./resumeDownloadHelper.js";
 import {
   ArrowRight,
@@ -292,7 +292,7 @@ function HeroSection() {
         <div className="z-10 relative">
           {/* Availability pill */}
           <motion.div
-            className="inline-flex absolute -top-14 items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300 mb-8"
+            className="inline-flex !absolute -top-14 items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300 mb-8"
             variants={V.fadeUp}
           >
             <span className="relative flex h-2 w-2">
@@ -325,8 +325,9 @@ function HeroSection() {
           >
             <motion.img
               src={portraitGrayNoBg}
-              className="lg:h-[470px] md:!opacity-20 lg:!opacity-80 px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
+              className="lg:h-[470px] md:!opacity-20 lg:!opacity-80 px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 !grayscale contrast-160 brightness-100"
               alt="Portrait"
+              eager={true}
               variants={V.portraitImg}
               whileHover={{
                 opacity: 0.8,

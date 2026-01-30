@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import portraitGrayNoBg from "@/assets/heavily-edited-fotor-glasses-white-cropped.png";
+import portraitGrayNoBg from "@/assets/portrait/professional-portrait-glasses-no-bg.png?format=webp&quality=70&as=src";
 import downloadResume from "./resumeDownloadHelper.js";
 import CompanyBanner from "./CompanyBanner.jsx";
 import { ArrowRight, Download, MapPin, Layers, Flame, Brain } from "lucide-react";
@@ -203,7 +203,7 @@ function HeroSectionMobile() {
         >
             <motion.img
               src={portraitGrayNoBg}
-              className="lg:h-[470px] !opacity-80  px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 scale-x-[-1]"
+              className="lg:h-[470px] md:!opacity-20 lg:!opacity-80 px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 !grayscale contrast-150 brightness-100"
               alt="Portrait"
               variants={V.portraitImg}
               whileHover={{
