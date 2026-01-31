@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import MotionSection from "./MotionSection.jsx";
-import portraitGrayNoBg from "@/assets/portrait/professional-portrait-glasses-no-bg.png?format=png&quality=80&as=src";
+import portraitGrayNoBg from "@/assets/portrait/7-final-glasses-mirrored.png?format=png&quality=80&as=src";
 import downloadResume from "./resumeDownloadHelper.js";
 
 function ContactSection({ setOpen }) {

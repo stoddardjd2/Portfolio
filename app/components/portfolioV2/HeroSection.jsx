@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import portraitGrayNoBg from "@/assets/portrait/professional-portrait-glasses-no-bg.png?format=webp&quality=70&as=src";
+import portraitGrayNoBg from "@/assets/portrait/7-final-glasses-mirrored.png?format=webp&quality=70&as=src";
 import downloadResume from "./resumeDownloadHelper.js";
 import {
   ArrowRight,
@@ -196,7 +196,7 @@ function HeroSection() {
 
   const HeroContent = (
     <motion.div
-      className="absolute lg:static top-0  h-full w-full lg:bg-transparent lg:h-fit"
+      className="absolute lg:static  top-0  h-full w-full lg:bg-transparent lg:h-fit"
       variants={V.container}
       initial="hidden"
       animate="visible"
@@ -283,7 +283,7 @@ function HeroSection() {
 
   return (
     <motion.div
-      className="relative min-h-[840px] mt-[100px] lg:mt-[0px] w-full xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100vh-56px)] xs:min-h-[calc(100dvh-56px)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
+      className="relative overflow-clip min-h-[840px] mt-[100px] lg:mt-[0px] w-full xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100vh-56px)] xs:min-h-[calc(100dvh-56px)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
       initial="hidden"
       animate="visible"
       variants={V.container}
@@ -325,7 +325,7 @@ function HeroSection() {
           >
             <motion.img
               src={portraitGrayNoBg}
-              className="lg:h-[470px] md:!opacity-20 lg:!opacity-80 px-[clamp(.1rem,5vw,12.5rem)] lg:px-0 !grayscale contrast-160 brightness-100"
+              className="lg:h-[390px] md:!opacity-20 lg:!opacity-80 translate-x-[110px] px-[clamp(.1rem,5vw,12.5rem)] lg:px-0  !grayscale contrast-160 brightness-100"
               alt="Portrait"
               eager={true}
               variants={V.portraitImg}
