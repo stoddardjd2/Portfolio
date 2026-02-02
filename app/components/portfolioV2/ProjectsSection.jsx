@@ -439,7 +439,8 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
           { name: "Google Ads", logo: googleAdsIcon, rounded: false },
           { name: "Google Analytics", logo: googleAnalyticsIcon, rounded: false  },
         ]}
-
+        highlightsOn={highlightsOn}
+        setHighlightsOn={setHighlightsOn}
         description="Production web app that converts user selfies into high-quality dating profile photos using the most advanced image generation models. Ran 100s of tests with multiple models and prompt variations to find the best results. Application includes a full checkout, generation, and delivery workflow. Users can make iterative prompt-based edits. Intended for primarily mobile use."
         badges={[
           "Next.js (App Router)",
