@@ -128,7 +128,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
         <ExperienceEntry
           role="Full-Stack Engineer"
           company="the85ers"
-          timeframe="Feb 2025  – Jul 2025"
+          timeframe="Feb 2025  – Jan 2026"
           description="Built a cinematic, motion-driven website for the U.S. Women's National Soccer Team in partnership with Adidas and professional sports brands."
           highlights={[
             "Framer Motion",
