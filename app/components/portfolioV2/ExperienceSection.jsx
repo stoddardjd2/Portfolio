@@ -75,7 +75,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
           ]}
         />
         <ExperienceEntry
-          role="Founder / Full-Stack Engineer"
+          role="Full-Stack Engineer / Founding Engineer"
           company="Splitify"
           timeframe="Jul 2025 – Present"
           highlights={[
