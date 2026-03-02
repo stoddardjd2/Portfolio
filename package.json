@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@microsoft/clarity": "^1.0.2",
     "emailjs-com": "^3.2.0",
     "framer-motion": "^11.18.2",
     "iframe-resizer": "^5.5.7",
