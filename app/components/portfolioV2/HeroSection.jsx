@@ -283,7 +283,7 @@ function HeroSection() {
 
   return (
     <motion.div
-      className="relative overflow-clip min-h-[840px] mt-[100px] lg:mt-[0px] w-full xxxxs:min-h-[750px] xxxs:min-h-[700px] xs:min-h-[calc(100vh-56px)] xs:min-h-[calc(100dvh-56px)] h-fit mb-0 flex justify-center items-start lg:items-center pt-20 lg:pt-0"
+      className="overflow-clip mt-[56px]  w-full  mb-0 flex justify-center items-center "
       initial="hidden"
       animate="visible"
       variants={V.container}
@@ -292,7 +292,7 @@ function HeroSection() {
         <div className="z-10 relative">
           {/* Availability pill */}
           <motion.div
-            className="inline-flex !absolute -top-14 items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300 mb-8"
+            className="flex w-fit justify-center items-center mt-8 gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300 mb-8"
             variants={V.fadeUp}
           >
             <span className="relative flex h-2 w-2">
@@ -342,7 +342,7 @@ function HeroSection() {
         </div>
 
         {/* Company Banner */}
-        <div className="mb-8 hidden lg:inline absolute left-0 right-0 top-full">
+        <div className="mb-0 hidden lg:inline">
           <CompanyBanner />
         </div>
       </div>
