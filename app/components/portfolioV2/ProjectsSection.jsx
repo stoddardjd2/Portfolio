@@ -423,7 +423,7 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
       <ProjectCard
         // collapsedByDefault={false}
         starProject
-        title="PhotoMax - AI Dating Photo Generator "
+        title="PhotoMax - AI Dating Photo Generator (Mobile)"
         icon={photoMaxLogo}
         actions={[{
           href: "https://www.photomax.me/",

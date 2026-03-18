@@ -18,8 +18,12 @@ const LabsTextLogo = () => (
     </div>
 
     {/* Main text */}
-    <span className="text-white font-mono font-bold text-xs tracking-wider relative z-10">2351</span>
-    <span className="text-slate-400 font-mono text-[8px] tracking-widest relative z-10 -mt-0.5">LABS</span>
+    <span className="text-white font-mono font-bold text-xs tracking-wider relative z-10">
+      2351
+    </span>
+    <span className="text-slate-400 font-mono text-[8px] tracking-widest relative z-10 -mt-0.5">
+      LABS
+    </span>
   </div>
 );
 
@@ -64,7 +68,7 @@ const companies = [
 function CompanyBanner({ centerOnMobile = false }) {
   return (
     <MotionSection
-      className="py-8"
+      className="py-8 "
       delay={0.2}
       duration={0.8}
       staggerChildren={0.08}
@@ -72,7 +76,7 @@ function CompanyBanner({ centerOnMobile = false }) {
     >
       <motion.div
         className={`flex flex-wrap items-center gap-8 opacity-60 hover:opacity-80 transition-opacity duration-300 ${
-          centerOnMobile ? 'justify-center' : 'justify-start'
+          centerOnMobile ? "justify-center" : "justify-start"
         }`}
         variants={{
           hidden: {},
@@ -84,48 +88,51 @@ function CompanyBanner({ centerOnMobile = false }) {
           },
         }}
       >
-
         <div className="w-full mb-4">
           <h2 className="text-center md:text-start text-base lg:text-md font-light tracking-wide text-neutral-300 uppercase">
             Select Clients &amp; Partners
           </h2>
         </div>
-        {companies.map((company) => (
-          <motion.div
-            key={company.name}
-            className="flex flex-col w-[70px] h-[90px] lg:h-fit lg:w-fit items-center  gap-2 group"
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-              },
-            }}
-          >
-            <div className="relative ">
-              {React.isValidElement(company.logo) ? (
-                company.logo
-              ) : company.logo ? (
-                <img
-                  src={company.logo}
-                  alt={`${company.name} logo`}
-                  className={`w-12 h-12 object-contain transition-all duration-300 group-hover:scale-110 ${
-                    company.rounded ? "rounded-full" : ""
-                  }`}
-                />
-              ) : (
-                <div className="w-12 h-12 bg-gray-200 flex items-center justify-center rounded-md">
-                  <span className="text-xs text-gray-600 text-center">{company.name}</span>
-                </div>
-              )}
-              <div className="absolute -inset-2 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
-            </div>
-            <span className="text-xs text-center text-neutral-200 font-medium tracking-wide uppercase">
-              {company.name}
-            </span>
-          </motion.div>
-        ))}
+        <div className="pl-4 flex flex-wrap items-center gap-8">
+          {companies.map((company) => (
+            <motion.div
+              key={company.name}
+              className="flex flex-col w-[70px] h-[90px] lg:h-fit lg:w-fit items-center  gap-2 group"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+                },
+              }}
+            >
+              <div className="relative ">
+                {React.isValidElement(company.logo) ? (
+                  company.logo
+                ) : company.logo ? (
+                  <img
+                    src={company.logo}
+                    alt={`${company.name} logo`}
+                    className={`w-12 h-12 object-contain transition-all duration-300 group-hover:scale-110 ${
+                      company.rounded ? "rounded-full" : ""
+                    }`}
+                  />
+                ) : (
+                  <div className="w-12 h-12 bg-gray-200 flex items-center justify-center rounded-md">
+                    <span className="text-xs text-gray-600 text-center">
+                      {company.name}
+                    </span>
+                  </div>
+                )}
+                <div className="absolute -inset-2 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+              </div>
+              <span className="text-xs text-center text-neutral-200 font-medium tracking-wide uppercase">
+                {company.name}
+              </span>
+            </motion.div>
+          ))}
+        </div>
       </motion.div>
     </MotionSection>
   );
