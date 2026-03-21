@@ -14,6 +14,10 @@ import ContactModal from "../components/portfolioV2/ContactModal.jsx";
 import HeroSectionMobile from "../components/portfolioV2/HeroSectionMobile.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 function PortfolioPageV2() {
+  const role = (
+    new URLSearchParams(window.location.search).get("role") || "full-stack engineer"
+  )
+    .split(" ");
   const [open, setOpen] = useState(false);
   const [highlightsOn, setHighlightsOn] = useState(false);
 
@@ -25,11 +29,11 @@ function PortfolioPageV2() {
         className="max-w-5xl mx-auto px-5 sm:px-6 pb-4 lg:pb-12 space-y-[clamp(4rem,8vw,8rem)]"
       >
         <div className="hidden md:block">
-          <HeroSection />
+          <HeroSection role={role} />
         </div>
         {/* MOBILE */}
         <div className="md:hidden">
-          <HeroSectionMobile />
+          <HeroSectionMobile role={role} />
         </div>
 
         <ProjectsSection
@@ -39,10 +43,11 @@ function PortfolioPageV2() {
         <ExperienceSection
           highlightsOn={highlightsOn}
           setHighlightsOn={setHighlightsOn}
+          role={role}
         />
         {/* <CaseStudySection /> */}
         <div className="grid lg:grid-cols-2 gap-16">
-          <AboutSection />
+          <AboutSection role={role}/>
           
         <ValueSection />
 

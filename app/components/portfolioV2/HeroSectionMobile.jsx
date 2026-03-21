@@ -155,7 +155,7 @@ function useIsMobile(breakpointPx = 1024) {
   return isMobile;
 }
 
-function HeroSectionMobile() {
+function HeroSectionMobile({ role = ["full-stack", "engineer"] }) {
   const isMobile = useIsMobile();
 
   // keep variants stable
@@ -193,7 +193,8 @@ function HeroSectionMobile() {
           "
         >
           I am more than just a <br />
-          <span className="text-neutral-500">full-stack</span> engineer.
+          <span className="text-neutral-500">{role?.[0]}</span>
+          {role?.[1] ? ` ${role[1]}` : ""}.
         </motion.h1>
 
         {/* Portrait (fully controlled via MOTION + variants above) */}
@@ -218,9 +219,9 @@ function HeroSectionMobile() {
           variants={V.paragraph}
           className="text-md sm:text-lg min-h-[165px] md:text-xl text-white/75 max-w-2xl mb-8 leading-relaxed font-light mx-auto "
         >
-          Full-stack engineer &amp; founder experienced in production systems
-          and AI-powered workflows. I use AI effectively, understand its
-          limitations, and know when manual engineering delivers better
+          {role.map((word) => word).join(" ")} experienced in production
+          systems and AI-powered workflows. I use AI effectively, understand
+          its limitations, and know when manual engineering delivers better
           precision. I have shipped real full-stack products end-to-end,
           building scalable frontends, APIs, and production systems.{" "}
           <span className="text-white/80">Scroll down to see how.</span>

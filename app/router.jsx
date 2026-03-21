@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import ErrorPage from "./ErrorPage.jsx";
 import RootLayout from "./RootLayout.jsx";
-import PortfolioPage from "./pages/PortfolioPage.jsx";
 import PortfolioPageV2 from "./pages/PortfolioPageV2.jsx";
 
 const router = createBrowserRouter(

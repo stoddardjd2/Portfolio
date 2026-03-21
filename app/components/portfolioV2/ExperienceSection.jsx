@@ -1,7 +1,10 @@
 import React from "react";
 import MotionSection from "./MotionSection.jsx";
 import { useState } from "react";
-function ExperienceSection({ highlightsOn, setHighlightsOn }) {
+function ExperienceSection({ highlightsOn, setHighlightsOn, role }) {
+  
+
+  const roleText = role.map((word) => word).join(" ");
   return (
     <MotionSection
       id="experience"
@@ -34,8 +37,9 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
         </button>
       </div>
       <div className="space-y-4">
+        {console.log(role)}
         <ExperienceEntry
-          role="Full-Stack Engineer / Founding Engineer"
+          role={`${roleText} / Founding Engineer`}
           company="FixMyOldWebsite"
           timeframe="Dec 2025 – Present"
           highlights={[
@@ -75,7 +79,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
           ]}
         />
         <ExperienceEntry
-          role="Full-Stack Engineer / Founding Engineer"
+          role={`${roleText} / Founding Engineer`}
           company="Splitify"
           timeframe="Jul 2025 – Present"
           highlights={[
@@ -126,7 +130,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
         />
 
         <ExperienceEntry
-          role="Full-Stack Engineer"
+          role={roleText}
           company="the85ers"
           timeframe="Feb 2025  – Jan 2026"
           description="Built a cinematic, motion-driven website for the U.S. Women's National Soccer Team in partnership with Adidas and professional sports brands."
@@ -155,7 +159,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn }) {
         />
 
         <ExperienceEntry
-          role="Full-Stack Engineer"
+          role={roleText}
           company="2351 Labs"
           timeframe="Jul 2024 - Feb 2025"
           description="Designed and built a production-grade internal catalog platform to centralize services, libraries, and tooling with white-label support and role-based access."

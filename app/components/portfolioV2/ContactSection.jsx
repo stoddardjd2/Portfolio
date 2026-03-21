@@ -21,7 +21,7 @@ function ContactSection({ setOpen }) {
                 Let's Build Something Great
               </h2>
               <p className="text-neutral-400 mb-8 max-w-md font-light">
-                I am open to full-stack, backend, frontend and product-focused
+                I am open to full-stack, frontend, web development, and AI automation
                 roles.
               </p>
 

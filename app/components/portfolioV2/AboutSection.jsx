@@ -1,7 +1,7 @@
 import React from "react";
 import MotionSection from "./MotionSection.jsx";
 
-function AboutSection() {
+function AboutSection({ role }) {
   return (
     <MotionSection delay={0.18}>
       <h2 className="text-sm font-medium text-white mb-6 uppercase tracking-widest">
@@ -9,7 +9,7 @@ function AboutSection() {
       </h2>
       <div className="prose prose-invert prose-sm text-neutral-400">
         <p className="mb-4">
-          I’m Jared, a full-stack engineer and founder with hands-on experience
+          I’m Jared, a {role.map((word) => word).join(" ")} with hands-on experience
           building and shipping production systems, including AI-powered
           workflows. I focus on creating software that feels intuitive to users
           while remaining precise, reliable, and scalable under the hood.
