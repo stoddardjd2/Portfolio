@@ -115,7 +115,7 @@ function makeVariants(m) {
       opacity: 1,
       y: 0,
       filter: blur(0),
-      transition: { duration:0.75, ease: m.easeEnter, delay: 0.3 },
+      transition: { duration: 0.75, ease: m.easeEnter, delay: 0.3 },
     },
   };
 
@@ -168,9 +168,9 @@ function HeroSectionMobile({ role = ["full-stack", "engineer"] }) {
       animate="visible"
       variants={V.container}
     >
-      
+
       <div className="relative h-full w-full">
-      
+
         {/* Availability pill */}
         <motion.div className=" mb-4" variants={V.fadeUp}>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/50 text-xs font-medium text-neutral-300">
@@ -202,16 +202,16 @@ function HeroSectionMobile({ role = ["full-stack", "engineer"] }) {
           className="flex justify-center mb-8"
           variants={V.portraitWrap}
         >
-            <motion.img
-              src={portraitGrayNoBg}
-              className="w-full md:!opacity-20 lg:!opacity-80  lg:px-0 !grayscale contrast-150 brightness-100"
-              alt="Portrait"
-              variants={V.portraitImg}
-              whileHover={{
-                opacity:0.8,
-                transition: { duration: 0.15, ease: MOTION.easeHover },
-              }}
-            />
+          <motion.img
+            src={portraitGrayNoBg}
+            className="w-full md:!opacity-20 lg:!opacity-80  lg:px-0 !grayscale contrast-150 brightness-100"
+            alt="Portrait"
+            variants={V.portraitImg}
+            whileHover={{
+              opacity: 0.8,
+              transition: { duration: 0.15, ease: MOTION.easeHover },
+            }}
+          />
         </motion.div>
 
         {/* Paragraph */}
@@ -219,12 +219,10 @@ function HeroSectionMobile({ role = ["full-stack", "engineer"] }) {
           variants={V.paragraph}
           className="text-md sm:text-lg min-h-[165px] md:text-xl text-white/75 max-w-2xl mb-8 leading-relaxed font-light mx-auto "
         >
-          {role.map((word) => word).join(" ")} experienced in production
-          systems and AI-powered workflows. I use AI effectively, understand
-          its limitations, and know when manual engineering delivers better
-          precision. I have shipped real full-stack products end-to-end,
-          building scalable frontends, APIs, and production systems.{" "}
-          <span className="text-white/80">Scroll down to see how.</span>
+          {role.map((word) => word).join(" ")} experienced in front and backend web development,
+          AI-powered workflows/agents, and UI/UX design. I use AI effectively, understand its limitations,
+          and know when manual engineering delivers better precision.
+          <span className="text-white/80 font-medium"> Scroll down to see how.</span>
         </motion.p>
 
         {/* CTA buttons */}

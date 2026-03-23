@@ -205,12 +205,10 @@ function HeroSection({ role }) {
         className="text-md sm:text-lg min-h-[165px] md:text-xl text-white/75 lg:text-neutral-400 max-w-2xl mb-8 leading-relaxed font-light"
         variants={V.paragraph}
       >
-        {role.map((word) => word).join(" ")} experienced in production systems and
-        AI-powered workflows. I use AI effectively, understand its limitations,
-        and know when manual engineering delivers better precision. I have
-        shipped real full-stack products end-to-end, building scalable
-        frontends, APIs, and production systems.{" "}
-        <span className="text-white/80">Scroll down to see how.</span>
+        {role.map((word) => word).join(" ")} experienced in front and backend web development,
+          AI-powered workflows/agents, and UI/UX design. I use AI effectively, understand its limitations,
+          and know when manual engineering delivers better precision.{" "}
+        <span className="text-white/80 font-medium">Scroll down to see how.</span>
       </motion.p>
 
       {/* CTA buttons */}
