@@ -15,7 +15,7 @@ import HeroSectionMobile from "../components/portfolioV2/HeroSectionMobile.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 function PortfolioPageV2() {
   const role = (
-    new URLSearchParams(window.location.search).get("role") || "full-stack engineer"
+    new URLSearchParams(window.location.search).get("role") || "Full-Stack Engineer"
   )
     .split(" ");
   const [open, setOpen] = useState(false);
