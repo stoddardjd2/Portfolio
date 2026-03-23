@@ -131,7 +131,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn, role }) {
 
         <ExperienceEntry
           role={roleText}
-          company="the85ers"
+          company="The85ers"
           timeframe="Feb 2025  – Jan 2026"
           description="Built a cinematic, motion-driven website for the U.S. Women's National Soccer Team in partnership with Adidas and professional sports brands."
           highlights={[
