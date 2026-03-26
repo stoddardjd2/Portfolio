@@ -132,7 +132,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn, role }) {
         <ExperienceEntry
           role={roleText}
           company="The85ers"
-          timeframe="Feb 2025  – Jan 2026"
+          timeframe="Feb 2025  – Jun 2025"
           description="Built a cinematic, motion-driven website for the U.S. Women's National Soccer Team in partnership with Adidas and professional sports brands."
           highlights={[
             "Framer Motion",
@@ -161,7 +161,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn, role }) {
         <ExperienceEntry
           role={roleText}
           company="2351 Labs"
-          timeframe="Jul 2024 - Feb 2025"
+          timeframe="Jul 2024 - Jan 2025"
           description="Designed and built a production-grade internal catalog platform to centralize services, libraries, and tooling with white-label support and role-based access."
           highlights={[
             "OAuth 2.0",
