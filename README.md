@@ -9,14 +9,14 @@ Client-side React Router app built with Vite and TailwindCSS, written in JavaScr
 
 ## Project structure
 - `index.html` — Vite entry HTML with global metadata and font links.
-- `app/main.jsx` — application entry that mounts the router.
-- `app/router.jsx` — standard React Router config using `createBrowserRouter`.
-- `app/pages/Home.jsx` — home route that renders the portfolio.
-- `app/pages/PortfolioPageV2.jsx` — alternate portfolio layout available at `/v2`.
-- `app/components/PortfolioPage.jsx` — main portfolio layout and content.
+- `src/main.jsx` — application entry that mounts the router.
+- `src/router.jsx` — React Router config using `createBrowserRouter`.
+- `src/pages/PortfolioPageV2.jsx` — home route (`/`) portfolio page.
+- `src/components/portfolio/` — section components for the portfolio page.
+- `public/` — static assets served at the site root.
 
 ## Styling
-TailwindCSS 4 is enabled via `app/app.css`; extend the theme there as needed.
+TailwindCSS 4 is enabled via `src/app.css`; extend the theme there as needed.
 
 ## Deployment & Analytics
 

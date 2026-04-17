@@ -1,17 +1,17 @@
 import React from "react";
-import NavBar from "../components/portfolioV2/NavBar.jsx";
-import HeroSection from "../components/portfolioV2/HeroSection.jsx";
-import ValueSection from "../components/portfolioV2/ValueSection.jsx";
-import SkillsSection from "../components/portfolioV2/SkillsSection.jsx";
-import ProjectsSection from "../components/portfolioV2/ProjectsSection.jsx";
-import ExperienceSection from "../components/portfolioV2/ExperienceSection.jsx";
-import CaseStudySection from "../components/portfolioV2/CaseStudySection.jsx";
-import AboutSection from "../components/portfolioV2/AboutSection.jsx";
-import TestimonialsSection from "../components/portfolioV2/TestimonialsSection.jsx";
-import ContactSection from "../components/portfolioV2/ContactSection.jsx";
+import NavBar from "../components/portfolio/NavBar.jsx";
+import HeroSection from "../components/portfolio/HeroSection.jsx";
+import ValueSection from "../components/portfolio/ValueSection.jsx";
+import SkillsSection from "../components/portfolio/SkillsSection.jsx";
+import ProjectsSection from "../components/portfolio/ProjectsSection.jsx";
+import ExperienceSection from "../components/portfolio/ExperienceSection.jsx";
+import CaseStudySection from "../components/portfolio/CaseStudySection.jsx";
+import AboutSection from "../components/portfolio/AboutSection.jsx";
+import TestimonialsSection from "../components/portfolio/TestimonialsSection.jsx";
+import ContactSection from "../components/portfolio/ContactSection.jsx";
 import { useState } from "react";
-import ContactModal from "../components/portfolioV2/ContactModal.jsx";
-import HeroSectionMobile from "../components/portfolioV2/HeroSectionMobile.jsx";
+import ContactModal from "../components/portfolio/ContactModal.jsx";
+import HeroSectionMobile from "../components/portfolio/HeroSectionMobile.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 function PortfolioPageV2() {
   const role = (

@@ -30,7 +30,7 @@ import ViewMore from "./ViewMore.jsx";
 import aiResumeOptimzerLogo from '../../assets/project-logos/ai-resume-optimizer.svg?format=webp&quality=70&as=src';
 // eager = import immediately (recommended for small sets)
 const scrollosProjectImageList = Object.entries(
-  import.meta.glob("/app/assets/projects/scrollos/*.{png,jpg,jpeg,webp}", {
+  import.meta.glob("/src/assets/projects/scrollos/*.{png,jpg,jpeg,webp}", {
     eager: true,
     import: "default",
     query: "?format=webp&quality=70&as=src",
@@ -41,7 +41,7 @@ const scrollosProjectImageList = Object.entries(
 
 const autoWebsiteGenreratorProjectImageList = Object.entries(
   import.meta.glob(
-    "/app/assets/projects/auto-website-generator/*.{png,jpg,jpeg,webp}",
+    "/src/assets/projects/auto-website-generator/*.{png,jpg,jpeg,webp}",
     {
       eager: true,
       import: "default",

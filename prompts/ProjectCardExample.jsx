@@ -1,5 +1,5 @@
 import React from 'react';
-import ProjectCard from '../app/components/portfolioV2/ProjectCard.jsx';
+import ProjectCard from '../src/components/portfolio/ProjectCard.jsx';
 
 // Example ProjectCard component using JSON structure from project-creation-prompt.md
 function ProjectCardExample() {

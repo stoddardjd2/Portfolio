@@ -13,7 +13,7 @@ The output **MUST be valid JSON only** (no comments, no markdown, no explanation
 ## React Component Usage
 
 ```jsx
-import ProjectCard from "../components/portfolioV2/ProjectCard.jsx";
+import ProjectCard from "../src/components/portfolio/ProjectCard.jsx";
 
 // Example usage with JSON output:
 const projectData = {
@@ -81,7 +81,7 @@ function ProjectsSection() {
 
 ### React Component Usage:
 ```jsx
-import ProjectCard from "../components/portfolioV2/ProjectCard.jsx";
+import ProjectCard from "../src/components/portfolio/ProjectCard.jsx";
 
 // In your ProjectsSection.jsx:
 <ProjectCard

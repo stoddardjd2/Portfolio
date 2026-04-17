@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [tailwindcss(), react(), imagetools()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "app"),
+      "@": path.resolve(__dirname, "src"),
     },
   },
 });
