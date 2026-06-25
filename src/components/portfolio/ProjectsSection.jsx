@@ -506,14 +506,14 @@ function ProjectsSection({ highlightsOn, setHighlightsOn }) {
         highlightsOn={highlightsOn}
         setHighlightsOn={setHighlightsOn}
         icon={smartPlatterLogo}
-        actions={[
-          {
-            href: "",
-            target: "_blank",
-            label: "Demo",
-            icon: "lucide:external-link"
-          }
-        ]}
+        // actions={[
+        //   {
+        //     href: "",
+        //     target: "_blank",
+        //     label: "Demo",
+        //     icon: "lucide:external-link"
+        //   }
+        // ]}
         description="Full-stack meal planning app that imports recipes from URLs, pasted text, or photos, generates a weekly plan and categorized shopping list. Generates images for all recipes and ingredients, calculates macros and costs for each meal and week."
         badges={[
           "React 19",
