@@ -41,7 +41,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn, role }) {
         <ExperienceEntry
           role={`${roleText} / Founding Engineer`}
           company="FixMyOldWebsite"
-          timeframe="Dec 2025 – Present"
+          timeframe="December 2025 – June 2026"
           highlights={[
             "Next.js 16",
             "React 19",
@@ -81,7 +81,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn, role }) {
         <ExperienceEntry
           role={`${roleText} / Founding Engineer`}
           company="Splitify"
-          timeframe="Jul 2025 – Present"
+          timeframe="July 2025 – June 2026"
           highlights={[
             "production SaaS",
             "SMS reminders",
@@ -132,7 +132,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn, role }) {
         <ExperienceEntry
           role={roleText}
           company="The85ers"
-          timeframe="Feb 2025  – Jun 2025"
+          timeframe="February 2025  – July 2025"
           description="Built a cinematic, motion-driven website for the U.S. Women's National Soccer Team in partnership with Adidas and professional sports brands."
           highlights={[
             "Framer Motion",
@@ -161,7 +161,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn, role }) {
         <ExperienceEntry
           role={roleText}
           company="2351 Labs"
-          timeframe="Jul 2024 - Jan 2025"
+          timeframe="July 2024 - February 2025"
           description="Designed and built a production-grade internal catalog platform to centralize services, libraries, and tooling with white-label support and role-based access."
           highlights={[
             "OAuth 2.0",
@@ -192,7 +192,7 @@ function ExperienceSection({ highlightsOn, setHighlightsOn, role }) {
         <ExperienceEntry
           role="Department Manager"
           company="Safeway & Kroger"
-          timeframe="Apr 2018 - Dec 2023"
+          timeframe="April 2018 - December 2023"
           description="Led end-to-end department operations, improving profitability by 50% and reducing inventory waste by 30% through process optimization and data-driven management."
           highlights={[
             "department operations",
