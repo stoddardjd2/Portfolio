@@ -93,7 +93,7 @@ function CompanyBanner({ centerOnMobile = false }) {
             Select Clients &amp; Partners
           </h2>
         </div>
-        <div className="pl-4 flex flex-wrap items-center gap-8">
+        <div className="flex flex-wrap justify-center items-center gap-8">
           {companies.map((company) => (
             <motion.div
               key={company.name}
