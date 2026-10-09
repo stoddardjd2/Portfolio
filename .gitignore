@@ -31,3 +31,6 @@ Thumbs.db
 
 # Local overrides
 *.local
+
+# Private interview prep (keep local only)
+docs/
