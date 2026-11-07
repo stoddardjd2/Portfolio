@@ -61,7 +61,7 @@ function ContactSection({ setOpen }) {
                 />
                 <button
                   type="button"
-                  onClick={downloadResume}
+                  onClick={() => downloadResume("contact")}
                   variants={{
                     hidden: { opacity: 0, x: 0, y: 40, filter: "blur(0px)" },
                     visible: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },

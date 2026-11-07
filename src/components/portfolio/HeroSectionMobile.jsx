@@ -242,7 +242,7 @@ function HeroSectionMobile({ role = ["full-stack", "engineer"] }) {
 
           <motion.button
             type="button"
-            onClick={downloadResume}
+            onClick={() => downloadResume("hero_mobile")}
             variants={V.fadeUp}
             {...V.hoverLift}
             className="inline-flex items-center justify-center gap-2 h-10 px-6 rounded-md border border-neutral-800 text-neutral-300 text-sm font-medium hover:border-neutral-600 hover:text-white transition-colors bg-[#0E0E0E]"

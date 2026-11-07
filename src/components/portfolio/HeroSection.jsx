@@ -233,7 +233,7 @@ function HeroSection({ role }) {
 
         <motion.button
           type="button"
-          onClick={downloadResume}
+          onClick={() => downloadResume("hero")}
           variants={V.fadeUp}
           whileHover={{
             y: -4,
